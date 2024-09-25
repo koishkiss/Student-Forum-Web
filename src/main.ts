@@ -12,6 +12,3 @@ app.use(createPinia())
 app.use(router)
 
 app.mount('#app')
-
-
-//type npm install & npm run dev TO start it!
