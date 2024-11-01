@@ -1,18 +1,13 @@
 
 <template>
-    <div class="app">
-        <h2>test</h2>
+    <div style="background-color: blue; width: 100px; height: 100px;">
+        <LoginPage/>
     </div>
 </template>
 
-<script lang="ts">
-    export default {
-        name:'App'  //组件名
-    }
+<script setup lang="ts">
+    import LoginPage from './page/LoginPage.vue';
 </script>
 
 <style scoped>
-    .app {
-        background-color: red;
-    }
 </style>
