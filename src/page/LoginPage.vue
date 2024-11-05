@@ -110,7 +110,7 @@ async function doLogin() {
 }
 
 .input-box {
-    width: 240px
+  width: 240px
 }
 
 .submit-box {
