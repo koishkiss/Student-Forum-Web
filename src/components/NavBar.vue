@@ -9,7 +9,7 @@
     <div class="mainpage-return">
       <SduIcon/>
 
-      <el-button type="primary" class="mainpage-button">
+      <el-button class="mainpage-button" >
         首页
       </el-button>
     </div>
@@ -20,11 +20,11 @@
     </div>
 
     <div class="item-container">
-      <img :src="avatarUrl" alt="" class="avatar" />
+      <img :src="avatarUrl" alt="" class="avatar" @click="changePath"/>
 
       <div class="nav-buttons">
         <div class="dropdown" v-for="(item, index) in navItems" :key="index">
-          <button class="dropbtn">{{ item.label }}</button>
+          <el-button  type="success" plain class="dropbtn">{{ item.label }}</el-button>
           <div class="dropdown-content">
             <a v-for="(option, idx) in item.options" :key="idx">{{ option }}</a>
           </div>
@@ -38,6 +38,7 @@
 <script lang="ts" setup name="NavBar">
 import { ref } from 'vue'
 import SduIcon from './icon/SduIcon.vue';
+import { useRouter } from 'vue-router';
 
 const searchQuery = ref('');
 const avatarUrl = ref('');  //url
@@ -47,6 +48,12 @@ const navItems = ref([
   { label: '收藏' },
   { label: '历史' },
 ]);
+
+const router = useRouter();
+
+async function changePath() {
+router.push('/login')
+}
 </script>
 
 
@@ -72,7 +79,7 @@ const navItems = ref([
 }
 
 .search-container {
-  margin-left: 600px;
+  margin-left: 550px;
   display: flex;
 }
 
@@ -151,7 +158,7 @@ btn-3d:after {
 .item-container {
   display: flex;
   flex-direction: row;
-  margin-left: 200px;
+  margin-left: 250px;
 }
 
 .avatar {
@@ -178,7 +185,7 @@ btn-3d:after {
 }
 
 .dropbtn {
-  background-color: #686868;
+  /* background-color: #686868;
   color: white;
   padding: 15px 10px;
   height: 10px;
@@ -188,7 +195,7 @@ btn-3d:after {
   margin: 0 10px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
 }
 
 .dropdown-content {

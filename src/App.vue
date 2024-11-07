@@ -2,7 +2,7 @@
 <template>
 <div style="height: 95%; width: 99%; position: absolute;">
   <NavBar/>
-  <el-button type="primary" @click="popLoginPage">登入</el-button>
+
   <div class="view-box">
     <RouterView></RouterView>
   </div>
