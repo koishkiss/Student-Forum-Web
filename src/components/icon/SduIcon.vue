@@ -22,12 +22,8 @@
 </svg>
 </template>
   
-<script>
-export default {
-data() {
-    return {
-        name:"SduIcon"
-    }
-}
-}
+<script lang="ts">
+  export default {
+    name:"SduIcon"
+  }
 </script>

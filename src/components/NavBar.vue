@@ -1,5 +1,6 @@
 <script lang="ts">
   export default {
+  components: { IdentityCard },
     name:'NavBar'  //组件名
   }
 </script>
@@ -9,24 +10,40 @@
     <div class="mainpage-return">
       <SduIcon/>
 
-      <el-button class="mainpage-button" >
+      <el-button :icon="House" type="success" plain text class="mainpage-button">
         首页
       </el-button>
     </div>
 
     <div class="search-container">
-      <input type="text" placeholder="搜索..." v-model="searchQuery" class="search-input" />
-      <button class="btn-3d">搜索</button> <!-- 添加点击事件@click -->
+      <el-input v-model="searchQuery" class="search-input" placeholder="搜索..." :prefix-icon="Search"/>
+      <el-button :icon="Search" class="search-button" />
     </div>
 
     <div class="item-container">
-      <img :src="avatarUrl" alt="" class="avatar" @click="changePath"/>
+      <div class="avatar-container" @mouseenter="showIdentityCard=true" @mouseleave="showIdentityCard=true">
+        <transition name="identity-card-content">
+          <div class="identity-card-container" v-if="showIdentityCard">
+            <IdentityCard/>
+          </div>
+        </transition>
+        <el-avatar :src="user.avatarURL" class="avatar"/>
+      </div>
 
       <div class="nav-buttons">
         <div class="dropdown" v-for="(item, index) in navItems" :key="index">
-          <el-button  type="success" plain class="dropbtn">{{ item.label }}</el-button>
-          <div class="dropdown-content">
-            <a v-for="(option, idx) in item.options" :key="idx">{{ option }}</a>
+          <div @mouseenter="item.visible=true" @mouseleave="item.visible=false">
+            <el-button plain :icon="item.labelIcon" text class="dropbtn">
+              {{ item.label }}
+            </el-button>
+
+            <transition name="down-content">
+              <div class="dropdown-content" v-if="item.visible">
+                <a v-for="(option, idx) in item.options" :key="idx">
+                  {{ option }}
+                </a>
+              </div>
+            </transition>
           </div>
         </div>
       </div>
@@ -39,37 +56,44 @@
 import { ref } from 'vue'
 import SduIcon from './icon/SduIcon.vue';
 import { useRouter } from 'vue-router';
+import { Clock, House, Message, Search, Star, View }  from '@element-plus/icons-vue';
+import IdentityCard from './IdentityCard.vue';
+import { useUserInfoStore } from '@/store/UserInfo';
 
+const user = useUserInfoStore();
 const searchQuery = ref('');
-const avatarUrl = ref('');  //url
+const showIdentityCard = ref(false);
 const navItems = ref([
-  { label: '消息', options: ['点赞', '回复', '通知'] },
-  { label: '动态', options: ['个人', '广场'] },
-  { label: '收藏' },
-  { label: '历史' },
+  { label: '消息', labelIcon: Message, options: ['点赞', '回复', '通知'], visible: false },
+  { label: '动态', labelIcon: View, options: ['个人', '广场'], visible: false },
+  { label: '收藏', labelIcon: Star, options: [], visible: false },
+  { label: '历史', labelIcon: Clock, options: [], visible: false },
 ]);
 
 const router = useRouter();
 
-async function changePath() {
-router.push('/login')
-}
 </script>
 
 
 <style scoped>
+@import "@/assets/avatar.css";
+
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  display: flex;
-  flex-direction: row;
+  height: 37px;
   padding: 10px;
   background-color: #f8f8f8;
+  display: flex;
+  flex-direction: column; 
+  justify-content: center;
 }
 
 .mainpage-return {
+  position: absolute;
+  align-self: flex-start;
   display: flex;
   flex-direction: row;
 }
@@ -79,96 +103,52 @@ router.push('/login')
 }
 
 .search-container {
-  margin-left: 550px;
+  position: absolute;
+  align-self: center;
+  align-items: center;
   display: flex;
 }
 
 .search-input {
-  margin-bottom: auto;
-  margin-top: auto;
-  padding: 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 270px;
-  height: 15px;
+  width: 300px;
 }
 
-.btn-3d {
-  margin-bottom: auto;
-  margin-top: auto;
+.search-button {
+  width: 32px;
+  height: 32px;
   margin-left: 10px;
-  height: 25px;
-  width: 50px;
-  border: none;
-  color: #fff;
-  font-size: 15px;
-  line-height: 1;
-  border-radius: 5px;
-  padding: 6px 10px;
-  text-align: center;
-  text-shadow: rgba(0,0,0,.4)1px 1px;
-  transform-style:preserve-3d;
-  transition:all .3s ease-out;
-  background:linear-gradient(to bottom,#556270 0%,#616161 100%);
-  background-color:#556270;
-}
-
-/* btn-3d:before,
-btn-3d:after {
-  border: none;
-  content: '';
-  position: absolute;
-  top: calc(50%- 2px);
-  left: 0;
-  height: 4px;
-  width: 100%;
-  transform-style: preserve-3d;
-  transition: all .3s ease-out;
-} */
-
-.btn-3d:before {
-  background: #BD3F32;
-  transform:translateZ(-1px);
-  box-shadow:0 0 8px rgba(189,63,50,.7);
-}
-
-.btn-3d:after {
-  background: #3F7FBC;
-  transform-origin: left;
-  transform: rotateY(90deg) translateZ(-1px);
-  box-shadow: 0 0 8px rgba(63,127,188,.7);
-}
-
-.btn-3d:hover {
-  background: linear-gradient(to bottom,skyblue 0%,#616161 100%);
-  transform: translateZ(-6px);
-  text-shadow: none;
-  box-shadow: 0 0 8px rgba(0,0,0,.5);
-}
-
-.btn-3d:hover:before {
-  transform:translatez(-13px) rotateY(60deg);
-}
-
-.btn-3d:hover:after{
-  transform: rotateY(-60deg) translateZ(-13px);
- transition-delay: .05s;
 }
 
 .item-container {
+  position: absolute;
   display: flex;
+  align-self: flex-end;
+  align-items: center;
   flex-direction: row;
-  margin-left: 250px;
 }
 
-.avatar {
+.avatar-container {
+  position: relative;
   margin-top: auto;
   margin-bottom: auto;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 2px solid #1800b5;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  width: 35px;
+  height: 35px;
+  /* 下面这三个让头像向下扩大，虽然我也不知道为什么 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.avatar-container:hover .avatar {
+  width: 65px;
+  height: 65px;
+}
+
+.identity-card-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 38px;
 }
 
 .nav-buttons {
@@ -184,22 +164,17 @@ btn-3d:after {
   margin: 0 auto
 }
 
-.dropbtn {
-  /* background-color: #686868;
-  color: white;
-  padding: 15px 10px;
-  height: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 0 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center; */
+.dropbtn:hover {
+  transition: all 0.3s;
+  color: #00bfff;
+}
+
+.dropbtn:active {
+  transition: all 0.3s;
+  color: #002aff;
 }
 
 .dropdown-content {
-  display: none;
   position: absolute;
   background-color: #f9f9f9;
   min-width: 160px;
@@ -207,18 +182,38 @@ btn-3d:after {
   z-index: 1;
 }
 
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
 .dropdown-content a {
+  display: block;
   color: black;
   padding: 12px 16px;
   text-decoration: none;
-  display: block;
 }
 
 .dropdown-content a:hover {
   background-color: #f1f1f1;
+}
+
+/* 身份卡片动画 */
+.identity-card-content-enter-active  {
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+.identity-card-content-leave-active {
+  transition: opacity 0.3s ease-out, transform 0.2s ease-out;
+}
+.identity-card-content-enter-from,
+.identity-card-content-leave-to {
+  transform: translateY(-10px);
+  opacity: 0;
+}
+
+/* 下拉菜单动画 */
+.down-content-enter-active,
+.down-content-leave-active {
+  transition: opacity 0.3s ease-out, transform 0.2s ease-out;
+}
+.down-content-enter-from,
+.down-content-leave-to {
+  transform: translateY(-3px);
+  opacity: 0;
 }
 </style>
