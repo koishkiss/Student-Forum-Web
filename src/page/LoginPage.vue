@@ -1,6 +1,6 @@
 <script lang="ts">
   export default {
-    name:'Login'  //组件名
+    name:'LoginPage'  //组件名
   }
 </script>
 
@@ -84,29 +84,27 @@ async function doLogin() {
 
 <style scoped>
 .login-page-box {
-  height: 100%; 
-  width: 100%; 
+  height: 100%;
+  width: 100%;
   display: flex;
+  flex-direction: row-reverse;
 }
 
 .input-form {
+  border-radius: 10px;
   background-color: var(--color-background-soft);
-  position: absolute;
-  top: 20%;
-  left: 0;
-  right: 0;
-  margin: auto;
   width: 400px;
   height: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  align-self: center;
+  margin-right: 10%;
 }
 
 .input-line {
   margin-top: 20px;
   margin-bottom: 20px;
-
 }
 
 .input-box {

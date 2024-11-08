@@ -11,19 +11,15 @@
 
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
 import NavBar from './components/NavBar.vue';
 
-const router = useRouter();
-
-async function popLoginPage() {
-  router.push({path:"/login"});
-}
 </script>
 
 
 <style scoped>
 .view-box {
+  margin-top: 37px;
+  padding-top: 10px;
   height: 100%;
   width: 100%;
 }

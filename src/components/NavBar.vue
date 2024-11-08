@@ -10,7 +10,7 @@
     <div class="mainpage-return">
       <SduIcon/>
 
-      <el-button :icon="House" type="success" plain text class="mainpage-button">
+      <el-button :icon="House" type="success" plain text class="mainpage-button" @click="toMainPage">
         首页
       </el-button>
     </div>
@@ -21,7 +21,7 @@
     </div>
 
     <div class="item-container">
-      <div class="avatar-container" @mouseenter="showIdentityCard=true" @mouseleave="showIdentityCard=true">
+      <div class="avatar-container" @mouseenter="showIdentityCard=true" @mouseleave="showIdentityCard=false">
         <transition name="identity-card-content">
           <div class="identity-card-container" v-if="showIdentityCard">
             <IdentityCard/>
@@ -53,14 +53,19 @@
 
 
 <script lang="ts" setup name="NavBar">
-import { ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import SduIcon from './icon/SduIcon.vue';
 import { useRouter } from 'vue-router';
 import { Clock, House, Message, Search, Star, View }  from '@element-plus/icons-vue';
 import IdentityCard from './IdentityCard.vue';
 import { useUserInfoStore } from '@/store/UserInfo';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { useHttpStore } from '@/store/Http';
 
+const { ip_port } = useHttpStore();
 const user = useUserInfoStore();
+
 const searchQuery = ref('');
 const showIdentityCard = ref(false);
 const navItems = ref([
@@ -71,6 +76,36 @@ const navItems = ref([
 ]);
 
 const router = useRouter();
+
+//去首页
+async function toMainPage() {
+  router.push("/main")
+}
+
+//初始化
+onBeforeMount(()=>{
+  if (user.uid === -1 && Cookies.get("Authorization") !== undefined) {
+    axios({
+      method: "get",
+      url: ip_port + "/user/mine/info",
+      headers: {
+        "Authorization": Cookies.get("Authorization"),
+        "uid": Cookies.get("uid")
+      }
+    })
+    .then(function (response) {
+      const data = response.data;
+      if (data.code == 200) {
+        user.$patch(data.data);
+      } else {
+        window.alert(data.message);
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+})
 
 </script>
 
@@ -89,6 +124,7 @@ const router = useRouter();
   display: flex;
   flex-direction: column; 
   justify-content: center;
+  z-index: 1;
 }
 
 .mainpage-return {

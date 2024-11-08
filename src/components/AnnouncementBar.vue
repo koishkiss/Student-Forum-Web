@@ -1,3 +1,9 @@
+<script lang="ts">
+  export default {
+    name:'AnnouncementBar'  //组件名
+  }
+</script>
+
 <template>
   <div class="announcement-bar">
     <h2>公告栏</h2>

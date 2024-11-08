@@ -1,6 +1,10 @@
 <script lang="ts">
+import { Loading, User, Position }  from '@element-plus/icons-vue';
   export default {
-    name:'IdentityCard'  //组件名
+    name:'IdentityCard',  //组件名
+    components: {
+      Loading,User,Position
+    }
   }
 </script>
 
@@ -12,11 +16,12 @@
 
   <div class="loading-finish" v-if="!isLoading">
     <div class="not-login" v-if="!hasLogin">
+      <Login/>
       <el-text class="not-login-text" size="large">
-        欢迎登入学生论坛系统！
+        欢迎登入学生论坛系统!
       </el-text>
       <el-button type="success" size="large" plain class="not-login-button" @click="toLoginPage">
-        登入
+        登录
       </el-button>
     </div>
 
@@ -45,6 +50,33 @@
           <span class="statistics-describe">加入</span>
         </div>
       </div>
+
+      <el-text class="register-time-text">
+        于 {{ user.registerTime }} 成为论坛中的一员
+      </el-text>
+
+      <div class="operator-box">
+        <button class="cta">
+          <el-icon class="preIcon"><User /></el-icon>
+          <span class="hover-underline-animation">个人中心</span>
+          <RightArraySVG class="icon"/>
+        </button>
+        
+        <button class="cta">
+          <el-icon class="preIcon"><Position /></el-icon>
+          <span class="hover-underline-animation">我的发帖</span>
+          <RightArraySVG class="icon"/>
+        </button>
+
+        <el-divider class="row-divider" />
+        
+        <button class="cta logout" @click="doLogout">
+          <el-icon class="preIcon"><LogoutSVG /></el-icon>
+          <span class="hover-underline-animation">退出登录</span>
+          <NoneIcon class="icon"/>
+        </button>
+      </div>
+
     </div>
   </div>
 </div>
@@ -57,7 +89,9 @@ import { useUserInfoStore } from '@/store/UserInfo';
 import { useHttpStore } from '@/store/Http';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import { Loading }  from '@element-plus/icons-vue';
+import RightArraySVG from './icon/RightArraySVG.vue';
+import LogoutSVG from './icon/LogoutSVG.vue';
+import NoneIcon from './icon/NoneIcon.vue';
 import { useRouter } from 'vue-router';
 
 const {ip_port} = useHttpStore();
@@ -69,6 +103,32 @@ const hasLogin = ref(false);
 
 async function toLoginPage() {
   route.push({path:'/login'});
+}
+
+//登出
+async function doLogout() {
+  isLoading.value = true;
+  hasLogin.value = false;
+
+  Cookies.remove("Authorization");
+  Cookies.remove("uid");
+
+  user.$patch({
+    uid:-1,
+    sid:"",
+    authority:-1,
+    realName:"",
+    nickname:"",
+    signature:"",
+    registerTime:"",
+    likeNum:-1,
+    bookmarkNum:-1,
+    postNum:-1,
+    joinNum:-1,
+    avatarURL:"http://47.113.194.64:22222/image/default-avatar.png"
+  })
+
+  isLoading.value = false;
 }
 
 //初始化
@@ -108,13 +168,13 @@ onBeforeMount(()=>{
 
 
 <style scoped>
+@import "@/assets/cta-button.css";
 
 .identity-card-box {
   border-radius: 8px;
-  height: 500px;
   position: absolute;
   background-color: var(--vt-c-white);
-  min-width: 300px;
+  min-width: 280px;
   padding: 12px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
@@ -137,7 +197,8 @@ onBeforeMount(()=>{
 }
 
 .not-login {
-  margin-top: 50%;
+  height: 140px;
+  margin-top: 13%;
   display: flex;
   flex-direction: column;
   align-self: center;
@@ -157,6 +218,7 @@ onBeforeMount(()=>{
 /* 登入后展示的 */
 
 .has-login {
+  height: 410px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -194,6 +256,32 @@ onBeforeMount(()=>{
 .column-divider {
   height: 25px;
   margin: 0 30px;
+}
+
+.register-time-text {
+  margin-top: 13px;
+  font-size: 11px;
+  color: #959595;
+}
+
+.operator-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+.row-divider {
+  width: 230px;
+  margin: 9px 0;
+}
+.cta {
+  margin: 15px 0;
+}
+.logout .hover-underline-animation {
+  color: red;
+}
+.logout .hover-underline-animation:after {
+  background-color: red;
 }
 
 </style>

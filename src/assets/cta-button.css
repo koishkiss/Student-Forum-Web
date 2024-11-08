@@ -1,0 +1,74 @@
+.cta {
+display: flex;
+flex-direction: row;
+height: 25px;
+border: none;
+background: none;
+}
+
+.cta span {
+padding-bottom: 7px;
+letter-spacing: 4px;
+font-size: 15px;
+text-transform: uppercase;
+}
+
+.preIcon {
+  padding-right: 15px;
+  height: 21px;
+}
+
+.cta .preIcon {
+transform: translateX(3px);
+transition: all 0.3s ease;
+}
+
+.cta:hover .preIcon {
+transform: translateX(0);
+}
+
+.cta:active .preIcon {
+transform: scale(0.9);
+}
+
+.icon {
+padding-left: 70px;
+height: 20px;
+}
+
+.cta .icon {
+transform: translateX(-7px);
+transition: all 0.3s ease;
+}
+
+.cta:hover .icon {
+transform: translateX(0);
+}
+
+.cta:active .icon {
+transform: scale(0.9);
+}
+
+.hover-underline-animation {
+position: relative;
+color: black;
+padding-bottom: 20px;
+}
+
+.hover-underline-animation:after {
+content: "";
+position: absolute;
+width: 100%;
+transform: scaleX(0);
+height: 1.5px;
+bottom: 0;
+left: 0;
+background-color: #000000;
+transform-origin: bottom right;
+transition: transform 0.25s ease-out;
+}
+
+.cta:hover .hover-underline-animation:after {
+transform: scaleX(1);
+transform-origin: bottom left;
+}
