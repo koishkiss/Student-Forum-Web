@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import App from "@/App.vue";
 import MainPage from "@/page/MainPage.vue";
 import PersonalPage from "@/page/PersonalPage.vue";
 import LoginPage from "@/page/LoginPage.vue";
@@ -10,9 +9,8 @@ const router = createRouter({
 history:createWebHistory(),
 routes:[
     {
-        name:"app-page",
         path:"/",
-        component:App
+        redirect:"/main"
     },
     {
         name:"login-page",

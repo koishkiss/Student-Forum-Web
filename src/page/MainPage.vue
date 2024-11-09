@@ -1,9 +1,10 @@
 <script lang="ts">
   import AnnouncementBar from '@/components/AnnouncementBar.vue';
+  import FollowSection from '@/components/FollowSectionInMainPage.vue';
   export default {
     name:'MainPage',  //组件名
     components:{
-      AnnouncementBar
+      AnnouncementBar,FollowSection
     }
   }
 </script>
@@ -22,7 +23,7 @@
 
   <div class="right-sidebar-box">
     <div class="follow-section-box">
-      
+      <FollowSection/>
     </div>
 
     <div class="right-bottom-item-box">
@@ -70,14 +71,15 @@
 }
 
 .right-sidebar-box {
+  min-width: 600px;
   width: 68%;
   height: 100px;
 }
 
 .follow-section-box {
-  min-height: 150px;
+  min-height: 180px;
   max-height: 400px;
-  background-color: beige;
+  scroll-behavior: smooth;
 }
 
 .right-bottom-item-box {

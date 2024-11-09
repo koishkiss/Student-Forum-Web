@@ -1,0 +1,28 @@
+.liner-text1 {
+  font-weight: bold;
+}
+.liner-text1:hover {
+  color: #000000;
+  text-shadow: rgba(0,0,0,.2)1px 1px;
+  transition: all 0.3 ease;
+}
+.liner-text1 {
+  position: relative;
+  color: black;
+}
+.liner-text1::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 1.5px;
+  bottom: 0;
+  left: 0;
+  background-color: #000000;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+.liner-text1:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
