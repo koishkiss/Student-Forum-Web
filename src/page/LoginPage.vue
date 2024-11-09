@@ -38,7 +38,7 @@
 </div>
 </template>
 
-<script setup lang="ts">
+<script  lang="ts" setup>
 import { useHttpStore } from '@/store/Http';
 import { useUserInfoStore } from '@/store/UserInfo';
 import Cookies from 'js-cookie';
@@ -68,7 +68,7 @@ async function doLogin() {
       Cookies.set("uid",data.data.user.uid,{ expires:7 });
       window.alert("登入成功！");
       loading.value = false;
-      router.push({path:"/"});
+      router.push({path:"/main"});
     } else {
       window.alert(data.message);
       loading.value = false;
@@ -79,6 +79,12 @@ async function doLogin() {
     console.log(error);
   });
 }
+
+// onBeforeMount(()=>{
+//   if (user.uid !== -1) {
+//     router.push("/main")
+//   }
+// })
 
 </script>
 

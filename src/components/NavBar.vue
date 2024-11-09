@@ -21,13 +21,16 @@
     </div>
 
     <div class="item-container">
-      <div class="avatar-container" @mouseenter="showIdentityCard=true" @mouseleave="showIdentityCard=false">
+      <div class="avatar-container" 
+        @mouseenter="showIdentityCard=true" 
+        @mouseleave="showIdentityCard=false"
+      >
         <transition name="identity-card-content">
           <div class="identity-card-container" v-if="showIdentityCard">
             <IdentityCard/>
           </div>
         </transition>
-        <el-avatar :src="user.avatarURL" class="avatar"/>
+        <el-avatar :src="user.avatarURL" class="avatar" @click="toPersonalPage"/>
       </div>
 
       <div class="nav-buttons">
@@ -53,7 +56,7 @@
 
 
 <script lang="ts" setup name="NavBar">
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, ref, shallowRef } from 'vue'
 import SduIcon from './icon/SduIcon.vue';
 import { useRouter } from 'vue-router';
 import { Clock, House, Message, Search, Star, View }  from '@element-plus/icons-vue';
@@ -68,7 +71,7 @@ const user = useUserInfoStore();
 
 const searchQuery = ref('');
 const showIdentityCard = ref(false);
-const navItems = ref([
+const navItems = shallowRef([
   { label: '消息', labelIcon: Message, options: ['点赞', '回复', '通知'], visible: false },
   { label: '动态', labelIcon: View, options: ['个人', '广场'], visible: false },
   { label: '收藏', labelIcon: Star, options: [], visible: false },
@@ -80,6 +83,15 @@ const router = useRouter();
 //去首页
 async function toMainPage() {
   router.push("/main")
+}
+
+//去个人主页
+async function toPersonalPage() {
+  if (user.uid !== -1) {
+    router.push("/personal");
+  } else {
+    router.push("/login")
+  }
 }
 
 //初始化
@@ -118,20 +130,24 @@ onBeforeMount(()=>{
   top: 0;
   left: 0;
   width: 100%;
+  min-width: 1350px;
   height: 37px;
   padding: 10px;
   background-color: #f8f8f8;
   display: flex;
   flex-direction: column; 
+  flex-wrap: nowrap;
   justify-content: center;
   z-index: 1;
 }
 
 .mainpage-return {
   position: absolute;
+  margin-left: 30px;
   align-self: flex-start;
   display: flex;
   flex-direction: row;
+  flex-shrink: 0;
 }
 
 .mainpage-button {
@@ -143,6 +159,7 @@ onBeforeMount(()=>{
   align-self: center;
   align-items: center;
   display: flex;
+  flex-shrink: 1;
 }
 
 .search-input {
@@ -161,6 +178,7 @@ onBeforeMount(()=>{
   align-self: flex-end;
   align-items: center;
   flex-direction: row;
+  flex-shrink: 1;
 }
 
 .avatar-container {
@@ -211,6 +229,7 @@ onBeforeMount(()=>{
 }
 
 .dropdown-content {
+  cursor: pointer;
   position: absolute;
   background-color: #f9f9f9;
   min-width: 160px;

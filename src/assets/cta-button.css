@@ -4,6 +4,7 @@ flex-direction: row;
 height: 25px;
 border: none;
 background: none;
+cursor: pointer;
 }
 
 .cta span {

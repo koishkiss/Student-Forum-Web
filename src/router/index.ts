@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import App from "@/App.vue";
-import LoginPage from "@/page/LoginPage.vue";
 import MainPage from "@/page/MainPage.vue";
+import PersonalPage from "@/page/PersonalPage.vue";
+import LoginPage from "@/page/LoginPage.vue";
 
 
 const router = createRouter({
@@ -22,6 +23,11 @@ routes:[
         name:"main-page",
         path:"/main",
         component:MainPage
+    },
+    {
+        name:"personal-page",
+        path:"/personal",
+        component:PersonalPage
     }
 ]})
 

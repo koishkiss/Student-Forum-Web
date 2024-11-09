@@ -1,5 +1,6 @@
 <script lang="ts">
 import { Loading, User, Position }  from '@element-plus/icons-vue';
+import { useRouter } from 'vue-router';
   export default {
     name:'IdentityCard',  //组件名
     components: {
@@ -16,7 +17,6 @@ import { Loading, User, Position }  from '@element-plus/icons-vue';
 
   <div class="loading-finish" v-if="!isLoading">
     <div class="not-login" v-if="!hasLogin">
-      <Login/>
       <el-text class="not-login-text" size="large">
         欢迎登入学生论坛系统!
       </el-text>
@@ -47,7 +47,7 @@ import { Loading, User, Position }  from '@element-plus/icons-vue';
         <el-divider direction="vertical" class="column-divider" />
         <div class="statistics-item">
           <span class="statistics-num">{{ user.joinNum }}</span> 
-          <span class="statistics-describe">加入</span>
+          <span class="statistics-describe">关注</span>
         </div>
       </div>
 
@@ -56,7 +56,7 @@ import { Loading, User, Position }  from '@element-plus/icons-vue';
       </el-text>
 
       <div class="operator-box">
-        <button class="cta">
+        <button class="cta" @click="toPersonalPage">
           <el-icon class="preIcon"><User /></el-icon>
           <span class="hover-underline-animation">个人中心</span>
           <RightArraySVG class="icon"/>
@@ -92,7 +92,6 @@ import axios from 'axios';
 import RightArraySVG from './icon/RightArraySVG.vue';
 import LogoutSVG from './icon/LogoutSVG.vue';
 import NoneIcon from './icon/NoneIcon.vue';
-import { useRouter } from 'vue-router';
 
 const {ip_port} = useHttpStore();
 const user = useUserInfoStore();
@@ -102,7 +101,11 @@ const isLoading = ref(true);
 const hasLogin = ref(false);
 
 async function toLoginPage() {
-  route.push({path:'/login'});
+  route.push("/login");
+}
+
+async function toPersonalPage() {
+  route.push("/personal")
 }
 
 //登出
@@ -127,6 +130,8 @@ async function doLogout() {
     joinNum:-1,
     avatarURL:"http://47.113.194.64:22222/image/default-avatar.png"
   })
+
+  route.push("/main");
 
   isLoading.value = false;
 }
