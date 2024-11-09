@@ -90,8 +90,7 @@ async function doLogin() {
 
 <style scoped>
 .login-page-box {
-  height: 100%;
-  width: 100%;
+  padding: 150px 100px;
   display: flex;
   flex-direction: row-reverse;
 }

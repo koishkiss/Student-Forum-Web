@@ -56,7 +56,7 @@
 
 
 <script lang="ts" setup name="NavBar">
-import { onBeforeMount, ref, shallowRef } from 'vue'
+import { onBeforeMount, reactive, ref, markRaw } from 'vue'
 import SduIcon from './icon/SduIcon.vue';
 import { useRouter } from 'vue-router';
 import { Clock, House, Message, Search, Star, View }  from '@element-plus/icons-vue';
@@ -71,11 +71,11 @@ const user = useUserInfoStore();
 
 const searchQuery = ref('');
 const showIdentityCard = ref(false);
-const navItems = shallowRef([
-  { label: '消息', labelIcon: Message, options: ['点赞', '回复', '通知'], visible: false },
-  { label: '动态', labelIcon: View, options: ['个人', '广场'], visible: false },
-  { label: '收藏', labelIcon: Star, options: [], visible: false },
-  { label: '历史', labelIcon: Clock, options: [], visible: false },
+const navItems = reactive([
+  { label: '消息', labelIcon: markRaw(Message), options: ['点赞', '回复', '通知'], visible: false },
+  { label: '动态', labelIcon: markRaw(View), options: ['个人', '广场'], visible: false },
+  { label: '收藏', labelIcon: markRaw(Star), options: [], visible: false },
+  { label: '历史', labelIcon: markRaw(Clock), options: [], visible: false },
 ]);
 
 const router = useRouter();
