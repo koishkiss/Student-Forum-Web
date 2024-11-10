@@ -1,6 +1,7 @@
 <script lang="ts">
 import SectionIdentity from './SectionIdentity.vue';
 import { Loading } from '@element-plus/icons-vue';
+import { fa } from 'element-plus/es/locale';
 export default {
   name:"FollowSectionInMainPage",
   components: {
@@ -20,7 +21,7 @@ export default {
   </div>
 
   <div class="no-data-box" v-if="!hasData">
-    <el-empty :image-size="100" description="你还没有加入过论坛哦"/>
+    <el-empty :image-size="100" :description="noDataText"/>
   </div>
 
   <div class="section-identity-item-box" v-if="!isLoadingList&&hasData">
@@ -52,34 +53,41 @@ const { ip_port } = useHttpStore();
 let followedSectionList = reactive<SectionIdentityList>([]);
 const isLoadingList = ref(true);
 const hasData = ref(true);
+const noDataText = ref("你还没有加入过论坛哦");
 
 //初始化
 onBeforeMount(()=>{
-  axios({
-    method:"get",
-    url:ip_port + "/section/mine",
-    headers:{
-      "Authorization":Cookies.get("Authorization"),
-      "uid":Cookies.get("uid")
-    }
-  })
-  .then(function (response) {
-    const data = response.data;
-    if (data.code === 200) {
-      followedSectionList = data.data;
-      isLoadingList.value = false;
-    } else if (data.code === 40010) {
-      hasData.value = false;
-      isLoadingList.value = false;
-    } else {
-      window.alert(data.message);
-      hasData.value = false;
-      isLoadingList.value = false;
-    }
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+  if (Cookies.get("uid") === undefined) {
+    noDataText.value = "请登入后查看"
+    hasData.value = false;
+    isLoadingList.value = false;
+  } else {
+    axios({
+      method:"get",
+      url:ip_port + "/section/mine",
+      headers:{
+        "Authorization":Cookies.get("Authorization"),
+        "uid":Cookies.get("uid")
+      }
+    })
+    .then(function (response) {
+      const data = response.data;
+      if (data.code === 200) {
+        followedSectionList = data.data;
+        isLoadingList.value = false;
+      } else if (data.code === 40010) {
+        hasData.value = false;
+        isLoadingList.value = false;
+      } else {
+        window.alert(data.message);
+        hasData.value = false;
+        isLoadingList.value = false;
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
 })
 
 </script>

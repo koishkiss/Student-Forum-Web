@@ -1,6 +1,6 @@
 <script lang="ts">
 import { Loading, User, Position }  from '@element-plus/icons-vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
   export default {
     name:'IdentityCard',  //组件名
     components: {
@@ -95,23 +95,23 @@ import NoneIcon from './icon/NoneIcon.vue';
 
 const {ip_port} = useHttpStore();
 const user = useUserInfoStore();
-const route = useRouter();
+const router = useRouter();
+const route = useRoute();
 
 const isLoading = ref(true);
 const hasLogin = ref(false);
 
 async function toLoginPage() {
-  route.push("/login");
+  router.push("/login");
 }
 
 async function toPersonalPage() {
-  route.push("/personal")
+  router.push("/personal")
 }
 
 //登出
 async function doLogout() {
   isLoading.value = true;
-  hasLogin.value = false;
 
   Cookies.remove("Authorization");
   Cookies.remove("uid");
@@ -131,8 +131,13 @@ async function doLogout() {
     avatarURL:"http://47.113.194.64:22222/image/default-avatar.png"
   })
 
-  route.push("/main");
-
+  if (route.path === "/main") {
+    window.location.reload();
+  } else {
+    router.push("/"); 
+  }
+  
+  hasLogin.value = false;
   isLoading.value = false;
 }
 
