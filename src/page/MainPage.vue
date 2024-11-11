@@ -1,10 +1,11 @@
 <script lang="ts">
   import AnnouncementBar from '@/components/AnnouncementBar.vue';
   import FollowSection from '@/components/FollowSectionInMainPage.vue';
+  import PostPreviewScrollList from '@/components/PostPreviewScrollList.vue';
   export default {
     name:'MainPage',  //组件名
     components:{
-      AnnouncementBar,FollowSection
+      AnnouncementBar,FollowSection,PostPreviewScrollList
     }
   }
 </script>
@@ -28,7 +29,10 @@
 
     <div class="right-bottom-item-box">
       <div class="public-trend-box">
-        
+        <div class="public-trend-title">
+          丨 热门动态
+        </div>
+        <PostPreviewScrollList/>
       </div>
 
       <div class="hot-issue-box">
@@ -88,9 +92,18 @@
 }
 
 .public-trend-box {
+  display: flex;
+  flex-direction: column;
   min-width: 70%;
   min-height: 700px;
-  background-color: #199600;
+}
+
+.public-trend-title {
+  font-size: 28px;
+  font-weight: bold;
+  height: 40px;
+  background-color: #c9c9c9;
+  border: thick double rgb(255, 255, 255);
 }
 
 .hot-issue-box {

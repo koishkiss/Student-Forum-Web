@@ -26,15 +26,7 @@ export default {
 
   <div class="section-identity-item-box" v-if="!isLoadingList&&hasData">
     <div class="section-identity-item" v-for="identity in followedSectionList" :key="identity.sectionId">
-      <SectionIdentity 
-        :sectionId="identity.sectionId"
-        :iconURL="identity.iconURL"
-        :name="identity.name"
-        :classify="identity.classify"
-        :classifyName="identity.classifyName"
-        :memberNum="identity.memberNum"
-        :postNum="identity.postNum"
-      />
+      <SectionIdentity v-bind=identity />
     </div>
   </div>
 </div>

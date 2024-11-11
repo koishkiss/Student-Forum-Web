@@ -60,7 +60,7 @@ import { onBeforeMount, reactive, ref, markRaw } from 'vue'
 import SduIcon from './icon/SduIcon.vue';
 import { useRouter } from 'vue-router';
 import { Clock, House, Message, Search, Star, View }  from '@element-plus/icons-vue';
-import IdentityCard from './IdentityCard.vue';
+import IdentityCard from './MyIdentityCard.vue';
 import { useUserInfoStore } from '@/store/UserInfo';
 import axios from 'axios';
 import Cookies from 'js-cookie';

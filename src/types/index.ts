@@ -12,3 +12,24 @@ export interface SectionIdentityItem {
 }
 
 export type SectionIdentityList = Array<SectionIdentityItem>
+
+
+export interface PostPreviewItem {
+  id: number,
+  sectionId: number,
+  uid: number,
+  nickname: string,
+  avatarURL: string,
+  title: string,
+  coverURL: string,
+  content: string,
+  postTime: string,
+  like_time: string,
+  commentNum: number,
+  viewNum: number,
+  likeNum: number,
+  bookmarkNum: number,
+  status: number
+}
+
+export type PostPreviewItemList = Array<PostPreviewItem>
