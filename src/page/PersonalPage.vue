@@ -9,8 +9,8 @@
 </template>
 
 <script lang="ts" setup name="personal-page">
+import ProfileSidebar from '@/components/ProfileSidebar.vue';
 
-import ProfileSidebar from '../components/ProfileSidebar.vue'
 </script>
 
 <style scoped>

@@ -1,7 +1,6 @@
 <script lang="ts">
 import SectionIdentity from './SectionIdentity.vue';
 import { Loading } from '@element-plus/icons-vue';
-import { fa } from 'element-plus/es/locale';
 export default {
   name:"FollowSectionInMainPage",
   components: {

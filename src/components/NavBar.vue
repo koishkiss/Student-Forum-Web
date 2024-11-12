@@ -36,14 +36,14 @@
       <div class="nav-buttons">
         <div class="dropdown" v-for="(item, index) in navItems" :key="index">
           <div @mouseenter="item.visible=true" @mouseleave="item.visible=false">
-            <el-button plain :icon="item.labelIcon" text class="dropbtn">
+            <el-button plain :icon="item.labelIcon" text class="dropbtn" @click="item.to">
               {{ item.label }}
             </el-button>
 
             <transition name="down-content">
               <div class="dropdown-content" v-if="item.visible">
-                <a v-for="(option, idx) in item.options" :key="idx">
-                  {{ option }}
+                <a v-for="(option, idx) in item.options" :key="idx" @click="option.to">
+                  {{ option.label }}
                 </a>
               </div>
             </transition>
@@ -66,32 +66,65 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useHttpStore } from '@/store/Http';
 
+const router = useRouter();
 const { ip_port } = useHttpStore();
 const user = useUserInfoStore();
 
 const searchQuery = ref('');
 const showIdentityCard = ref(false);
 const navItems = reactive([
-  { label: '消息', labelIcon: markRaw(Message), options: ['点赞', '回复', '通知'], visible: false },
-  { label: '动态', labelIcon: markRaw(View), options: ['个人', '广场'], visible: false },
-  { label: '收藏', labelIcon: markRaw(Star), options: [], visible: false },
-  { label: '历史', labelIcon: markRaw(Clock), options: [], visible: false },
+  { 
+    label: '消息', 
+    labelIcon: markRaw(Message), 
+    options: [{label:'点赞', to:toPersonalPage}, {label:'回复', to:toPersonalPage}, {label:'通知', to:toPersonalPage}], 
+    visible: false,
+    to:toPersonalPage
+  },
+  { 
+    label: '动态', 
+    labelIcon: markRaw(View), 
+    options: [{label:'个人', to:toPersonalPostPage}, {label:'广场', to:toPersonalPage}], 
+    visible: false,
+    to:toPersonalPostPage
+  },
+  { 
+    label: '收藏', 
+    labelIcon: markRaw(Star), 
+    options: [], 
+    visible: false,
+    to:toPersonalMarkPage
+  },
+  { 
+    label: '历史', 
+    labelIcon: markRaw(Clock), 
+    options: [], 
+    visible: false,
+    to:toPersonalPage
+  }
 ]);
 
-const router = useRouter();
-
 //去首页
-async function toMainPage() {
+function toMainPage() {
   router.push("/main")
 }
 
-//去个人主页
-async function toPersonalPage() {
+//去个人主页动态页面
+function toPersonalPage() {
   if (user.uid !== -1) {
-    router.push("/personal/Person");
+    router.push("/personal/Activities");
   } else {
     router.push("/login")
   }
+}
+
+//去个人收藏页
+function toPersonalMarkPage() {
+  router.push("/personal/Collections")
+}
+
+//去个人发帖页
+function toPersonalPostPage() {
+  router.push("/personal/Person")
 }
 
 //初始化
