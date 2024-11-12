@@ -88,7 +88,7 @@ async function toMainPage() {
 //去个人主页
 async function toPersonalPage() {
   if (user.uid !== -1) {
-    router.push("/personal");
+    router.push("/personal/Person");
   } else {
     router.push("/login")
   }
