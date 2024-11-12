@@ -11,17 +11,26 @@
                 <p>个性签名：{{ signature }}</p>
             </div>
         </div>
-        <nav class="nav-tabs">
-            <RouterLink to="/personal/Activities" active-class="true">动态</RouterLink>
-            <RouterLink to="/personal/Collections" active-class="true">收藏</RouterLink>
-            <RouterLink to="/personal/Person" active-class="true">个人</RouterLink>
-            <RouterLink to="/personal/Settings" active-class="true">设置</RouterLink>
-        </nav>
-        <RouterView />
+        <div class="total">
+            <div class="left-side">
+                <nav class="nav-tabs">
+                    <RouterLink to="/personal/Activities" active-class="true">动态</RouterLink>
+                    <RouterLink to="/personal/Collections" active-class="true">收藏</RouterLink>
+                    <RouterLink to="/personal/Person" active-class="true">个人</RouterLink>
+                    <RouterLink to="/personal/Settings" active-class="true">设置</RouterLink>
+                </nav>
+                <RouterView />
+            </div>
+            <div class="right-side">
+                <FollowSection></FollowSection>
+            </div>
+        </div>
     </div>
   </template>
   
 <script lang="ts" setup>
+    import FollowSection from '../components/FollowSection.vue'
+
     import Cookies from 'js-cookie';
     import { ref, onMounted } from 'vue';
     import axios from 'axios';
@@ -47,8 +56,8 @@
         
         // 设置请求头
         const headers = {
-        Authorization: Authorization.value,
-        uid: uidLocal.value,
+            Authorization: Authorization.value,
+            uid: uidLocal.value,
         };
     
         // 发送GET请求，获取用户信息
@@ -135,5 +144,67 @@
         text-decoration: none;
         font-size: 14px;
     }
+    .total {
+        display: flex; /* 使用 Flexbox 布局 */
+        gap: 20px; /* 两边内容的间距 */
+        padding: 20px;
+        background-color: #f8f8f8; /* 背景颜色 */
+        border-radius: 10px; /* 圆角 */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+    }
+
+    .left-side {
+        flex: 6; /* 占左边 70% */
+        background-color: #ffffff; /* 白色背景 */
+        padding: 20px;
+        border-radius: 8px; 
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* 轻微阴影 */
+        min-height: 600px; /* 设置最小高度 */
+    }
+
+    .right-side {
+        flex: 4; /* 占右边 30% */
+        background-color: #ffffff; /* 白色背景 */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* 轻微阴影 */
+        min-height: 600px; /* 设置最小高度 */
+    }
+
+    /* 优化 nav-tabs 的样式 */
+    .nav-tabs {
+        display: flex;
+        justify-content: space-around;
+        border-bottom: 2px solid #eee;
+        margin-bottom: 20px;
+    }
+
+    .nav-tabs left-side {
+        color: #333;
+        font-size: 16px;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+    .nav-tabs .right-side:hover {
+        background-color: #f0f0f0;
+    }
+
+    .nav-tabs .true {
+        color: #007bff;
+        font-weight: bold;
+        background-color: #e8f4ff;
+    }
+
+    /* 优化 FollowSection 样式 */
+    .b .follow-section {
+        padding: 10px;
+        border-top: 1px solid #eee;
+        margin-top: 20px;
+    }
+
+
 </style>
   
