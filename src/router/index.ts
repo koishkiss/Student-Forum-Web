@@ -4,6 +4,10 @@ import MainPage from "@/page/MainPage.vue";
 import PersonalPage from "@/page/PersonalPage.vue";
 import LoginPage from "@/page/LoginPage.vue";
 
+import Activities from "../components/ActivitiesInPersonalPage.vue"
+import Collections from "../components/CollectionsInPersonalPage.vue"
+import Person from "../components/PersonInPersonalPage.vue"
+import Settings from "../components/SettingsInPersonalPage.vue"
 
 const router = createRouter({
 history:createWebHistory(),
@@ -25,7 +29,26 @@ routes:[
     {
         name:"personal-page",
         path:"/personal",
-        component:PersonalPage
+        component:PersonalPage,
+        children:[
+            {
+                path:"Activities",
+                component:Activities,
+            },
+            {
+                path:"Collections",
+                component:Collections,
+            },
+            {
+                path:"Person",
+                component:Person,
+            },
+            {
+                path:"Settings",
+                component:Settings,
+            },
+
+        ]
     }
 ]})
 

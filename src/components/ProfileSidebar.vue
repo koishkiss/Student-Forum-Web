@@ -12,22 +12,69 @@
             </div>
         </div>
         <nav class="nav-tabs">
-            <a href="#">动态</a>
-            <a href="#">收藏</a>
-            <a href="#">个人</a>
-            <a href="#">设置</a>
+            <RouterLink to="/personal/Activities" active-class="true">动态</RouterLink>
+            <RouterLink to="/personal/Collections" active-class="true">收藏</RouterLink>
+            <RouterLink to="/personal/Person" active-class="true">个人</RouterLink>
+            <RouterLink to="/personal/Settings" active-class="true">设置</RouterLink>
         </nav>
+        <RouterView />
     </div>
   </template>
   
 <script lang="ts" setup>
-    import { ref } from 'vue' 
-    //这里调用/user/mine/info，将用户信息传入name,uid,postCount,signature
-    const name = ref('张三')
-    const uid = ref('123456')
-    const postCount = ref(42)
-    const signature = ref('个性签名')
+    import Cookies from 'js-cookie';
+    import { ref, onMounted } from 'vue';
+    import axios from 'axios';
+    import { useHttpStore } from '@/store/Http';
     
+    // 从Cookies中获取授权信息和用户ID
+    const Authorization = ref(Cookies.get('Authorization') || '');
+    const uidLocal = ref(Cookies.get('uid') || '');
+    
+    // 使用HttpStore获取IP和端口配置
+    const { ip_port } = useHttpStore();
+    
+    // 定义响应数据的状态
+    const loading = ref(false);
+    const name = ref('加载中...');
+    const uid = ref('');
+    const postCount = ref(0); // 发帖数，可以在另一个API请求中获取
+    const signature = ref('');
+    
+    // 在组件挂载时请求用户数据
+    onMounted(() => {
+        loading.value = true;
+        
+        // 设置请求头
+        const headers = {
+        Authorization: Authorization.value,
+        uid: uidLocal.value,
+        };
+    
+        // 发送GET请求，获取用户信息
+        axios.get(`${ip_port}/user/mine/info`, { headers })
+        .then((response) => {
+            const { code, message, data } = response.data;
+            if (code === 200 && data) {
+            // 将后端返回的数据赋值到Vue状态中
+            name.value = data.realName || '未知用户';
+            uid.value = String(data.uid) || uidLocal.value;
+            signature.value = data.signature || '这个人很懒，什么都没有写';
+            // 这里假设发帖数为0，具体获取发帖数的API可以再进行调用
+            postCount.value = 0; 
+            } else {
+            console.error(`获取用户信息失败: ${message}`);
+            }
+        })
+        .catch((error) => {
+            console.error('请求错误:', error);
+        })
+        .finally(() => {
+            loading.value = false;
+        });
+    });
+    //后端没有发帖数数据，暂时设置为0
+    postCount.value=0
 </script>
   
 <style scoped>

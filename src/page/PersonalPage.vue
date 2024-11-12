@@ -1,61 +1,33 @@
-<script lang="ts">
-import FollowSection from '@/components/FollowSection.vue';
-import ProfileSidebar from '@/components/ProfileSidebar.vue';
-export default {
-  name:'PersonalPage',
-  components: {
-    FollowSection,ProfileSidebar
-  }
-}
-</script>
-
 <template>
-<div class="personal-page-box">
-  <div class="profile-sidebar-box">
-    <ProfileSidebar/>
-  </div>
-
-  <div class="display-box">
-    <div class="child-page-box">
-
+  <div class="app">
+    
+    <div class="content">
+      <ProfileSidebar />
+      <FollowSection />
     </div>
 
-    <div class="follow-section-box">
-      <FollowSection/>
-    </div>
   </div>
-</div>
 </template>
 
+<script lang="ts" setup name="personal-page">
 
-<script lang="ts" setup>
-
+import ProfileSidebar from '../components/ProfileSidebar.vue'
+import FollowSection from '../components/FollowSection.vue'
 </script>
 
-
 <style scoped>
-
-.personal-page-box {
-  padding: 150px 300px;
+.app {
+  width: 85%;
+  height: 100vh;
+  background-color: #f0f0f0;
+  margin: 0 auto;
 }
 
-.profile-sidebar-box {
-  min-width: 800px;
-}
-
-.display-box {
+.content {
   display: flex;
+  margin-top: 20px;
+  gap: 5%;
+  padding: 20px;
+  margin: 0 auto;
 }
-
-.child-page-box {
-  background-color: #6b6b6b;
-  width: 68%;
-  min-width: 600px;
-}
-
-.follow-section-box {
-  width: 32%;
-  min-width: 200px;
-}
-
 </style>
