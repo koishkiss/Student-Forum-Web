@@ -1,0 +1,11 @@
+<template>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 16 16">
+  <path fill="#eab308" fill-rule="evenodd" d="M3.5 1a.5.5 0 0 0-.5.5v13a.5.5 0 0 0 .743.437L8 12.572l4.257 2.365A.5.5 0 0 0 13 14.5v-13a.5.5 0 0 0-.5-.5zM5 4h6V3H5z" clip-rule="evenodd"/>
+</svg>
+</template>
+
+<script lang="ts">
+  export default {
+    name:"FullMarkSVG"
+  }
+</script>
