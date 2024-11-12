@@ -133,7 +133,8 @@ function like() {
       like_num.value += 1;
     } else if (data.code === 40012) {
       ElNotification({
-        title: data.message
+        title: "请不要进行重复的操作!",
+        duration:1000
       })
     } else {
       window.alert(data.message);
@@ -161,7 +162,8 @@ function dislike() {
       like_num.value -= 1;
     } else if (data.code === 40012) {
       ElNotification({
-        title: data.message
+        title: "请不要进行重复的操作!",
+        duration:1000
       })
     } else {
       window.alert(data.message);
@@ -189,7 +191,8 @@ function mark() {
       mark_num.value += 1;
     } else if (data.code === 40012) {
       ElNotification({
-        title: data.message
+        title: "请不要进行重复的操作!",
+        duration:1000
       })
     } else {
       window.alert(data.message);
@@ -217,7 +220,8 @@ function dismark() {
       mark_num.value -= 1;
     } else if (data.code === 40012) {
       ElNotification({
-        title: data.message
+        title: "请不要进行重复的操作!",
+        duration:1000
       })
     } else {
       window.alert(data.message);
