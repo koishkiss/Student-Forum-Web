@@ -25,6 +25,7 @@ export interface PostPreviewItem {
   content: string,
   postTime: string,
   like_time: string,
+  mark_time:string,
   commentNum: number,
   viewNum: number,
   likeNum: number,

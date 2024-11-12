@@ -11,7 +11,7 @@ export default {
 <template>
 <div class="preview-post-list-box">
 
-  <div v-if="!isFirstLoading">
+  <div v-if="!isFirstLoading" class="post-preview-list-box">
     <ul 
       v-infinite-scroll="loadMore" 
       :infinite-scroll-disabled="isLoadingMore || noMore" 
@@ -48,11 +48,12 @@ const noMore = ref(false);
 //加载更多
 async function loadMore() {
   isLoadingMore.value = true;
-  axios({
+  await axios({
     method:"post",
     url:ip_port + "/post/get/recommend",
     data:{
-      "lastData":lastData.value
+      "lastData":lastData.value,
+      "pageSize":5
     },
     headers:{
       "Authorization":Cookies.get("Authorization"),
@@ -62,7 +63,7 @@ async function loadMore() {
   .then(function (response) {
     const data = response.data;
     if (data.code === 200) {
-      previewPostList.concat(data.data.records);
+      previewPostList.push.apply(previewPostList,data.data.records)
       lastData.value = data.data.lastData;
       isLoadingMore.value = false;
     } else if (data.code === 40006) {
@@ -85,7 +86,9 @@ onBeforeMount(()=>{
   axios({
     method:"post",
     url:ip_port + "/post/get/recommend",      
-    data:{},
+    data:{
+      "pageSize":5
+    },
     headers:{
       "Authorization":Cookies.get("Authorization"),
       "uid":Cookies.get("uid")
@@ -123,6 +126,11 @@ onBeforeMount(()=>{
   background-color: var(--vt-c-white-soft);
 }
 
+.post-preview-list-box {
+  border: solid 1px rgb(201, 201, 201);
+  border-radius: 5px;
+}
+
 .post-preview-list {
   list-style-type: none;
   padding: 0;
@@ -130,9 +138,7 @@ onBeforeMount(()=>{
 }
 
 .post-preview-item {
-  border: solid 1px rgb(201, 201, 201);
   background-color: #fff;
-  border-radius: 3px;
   padding: 5px;
 }
 
