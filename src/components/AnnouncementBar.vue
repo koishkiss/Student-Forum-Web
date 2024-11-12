@@ -35,7 +35,6 @@
   padding: 20px;
   background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;

@@ -44,7 +44,7 @@ export default {
         :src="coverURL" 
         fit="cover" 
         class="post-cover" 
-        lazy 
+        lazy
         :preview-src-list="[coverURL]" 
         :initial-index="0"
       />
@@ -60,20 +60,22 @@ export default {
   <div class="post-data-box"> 
     <div class="post-data-num-box">
       <el-text class="data-num-item">
-        <el-icon><ChatLineSquare /></el-icon>
+        <el-icon class="operator-svg">
+          <ChatLineSquare />
+        </el-icon>
         <span>{{ commentNum }}</span>
       </el-text>
-      <el-text class="data-num-item">
-        <el-icon>
-          <EmptyLoveSVG v-if="!isLoved" @click="like" class="operator-svg" />
-          <FullLoveSVG v-if="isLoved" @click="dislike" class="operator-svg" />
+      <el-text class="data-num-item" @click="isLoved?dislike():like()" >
+        <el-icon class="operator-svg">
+          <EmptyLoveSVG v-if="!isLoved" />
+          <FullLoveSVG v-if="isLoved" />
         </el-icon>
         <span>{{ like_num }}</span>
       </el-text>
-      <el-text class="data-num-item">
-        <el-icon>
-          <EmptyMarkSVG v-if="!isMarked" @click="mark" class="operator-svg" />
-          <FullMarkSVG v-if="isMarked" @click="dismark" class="operator-svg" />
+      <el-text class="data-num-item" @click="isMarked?dismark():mark()" >
+        <el-icon class="operator-svg">
+          <EmptyMarkSVG v-if="!isMarked" />
+          <FullMarkSVG v-if="isMarked" />
         </el-icon>
         <span>{{ mark_num }}</span>
       </el-text>
@@ -133,7 +135,8 @@ function like() {
       like_num.value += 1;
     } else if (data.code === 40012) {
       ElNotification({
-        title: data.message
+        title: "请不要进行重复的操作!",
+        duration:1000
       })
     } else {
       window.alert(data.message);
@@ -161,7 +164,8 @@ function dislike() {
       like_num.value -= 1;
     } else if (data.code === 40012) {
       ElNotification({
-        title: data.message
+        title: "请不要进行重复的操作!",
+        duration:1000
       })
     } else {
       window.alert(data.message);
@@ -189,7 +193,8 @@ function mark() {
       mark_num.value += 1;
     } else if (data.code === 40012) {
       ElNotification({
-        title: data.message
+        title: "请不要进行重复的操作!",
+        duration:1000
       })
     } else {
       window.alert(data.message);
@@ -217,7 +222,8 @@ function dismark() {
       mark_num.value -= 1;
     } else if (data.code === 40012) {
       ElNotification({
-        title: data.message
+        title: "请不要进行重复的操作!",
+        duration:1000
       })
     } else {
       window.alert(data.message);
@@ -347,15 +353,28 @@ onBeforeMount(()=>{
 }
 
 .data-num-item {
+  width: 50px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   font-size: 16px;
-}
-.operator-svg {
   cursor: pointer;
 }
+.operator-svg {
+  width: 30px;
+  transition: font-size 0.1s;
+}
+.data-num-item:hover .operator-svg {
+  font-size: 18px;
+  transition: font-size 0.1s;
+}
+.data-num-item:active .operator-svg {
+  font-size: 16px;
+  transition: font-size 0.1s;
+}
 .data-num-item span {
+  width: 20px;
   margin-left: 4px;
 }
 
