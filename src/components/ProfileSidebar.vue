@@ -19,33 +19,40 @@ export default {
       <p>个性签名：{{ signature }}</p>
     </div>
   </div>
+
   <div class="total">
-  <div class="left-side">
-    <nav class="nav-tabs">
-      <RouterLink to="/personal/Activities" class="router cta" active-class="router-choose">
-        <span class="hover-underline-animation"> 动态 </span>
-      </RouterLink>
-      <RouterLink to="/personal/Person" class="router cta" active-class="router-choose">
-        <span class="hover-underline-animation"> 个人 </span>
-      </RouterLink>
-      <RouterLink to="/personal/Collections" class="router cta" active-class="router-choose">
-        <span class="hover-underline-animation"> 收藏 </span>
-      </RouterLink>
-      <RouterLink to="/personal/Settings" class="router cta" active-class="router-choose">
-        <span class="hover-underline-animation"> 设置 </span>
-      </RouterLink>
-    </nav>
-    <RouterView />
-  </div>
+    <div class="left-side">
+      <nav class="nav-tabs">
+
+        <RouterLink to="/personal/activity" class="router cta" active-class="router-choose">
+          <span class="hover-underline-animation"> 动态 </span>
+        </RouterLink>
+
+        <RouterLink to="/personal/post" class="router cta" active-class="router-choose">
+          <span class="hover-underline-animation"> 个人 </span>
+        </RouterLink>
+
+        <RouterLink to="/personal/mark" class="router cta" active-class="router-choose">
+          <span class="hover-underline-animation"> 收藏 </span>
+        </RouterLink>
+        
+        <RouterLink to="/personal/setting" class="router cta" active-class="router-choose">
+          <span class="hover-underline-animation"> 设置 </span>
+        </RouterLink>
+      </nav>
+      <RouterView />
+    </div>
     <div class="right-side">
-      <FollowSection></FollowSection>
+      <div class="follow-section-box">
+        <FollowSection></FollowSection>
+      </div>
     </div>
   </div>
 </div>
 </template>
   
 <script lang="ts" setup>
-import FollowSection from '../components/FollowSection.vue'
+import FollowSection from './FollowSectionInPersonalPage.vue'
 
 import Cookies from 'js-cookie';
 import { ref, onMounted } from 'vue';
@@ -157,6 +164,14 @@ postCount.value=0
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 添加阴影 */
 }
 
+.left-side {
+  flex: 6; /* 占左边 70% */
+  background-color: #ffffff; /* 白色背景 */
+  padding: 20px;
+  border-radius: 8px; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* 轻微阴影 */
+}
+
 .nav-tabs {
   display: flex;
   justify-content: space-around;
@@ -176,19 +191,16 @@ postCount.value=0
   transform-origin: bottom left;
 }
 
-.left-side {
-  flex: 6; /* 占左边 70% */
-  background-color: #ffffff; /* 白色背景 */
-  padding: 20px;
-  border-radius: 8px; 
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* 轻微阴影 */
-}
-
 .right-side {
   flex: 4; /* 占右边 30% */
+}
+
+.follow-section-box {
   background-color: #ffffff; /* 白色背景 */
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* 轻微阴影 */
+  position: sticky;
+  top: 63px;
 }
 
 </style>

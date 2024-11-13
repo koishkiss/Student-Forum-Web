@@ -111,7 +111,7 @@ function toMainPage() {
 //去个人主页动态页面
 function toPersonalPage() {
   if (user.uid !== -1) {
-    router.push("/personal/Activities");
+    router.push("/personal/activity");
   } else {
     router.push("/login")
   }
@@ -119,12 +119,12 @@ function toPersonalPage() {
 
 //去个人收藏页
 function toPersonalMarkPage() {
-  router.push("/personal/Collections")
+  router.push("/personal/mark")
 }
 
 //去个人发帖页
 function toPersonalPostPage() {
-  router.push("/personal/Person")
+  router.push("/personal/post")
 }
 
 //初始化

@@ -1,29 +1,29 @@
 <script lang="ts">
-import { Edit } from "@element-plus/icons-vue"
+import { Edit } from "@element-plus/icons-vue";
 import SectionIdentity from './SectionIdentity.vue';
 export default {
   name:"FollowSection",
   components: {
-    SectionIdentity
+    SectionIdentity,Edit
   }
 }
 </script>
 
 <template>
-  <div class="follow-section">
-    <div class="management">
-      <el-button type="primary" :icon="Edit" plain>管理</el-button>
-    </div>
-    <div class="follow-list" v-if="!isLoading">
-      <div v-for="identity in sectionList" :key="identity.sectionId" class="follow-item">
-        <SectionIdentity 
-          :sectionId="identity.sectionId" 
-          :iconURL="identity.iconURL"
-          :name="identity.name"
-        />
-      </div>
+<div class="follow-section">
+  <div class="management">
+    <el-button type="primary" :icon="Edit" plain>管理</el-button>
+  </div>
+  <div class="follow-list" v-if="!isLoading">
+    <div v-for="identity in sectionList" :key="identity.sectionId" class="follow-item">
+      <SectionIdentity 
+        :sectionId="identity.sectionId" 
+        :iconURL="identity.iconURL"
+        :name="identity.name"
+      />
     </div>
   </div>
+</div>
 </template>
   
 <script lang="ts" setup>
@@ -70,6 +70,7 @@ onBeforeMount(() => {
 </script>
   
 <style scoped>
+
 .follow-section {
   display: flex;
   flex-direction: column;

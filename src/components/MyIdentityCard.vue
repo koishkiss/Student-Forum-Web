@@ -106,11 +106,11 @@ function toLoginPage() {
 }
 
 function toPersonalPage() {
-  router.push("/personal/Activities")
+  router.push("/personal/activity")
 }
 
 function toPersonalPostPage() {
-  router.push("/personal/Person")
+  router.push("/personal/post")
 }
 
 //登出

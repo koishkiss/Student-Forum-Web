@@ -93,6 +93,7 @@ function reloadPostList() {
   min-height: 180px;
   max-height: 400px;
   scroll-behavior: smooth;
+  border-radius: 6px;
 }
 
 .right-bottom-item-box {
