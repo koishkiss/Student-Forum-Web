@@ -105,6 +105,11 @@ function reloadPostList() {
   flex-direction: column;
   min-width: 70%;
   min-height: 700px;
+  border-top: none;
+  border: solid 1px rgb(201, 201, 201);
+  border-radius: 5px;
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
 }
 
 .public-trend-title {

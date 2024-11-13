@@ -168,12 +168,6 @@ defineExpose({reloadAll});
   background-color: var(--vt-c-white-soft);
 }
 
-.post-preview-list-box {
-  border-top: none;
-  border: solid 1px rgb(201, 201, 201);
-  border-radius: 5px;
-}
-
 .post-preview-list {
   list-style-type: none;
   padding: 0;
