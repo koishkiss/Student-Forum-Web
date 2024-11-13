@@ -56,7 +56,7 @@ onBeforeMount(() => {
       // 将后端返回的数据赋值到Vue状态中
       sectionList = data
     } else {
-      window.alert(message);
+      console.log(message);
     }
   })
   .catch((error) => {
@@ -85,7 +85,8 @@ onBeforeMount(() => {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap:6px;
+  justify-content: space-between;
+  gap:6px 5px;
 }
 
 /* 每个关注项的样式 */
