@@ -16,7 +16,7 @@ export default {
     <div class="avatar-box">
       <el-image 
         :src="user.avatarURL" 
-        fit="cover" 
+        fit="contain" 
         class="avatar"
         :preview-src-list="[user.avatarURL]" 
         :initial-index="0"
@@ -129,10 +129,18 @@ onBeforeMount(()=>{
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.profile {
+  display: flex;
+  align-items: center; /* 垂直居中对齐 */
+  gap: 5%;
+  padding: 10px;
+  margin: 0 auto;
+}
+
 .avatar-box {
   margin-top:-100px;
-  width: 125px;
-  height: 125px;
+  width: 135px;
+  height: 135px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -148,17 +156,9 @@ onBeforeMount(()=>{
   z-index: 2;
 }
 .avatar:hover {
-  width: 122px;
-  height: 124px;
+  width: 123px;
+  height: 123px;
   transition: all 0.2s ease-in-out;
-}
-
-.profile {
-  display: flex;
-  align-items: center; /* 垂直居中对齐 */
-  gap: 5%;
-  padding: 10px;
-  margin: 0 auto;
 }
 
 .user-info {
@@ -173,6 +173,8 @@ onBeforeMount(()=>{
   margin-right: 10px;
   gap: 10px;
 }
+
+
 
 .total {
   min-width: 900px;
