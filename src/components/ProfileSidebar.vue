@@ -162,7 +162,6 @@ onBeforeMount(()=>{
   border-radius: 10px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease-in-out;
-  z-index: 2;
 }
 .avatar:hover {
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);

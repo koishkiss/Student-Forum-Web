@@ -1,13 +1,14 @@
 <script lang="ts">
-import { View,ChatLineSquare } from "@element-plus/icons-vue"
+import { View,ChatLineSquare } from "@element-plus/icons-vue";
 import EmptyLoveSVG from "./icon/EmptyLoveSVG.vue";
 import FullLoveSVG from "./icon/FullLoveSVG.vue";
 import EmptyMarkSVG from "./icon/EmptyMarkSVG.vue";
 import FullMarkSVG from "./icon/FullMarkSVG.vue";
+import UserPreviewIdentityCard from "./UserPreviewIdentityCard.vue";
 export default {
   name:'PostPreview',  //组件名
   components:{
-    View,ChatLineSquare,EmptyLoveSVG,FullLoveSVG,EmptyMarkSVG,FullMarkSVG
+    View,ChatLineSquare,EmptyLoveSVG,FullLoveSVG,EmptyMarkSVG,FullMarkSVG,UserPreviewIdentityCard
   }
 }
 </script>
@@ -16,7 +17,17 @@ export default {
 <el-card class="post-preview-box" shadow="hover">
   <div class="preview-head-box">
     <div class="author-box">
-      <el-avatar :src="avatarURL" fit="cover" class="author-avatar"/>
+      <div class="avatar-container" 
+        @mouseenter="showUserIdentityCard=true" 
+        @mouseleave="showUserIdentityCard=false"
+      >
+        <transition name="user-identity-card-content">
+          <div class="identity-card-container" v-if="showUserIdentityCard">
+            <UserPreviewIdentityCard/>
+          </div>
+        </transition>
+        <el-avatar :src="avatarURL" fit="cover" class="author-avatar"/>
+      </div>
       <el-divider direction="vertical" class="divider-between-name-avatar" />
       <el-text class="author-name">
         {{ nickname }}
@@ -113,6 +124,7 @@ let props = defineProps([
 
 const { ip_port } = useHttpStore();
 
+const showUserIdentityCard = ref(false);
 const isLoved = ref(false);
 const isMarked = ref(false);
 const like_num = ref(props.likeNum);

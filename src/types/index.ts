@@ -34,3 +34,18 @@ export interface PostPreviewItem {
 }
 
 export type PostPreviewItemList = Array<PostPreviewItem>
+
+
+export interface UserInfo {
+  uid:number,
+  sid:string,
+  authority:number,
+  nickname:string,
+  signature:string,
+  registerTime:string,
+  likeNum:number,
+  bookmarkNum:number,
+  postNum:number,
+  joinNum:number,
+  avatarURL:string
+}
