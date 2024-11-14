@@ -16,19 +16,27 @@ export default {
     <div class="avatar-box">
       <el-image 
         :src="user.avatarURL" 
-        fit="contain" 
+        fit="cover" 
         class="avatar"
         :preview-src-list="[user.avatarURL]" 
         :initial-index="0"
       />
     </div>
-    <div>    
-      <div class="user-info">
-        <span class="inline-block">昵称：{{ user.nickname }}</span>
-        <span class="inline-block">UID：{{ user.uid }}</span>
-        <span>发帖数：{{ user.postNum }}</span>
+    <div class="user-info">    
+      <el-text tag="p" class="nickname">
+        {{ user.nickname }}
+        <el-tag :type="user.auth.type" effect="dark" class="tag">
+          {{ user.auth.label }}
+        </el-tag>
+      </el-text>
+      <div class="other-info">
+        <el-text class="info-item">UID：{{ user.uid }}</el-text>
+        <el-divider direction="vertical" />
+        <el-text class="info-item">发帖数：{{ user.postNum }}</el-text>
+        <el-divider direction="vertical" />
+        <el-text class="info-item">加入时间：{{ user.registerTime }}</el-text>
       </div>
-      <p>个性签名：{{ user.signature }}</p>
+      <el-text tag="p" class="signature">简介: {{ user.signature }}</el-text>
     </div>
   </div>
 
@@ -125,30 +133,31 @@ onBeforeMount(()=>{
   flex: 7; /* 70% 宽度 */
   background-color: #fff;
   padding: 20px;
+  padding-top: 0;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .profile {
   display: flex;
-  align-items: center; /* 垂直居中对齐 */
-  gap: 5%;
+  align-items: center;
   padding: 10px;
+  padding-top: 1px;
   margin: 0 auto;
 }
 
 .avatar-box {
-  margin-top:-100px;
-  width: 135px;
-  height: 135px;
+  margin-top:-45px;
+  width: 140px;
+  height: 140px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 .avatar {
-  width: 120px;
-  height: 120px;
+  width: 125px;
+  height: 125px;
   border: 2px double #a1a1a1;
   border-radius: 10px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
@@ -156,22 +165,33 @@ onBeforeMount(()=>{
   z-index: 2;
 }
 .avatar:hover {
-  width: 123px;
-  height: 123px;
+  width: 128px;
+  height: 128px;
   transition: all 0.2s ease-in-out;
 }
 
 .user-info {
+  margin-left: 10px;
+}
+.nickname {
   display: flex;
   flex-direction: row;
-  gap: 5px;
+  color: #000;
+  font-size: 23px;
+  font-weight: bold;
 }
-.inline-block {
-  display: inline-block;
-  border-right: 1px solid #ccc;
-  padding-right: 10px;
-  margin-right: 10px;
-  gap: 10px;
+.tag {
+  height: 20px;
+  width: 40px;
+  justify-self: center;
+  align-self: center;
+  margin-left: 7px;
+}
+.other-info {
+  margin-top: 1px;
+}
+.signature {
+  margin-top: 6px;
 }
 
 
