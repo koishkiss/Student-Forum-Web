@@ -22,8 +22,8 @@
 
     <div class="item-container">
       <div class="avatar-container" 
-        @mouseenter="showIdentityCard=true" 
-        @mouseleave="showIdentityCard=false"
+        @mouseenter="personalInfoCardEnter" 
+        @mouseleave="personalInfoCardDelayLeave"
       >
         <transition name="identity-card-content">
           <div class="identity-card-container" v-if="showIdentityCard">
@@ -83,9 +83,9 @@ const navItems = reactive([
   { 
     label: '动态', 
     labelIcon: markRaw(View), 
-    options: [{label:'个人', to:toPersonalPostPage}, {label:'广场', to:toPersonalPage}], 
+    options: [{label:'广场', to:toPersonalPage}, {label:'个人', to:toPersonalPostPage}], 
     visible: false,
-    to:toPersonalPostPage
+    to:toPersonalPage
   },
   { 
     label: '收藏', 
@@ -102,6 +102,21 @@ const navItems = reactive([
     to:toPersonalPage
   }
 ]);
+
+var timeId;
+function personalInfoCardEnter() {
+  if (timeId !== undefined) {
+    clearTimeout(timeId);
+  } else {
+    showIdentityCard.value = true;
+  }
+}
+function personalInfoCardDelayLeave() {
+  timeId = setTimeout(()=>{
+    showIdentityCard.value=false;
+    timeId = undefined;
+  },100)
+}
 
 //去首页
 function toMainPage() {

@@ -18,12 +18,12 @@ export default {
   <div class="preview-head-box">
     <div class="author-box">
       <div class="avatar-container" 
-        @mouseenter="showUserIdentityCard=true" 
-        @mouseleave="showUserIdentityCard=false"
+        @mouseenter="userInfoCardEnter" 
+        @mouseleave="userInfoCardDelayLeave"
       >
         <transition name="user-identity-card-content">
           <div class="identity-card-container" v-if="showUserIdentityCard">
-            <UserPreviewIdentityCard/>
+            <UserPreviewIdentityCard :theUid="uid"/>
           </div>
         </transition>
         <el-avatar :src="avatarURL" fit="cover" class="author-avatar"/>
@@ -129,6 +129,21 @@ const isLoved = ref(false);
 const isMarked = ref(false);
 const like_num = ref(props.likeNum);
 const mark_num = ref(props.bookmarkNum);
+
+var timeId;
+function userInfoCardEnter() {
+  if (timeId !== undefined) {
+    clearTimeout(timeId);
+  } else {
+    showUserIdentityCard.value = true;
+  }
+}
+function userInfoCardDelayLeave() {
+  timeId = setTimeout(()=>{
+    showUserIdentityCard.value=false;
+    timeId = undefined;
+  },300)
+}
 
 //喜欢帖子
 function like() {
@@ -276,10 +291,26 @@ onBeforeMount(()=>{
   align-self: flex-start;
 }
 
-.author-avatar {
+.avatar-container {
   width: 30px;
   height: 30px;
 }
+.avatar-container:hover .author-avatar {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+  transition: all 0.1s ease-in-out;
+}
+.author-avatar {
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  transition: all 0.2s ease-in-out;
+}
+.identity-card-container {
+  position: absolute;
+  margin-left: -355px;
+  margin-top: -55px;
+}
+
 .divider-between-name-avatar {
   top: 0;
   bottom: 0;
@@ -288,6 +319,7 @@ onBeforeMount(()=>{
   margin-right: 6px;
   height: 22px;
 }
+
 .author-name {
   font-size: 16px;
 }
@@ -388,6 +420,20 @@ onBeforeMount(()=>{
 .data-num-item span {
   width: 20px;
   margin-left: 4px;
+}
+
+
+/* 发帖者身份卡片动画 */
+.user-identity-card-content-enter-active  {
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+.user-identity-card-content-leave-active {
+  transition: opacity 0.3s ease-out, transform 0.2s ease-out;
+}
+.user-identity-card-content-enter-from,
+.user-identity-card-content-leave-to {
+  transform: translateX(10px);
+  opacity: 0;
 }
 
 </style>
