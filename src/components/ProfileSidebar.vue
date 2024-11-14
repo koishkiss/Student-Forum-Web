@@ -131,7 +131,7 @@ onBeforeMount(()=>{
 
 .profile-sidebar {
   flex: 7; /* 70% 宽度 */
-  background-color: #fff;
+  background-color: #F5F7FA;
   padding: 20px;
   padding-top: 0;
   border-radius: 8px;
@@ -165,8 +165,7 @@ onBeforeMount(()=>{
   z-index: 2;
 }
 .avatar:hover {
-  width: 128px;
-  height: 128px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
   transition: all 0.2s ease-in-out;
 }
 

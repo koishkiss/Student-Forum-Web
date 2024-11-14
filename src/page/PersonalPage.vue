@@ -15,7 +15,7 @@ import ProfileSidebar from '@/components/ProfileSidebar.vue';
 
 <style scoped>
 .app {
-  background-color: #f0f0f0;
+  background-color: #ffffff;
   margin: 0 auto;
 }
 
