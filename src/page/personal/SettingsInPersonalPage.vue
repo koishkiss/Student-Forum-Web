@@ -218,6 +218,7 @@ onMounted(()=>{
   border: 1px solid #b7b7b7;
   border-radius: 10px;
   padding: 2px;
+  background-color: #f6f9f9;
 }
 
 .personal-info-setting-title {
