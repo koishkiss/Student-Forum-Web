@@ -102,8 +102,7 @@ onBeforeMount(()=>{
   display: flex;
   flex-direction: row;
   align-self: center;
-  align-items: center;
-  width: 30px;
+  width: 25px;
   height: 150px;
   color: rgb(155, 155, 155);
 }
