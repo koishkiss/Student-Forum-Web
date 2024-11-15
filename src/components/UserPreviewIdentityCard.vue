@@ -60,11 +60,11 @@ const { ip_port } = useHttpStore();
 
 let theUser = reactive<UserInfo>({
   uid:-1,
-  sid:"asdasd",
+  sid:"",
   authority:1,
-  nickname:"koishikiss",
-  signature:"你所热爱的，就是你的生活",
-  registerTime:"aaa",
+  nickname:"",
+  signature:"",
+  registerTime:"",
   likeNum:-1,
   bookmarkNum:-1,
   postNum:-1,
