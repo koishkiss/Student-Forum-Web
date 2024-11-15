@@ -8,7 +8,7 @@ import Activities from "../components/ActivitiesInPersonalPage.vue"
 import Collections from "../components/CollectionsInPersonalPage.vue"
 import Person from "../components/PersonInPersonalPage.vue"
 import Settings from "../components/SettingsInPersonalPage.vue"
-
+import postPage from "@/components/postPage.vue";
 const router = createRouter({
 history:createWebHistory(),
 routes:[
@@ -25,6 +25,11 @@ routes:[
         name:"main-page",
         path:"/main",
         component:MainPage
+    },
+    {
+        name:"post-detail-page",
+        path:"/postPage",
+        component:postPage
     },
     {
         name:"personal-page",
