@@ -22,8 +22,8 @@
 
     <div class="item-container">
       <div class="avatar-container" 
-        @mouseenter="showIdentityCard=true" 
-        @mouseleave="showIdentityCard=false"
+        @mouseenter="personalInfoCardEnter" 
+        @mouseleave="personalInfoCardDelayLeave"
       >
         <transition name="identity-card-content">
           <div class="identity-card-container" v-if="showIdentityCard">
@@ -36,14 +36,14 @@
       <div class="nav-buttons">
         <div class="dropdown" v-for="(item, index) in navItems" :key="index">
           <div @mouseenter="item.visible=true" @mouseleave="item.visible=false">
-            <el-button plain :icon="item.labelIcon" text class="dropbtn">
+            <el-button plain :icon="item.labelIcon" text class="dropbtn" @click="item.to">
               {{ item.label }}
             </el-button>
 
             <transition name="down-content">
               <div class="dropdown-content" v-if="item.visible">
-                <a v-for="(option, idx) in item.options" :key="idx">
-                  {{ option }}
+                <a v-for="(option, idx) in item.options" :key="idx" @click="option.to">
+                  {{ option.label }}
                 </a>
               </div>
             </transition>
@@ -66,32 +66,80 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useHttpStore } from '@/store/Http';
 
+const router = useRouter();
 const { ip_port } = useHttpStore();
 const user = useUserInfoStore();
 
 const searchQuery = ref('');
 const showIdentityCard = ref(false);
 const navItems = reactive([
-  { label: '消息', labelIcon: markRaw(Message), options: ['点赞', '回复', '通知'], visible: false },
-  { label: '动态', labelIcon: markRaw(View), options: ['个人', '广场'], visible: false },
-  { label: '收藏', labelIcon: markRaw(Star), options: [], visible: false },
-  { label: '历史', labelIcon: markRaw(Clock), options: [], visible: false },
+  { 
+    label: '消息', 
+    labelIcon: markRaw(Message), 
+    options: [{label:'点赞', to:toPersonalPage}, {label:'回复', to:toPersonalPage}, {label:'通知', to:toPersonalPage}], 
+    visible: false,
+    to:toPersonalPage
+  },
+  { 
+    label: '动态', 
+    labelIcon: markRaw(View), 
+    options: [{label:'广场', to:toPersonalPage}, {label:'个人', to:toPersonalPostPage}], 
+    visible: false,
+    to:toPersonalPage
+  },
+  { 
+    label: '收藏', 
+    labelIcon: markRaw(Star), 
+    options: [], 
+    visible: false,
+    to:toPersonalMarkPage
+  },
+  { 
+    label: '历史', 
+    labelIcon: markRaw(Clock), 
+    options: [], 
+    visible: false,
+    to:toPersonalPage
+  }
 ]);
 
-const router = useRouter();
+var timeId;
+function personalInfoCardEnter() {
+  if (timeId !== undefined) {
+    clearTimeout(timeId);
+  } else {
+    showIdentityCard.value = true;
+  }
+}
+function personalInfoCardDelayLeave() {
+  timeId = setTimeout(()=>{
+    showIdentityCard.value=false;
+    timeId = undefined;
+  },100)
+}
 
 //去首页
-async function toMainPage() {
+function toMainPage() {
   router.push("/main")
 }
 
-//去个人主页
-async function toPersonalPage() {
+//去个人主页动态页面
+function toPersonalPage() {
   if (user.uid !== -1) {
-    router.push("/personal");
+    router.push("/personal/activity");
   } else {
     router.push("/login")
   }
+}
+
+//去个人收藏页
+function toPersonalMarkPage() {
+  router.push("/personal/mark")
+}
+
+//去个人发帖页
+function toPersonalPostPage() {
+  router.push("/personal/post")
 }
 
 //初始化
@@ -138,7 +186,7 @@ onBeforeMount(()=>{
   flex-direction: column; 
   flex-wrap: nowrap;
   justify-content: center;
-  z-index: 1;
+  z-index: 2;
 }
 
 .mainpage-return {
@@ -234,7 +282,7 @@ onBeforeMount(()=>{
   background-color: #f9f9f9;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  z-index: 3;
 }
 
 .dropdown-content a {

@@ -19,7 +19,7 @@
     </a>
   </div>
 
-  <div class="section-describe">
+  <div class="section-describe" v-if="classifyName!==undefined">
     <span class="classify" title="分区">
       <el-icon size="10"><Menu/></el-icon> {{ classifyName }}
     </span>

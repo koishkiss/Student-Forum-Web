@@ -62,7 +62,7 @@ import { useRoute, useRouter } from 'vue-router';
           <RightArraySVG class="icon"/>
         </button>
         
-        <button class="cta">
+        <button class="cta" @click="toPersonalPostPage">
           <el-icon class="preIcon"><Position /></el-icon>
           <span class="hover-underline-animation">我的发帖</span>
           <RightArraySVG class="icon"/>
@@ -101,16 +101,20 @@ const route = useRoute();
 const isLoading = ref(true);
 const hasLogin = ref(false);
 
-async function toLoginPage() {
+function toLoginPage() {
   router.push("/login");
 }
 
-async function toPersonalPage() {
-  router.push("/personal")
+function toPersonalPage() {
+  router.push("/personal/activity")
+}
+
+function toPersonalPostPage() {
+  router.push("/personal/post")
 }
 
 //登出
-async function doLogout() {
+function doLogout() {
   isLoading.value = true;
 
   Cookies.remove("Authorization");
@@ -187,7 +191,7 @@ onBeforeMount(()=>{
   min-width: 280px;
   padding: 12px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  z-index: 3;
   display: flex;
   flex-direction: column;
 }

@@ -1,11 +1,12 @@
 <script lang="ts">
+  import { Refresh } from "@element-plus/icons-vue";
   import AnnouncementBar from '@/components/AnnouncementBar.vue';
   import FollowSection from '@/components/FollowSectionInMainPage.vue';
   import PostPreviewScrollList from '@/components/PostPreviewScrollList.vue';
   export default {
     name:'MainPage',  //组件名
     components:{
-      AnnouncementBar,FollowSection,PostPreviewScrollList
+      AnnouncementBar,FollowSection,PostPreviewScrollList,Refresh
     }
   }
 </script>
@@ -31,8 +32,11 @@
       <div class="public-trend-box">
         <div class="public-trend-title">
           丨 热门动态
+          <el-icon class="top-control-icon" @click="reloadPostList" >
+            <Refresh />
+          </el-icon>
         </div>
-        <PostPreviewScrollList/>
+        <PostPreviewScrollList ref="postList"/>
       </div>
 
       <div class="hot-issue-box">
@@ -45,6 +49,13 @@
 
 
 <script lang="ts" setup>
+import { ref } from "vue";
+
+let postList = ref();
+
+function reloadPostList() {
+  postList.value.reloadAll();
+}
 
 </script>
 
@@ -64,8 +75,6 @@
 }
 
 .announcement-bar-box {
-  background-color: blueviolet;
-  min-height: 300px;
   max-height: 400px;
 }
 
@@ -84,6 +93,7 @@
   min-height: 180px;
   max-height: 400px;
   scroll-behavior: smooth;
+  border-radius: 6px;
 }
 
 .right-bottom-item-box {
@@ -96,14 +106,32 @@
   flex-direction: column;
   min-width: 70%;
   min-height: 700px;
+  border-top: none;
+  border: solid 1px rgb(201, 201, 201);
+  border-radius: 5px;
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
 }
 
 .public-trend-title {
+  display: flex;
+  flex-direction: row;
+  height: 40px;
   font-size: 28px;
   font-weight: bold;
-  height: 40px;
-  background-color: #c9c9c9;
   border: thick double rgb(255, 255, 255);
+  border-start-start-radius: 5px;
+  border-start-end-radius: 5px;
+  border-bottom: none;
+  background-color: #efefef;
+}
+
+.top-control-icon {
+  font-size: 18px;
+  color: grey;
+  cursor: pointer;
+  margin: auto;
+  margin-right: 10px;
 }
 
 .hot-issue-box {

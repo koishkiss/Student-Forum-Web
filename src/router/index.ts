@@ -4,11 +4,11 @@ import MainPage from "@/page/MainPage.vue";
 import PersonalPage from "@/page/PersonalPage.vue";
 import LoginPage from "@/page/LoginPage.vue";
 
-import Activities from "../components/ActivitiesInPersonalPage.vue"
-import Collections from "../components/CollectionsInPersonalPage.vue"
-import Person from "../components/PersonInPersonalPage.vue"
-import Settings from "../components/SettingsInPersonalPage.vue"
-import postPage from "@/components/postPage.vue";
+import Activities from "../page/personal/ActivitiesInPersonalPage.vue"
+import Collections from "../page/personal/CollectionsInPersonalPage.vue"
+import Person from "../page/personal/PersonInPersonalPage.vue"
+import Settings from "../page/personal/SettingsInPersonalPage.vue"
+
 const router = createRouter({
 history:createWebHistory(),
 routes:[
@@ -37,19 +37,19 @@ routes:[
         component:PersonalPage,
         children:[
             {
-                path:"Activities",
+                path:"activity",
                 component:Activities,
             },
             {
-                path:"Collections",
-                component:Collections,
-            },
-            {
-                path:"Person",
+                path:"post",
                 component:Person,
             },
             {
-                path:"Settings",
+                path:"mark",
+                component:Collections,
+            },
+            {
+                path:"setting",
                 component:Settings,
             },
 

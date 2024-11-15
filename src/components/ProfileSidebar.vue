@@ -1,139 +1,247 @@
+<script lang="ts">
+export default {
+  name:'ProfileSidebar',  //组件名
+  components: {
+}
+}
+</script>
+
 <template>
-    <div class="profile-sidebar">
-        <div class="profile">
-            <div class="avatar">头像</div>
-            <div>    
-                <div class="user-info">
-                    <span class="inline-block">昵称：{{ name }}</span>
-                    <span class="inline-block">UID：{{ uid }}</span>
-                    <span>发帖数：{{ postCount }}</span>
-                </div>
-                <p>个性签名：{{ signature }}</p>
-            </div>
-        </div>
-        <nav class="nav-tabs">
-            <RouterLink to="/personal/Activities" active-class="true">动态</RouterLink>
-            <RouterLink to="/personal/Collections" active-class="true">收藏</RouterLink>
-            <RouterLink to="/personal/Person" active-class="true">个人</RouterLink>
-            <RouterLink to="/personal/Settings" active-class="true">设置</RouterLink>
-        </nav>
-        <RouterView />
+<div class="profile-sidebar">
+  <p v-if="isLoading">
+    Loading...
+  </p>
+
+  <div class="profile" v-if="!isLoading">
+    <div class="avatar-box">
+      <el-image 
+        :src="user.avatarURL" 
+        fit="cover" 
+        class="avatar"
+        :preview-src-list="[user.avatarURL]" 
+        :initial-index="0"
+      />
     </div>
-  </template>
+    <div class="user-info">    
+      <el-text tag="p" class="nickname">
+        {{ user.nickname }}
+        <el-tag :type="user.auth.type" effect="dark" class="tag">
+          {{ user.auth.label }}
+        </el-tag>
+      </el-text>
+      <div class="other-info">
+        <el-text class="info-item">UID：{{ user.uid }}</el-text>
+        <el-divider direction="vertical" />
+        <el-text class="info-item">发帖数：{{ user.postNum }}</el-text>
+        <el-divider direction="vertical" />
+        <el-text class="info-item">加入时间：{{ user.registerTime }}</el-text>
+      </div>
+      <el-text tag="p" class="signature">简介: {{ user.signature }}</el-text>
+    </div>
+  </div>
+
+  <div class="total">
+    <div class="left-side">
+      <nav class="nav-tabs">
+
+        <RouterLink to="/personal/activity" class="router cta" active-class="router-choose">
+          <span class="hover-underline-animation"> 动态 </span>
+        </RouterLink>
+
+        <RouterLink to="/personal/post" class="router cta" active-class="router-choose">
+          <span class="hover-underline-animation"> 个人 </span>
+        </RouterLink>
+
+        <RouterLink to="/personal/mark" class="router cta" active-class="router-choose">
+          <span class="hover-underline-animation"> 收藏 </span>
+        </RouterLink>
+
+        <RouterLink to="/personal/setting" class="router cta" active-class="router-choose">
+          <span class="hover-underline-animation"> 设置 </span>
+        </RouterLink>
+      </nav>
+      <RouterView />
+    </div>
+    <div class="right-side">
+      <div class="follow-section-box">
+        <FollowSection></FollowSection>
+      </div>
+    </div>
+  </div>
+</div>
+</template>
   
 <script lang="ts" setup>
-    import Cookies from 'js-cookie';
-    import { ref, onMounted } from 'vue';
-    import axios from 'axios';
-    import { useHttpStore } from '@/store/Http';
-    
-    // 从Cookies中获取授权信息和用户ID
-    const Authorization = ref(Cookies.get('Authorization') || '');
-    const uidLocal = ref(Cookies.get('uid') || '');
-    
-    // 使用HttpStore获取IP和端口配置
-    const { ip_port } = useHttpStore();
-    
-    // 定义响应数据的状态
-    const loading = ref(false);
-    const name = ref('加载中...');
-    const uid = ref('');
-    const postCount = ref(0); // 发帖数，可以在另一个API请求中获取
-    const signature = ref('');
-    
-    // 在组件挂载时请求用户数据
-    onMounted(() => {
-        loading.value = true;
-        
-        // 设置请求头
-        const headers = {
-        Authorization: Authorization.value,
-        uid: uidLocal.value,
-        };
-    
-        // 发送GET请求，获取用户信息
-        axios.get(`${ip_port}/user/mine/info`, { headers })
-        .then((response) => {
-            const { code, message, data } = response.data;
-            if (code === 200 && data) {
-            // 将后端返回的数据赋值到Vue状态中
-            name.value = data.realName || '未知用户';
-            uid.value = String(data.uid) || uidLocal.value;
-            signature.value = data.signature || '这个人很懒，什么都没有写';
-            // 这里假设发帖数为0，具体获取发帖数的API可以再进行调用
-            postCount.value = 0; 
-            } else {
-            console.error(`获取用户信息失败: ${message}`);
-            }
-        })
-        .catch((error) => {
-            console.error('请求错误:', error);
-        })
-        .finally(() => {
-            loading.value = false;
-        });
+import FollowSection from './FollowSectionInPersonalPage.vue'
+
+import Cookies from 'js-cookie';
+import { ref, onBeforeMount } from 'vue';
+import axios from 'axios';
+import { useHttpStore } from '@/store/Http';
+import { ElMessageBox } from 'element-plus';
+import { useRouter } from 'vue-router';
+import { useUserInfoStore } from '@/store/UserInfo';
+
+// 使用HttpStore获取IP和端口配置
+const { ip_port } = useHttpStore();
+const router = useRouter();
+
+// 定义响应数据的状态
+const isLoading = ref(true);
+const user = useUserInfoStore();
+
+//初始化
+onBeforeMount(()=>{
+  if (user.uid !== -1) {
+    isLoading.value = false;
+  } else if (Cookies.get('uid') === undefined) {
+    ElMessageBox.alert("请登录!", "", {confirmButtonText: 'OK'});
+    router.push('/main');
+  } else {
+    axios({
+      method: "get",
+      url: ip_port + "/user/mine/info",
+      headers: {
+        "Authorization": Cookies.get("Authorization"),
+        "uid": Cookies.get("uid")
+      }
+    })
+    .then(function (response) {
+      const data = response.data;
+      if (data.code == 200) {
+        user.$patch(data.data);
+      } else {
+        ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
+        router.push('/main');
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+    .finally(()=>{
+      isLoading.value = false;
     });
-    //后端没有发帖数数据，暂时设置为0
-    postCount.value=0
+  }
+});
+
 </script>
   
 <style scoped>
-    .profile-sidebar {
-        flex: 7; /* 70% 宽度 */
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-  
-    .profile {
-        display: flex;
-        align-items: center; /* 垂直居中对齐 */
-        gap: 5%;
-        padding: 10px;
-        margin: 0 auto;
-    }
+@import "@/assets/cta-button.css";
 
-    .avatar {
-        width: 100px; /* 固定头像宽度 */
-        height: 100px; /* 固定头像高度 */
-        background-color: #ccc;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 14px;
-        color: #fff;
-        border-radius: 50%; /* 将头像设置为圆形 */
-        margin-right: 5%; /* 头像和用户信息之间的水平间距 */
-    }
+.profile-sidebar {
+  flex: 7; /* 70% 宽度 */
+  background-color: #F5F7FA;
+  padding: 20px;
+  padding-top: 0;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-    .user-info {
-        display: flex;
-        flex-direction: row;
-        gap: 5px;
-    }
-    .inline-block {
-        display: inline-block;
-        border-right: 1px solid #ccc;
-        padding-right: 10px;
-        margin-right: 10px;
-        gap: 10px;
-    }
+.profile {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  padding-top: 1px;
+  margin: 0 auto;
+}
 
-    h3, h4, p {
-        margin: 0;
-    }
-  
-    .nav-tabs {
-        display: flex;
-        justify-content: space-around;
-        margin-top: 20px;
-    }
-  
-    .nav-tabs a {
-        color: #337ab7;
-        text-decoration: none;
-        font-size: 14px;
-    }
+.avatar-box {
+  margin-top:-45px;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.avatar {
+  width: 125px;
+  height: 125px;
+  border: 2px double #a1a1a1;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+}
+.avatar:hover {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease-in-out;
+}
+
+.user-info {
+  margin-left: 10px;
+}
+.nickname {
+  display: flex;
+  flex-direction: row;
+  color: #000;
+  font-size: 23px;
+  font-weight: bold;
+}
+.tag {
+  height: 20px;
+  width: 40px;
+  justify-self: center;
+  align-self: center;
+  margin-left: 7px;
+}
+.other-info {
+  margin-top: 1px;
+}
+.signature {
+  margin-top: 6px;
+}
+
+
+
+.total {
+  min-width: 900px;
+  display: flex; /* 使用 Flexbox 布局 */
+  gap: 5px; /* 两边内容的间距 */
+  padding: 1px;
+  background-color: #ffffffa2; /* 背景颜色 */
+  border-radius: 10px; /* 圆角 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+}
+
+.left-side {
+  flex: 6; /* 占左边 70% */
+  background-color: #ffffff; /* 白色背景 */
+  padding: 20px;
+  border-radius: 8px; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* 轻微阴影 */
+}
+
+.nav-tabs {
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 2px solid #eee;
+}
+.router {
+  text-decoration: none;
+  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  text-shadow: 1px 1px 2px grey;
+  margin-bottom: 10px;
+}
+.router-choose span {
+  color: #0d4700;
+}
+.router-choose .hover-underline-animation::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.right-side {
+  flex: 4; /* 占右边 30% */
+}
+
+.follow-section-box {
+  background-color: #ffffff; /* 白色背景 */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* 轻微阴影 */
+  position: sticky;
+  top: 63px;
+}
+
 </style>
   

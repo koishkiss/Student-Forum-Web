@@ -1,7 +1,6 @@
 <script lang="ts">
 import SectionIdentity from './SectionIdentity.vue';
 import { Loading } from '@element-plus/icons-vue';
-import { fa } from 'element-plus/es/locale';
 export default {
   name:"FollowSectionInMainPage",
   components: {
@@ -11,7 +10,7 @@ export default {
 </script>
 
 <template>
-<div class="follow-section-display-box">
+<el-card class="follow-section-display-box"  shadow="hover">
   <el-text class="follow-section-display-title">
     关注的版块
   </el-text>
@@ -29,7 +28,7 @@ export default {
       <SectionIdentity v-bind=identity />
     </div>
   </div>
-</div>
+</el-card>
 </template>
 
 
@@ -88,17 +87,15 @@ onBeforeMount(()=>{
 <style scoped>
 
 .follow-section-display-box {
-  background-color: var(--vt-c-white-soft);
-  padding: 5px 10px;
+  padding: 3px 25px;
   display: flex;
   flex-direction: column;
 }
 
 .follow-section-display-title {
-  font-size: medium;
+  font-size: large;
   font-weight: bold;
   align-self: start;
-  margin-left: 10px;
 }
 
 .loading-identity-item-box {
@@ -115,14 +112,10 @@ onBeforeMount(()=>{
   display: flex;
   flex-direction: row;
   align-items: start;
+  justify-content: space-between;
   flex-wrap: wrap;
+  gap: 10px 50px;
   margin-top: 5px;
-}
-
-.section-identity-item {
-  margin-bottom: 4px;
-  margin-left: 30px;
-  margin-right: 45px;
 }
 
 </style>
