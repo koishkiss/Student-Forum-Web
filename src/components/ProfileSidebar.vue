@@ -64,7 +64,7 @@ export default {
     </div>
     <div class="right-side">
       <div class="follow-section-box">
-        <FollowSection></FollowSection>
+        <FollowSection/>
       </div>
     </div>
   </div>
