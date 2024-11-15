@@ -3,6 +3,7 @@
   import AnnouncementBar from '@/components/AnnouncementBar.vue';
   import FollowSection from '@/components/FollowSectionInMainPage.vue';
   import PostPreviewScrollList from '@/components/PostPreviewScrollList.vue';
+  import ClassificationList from "@/components/ClassificationList.vue";
   export default {
     name:'MainPage',  //组件名
     components:{
@@ -19,7 +20,7 @@
     </div>
 
     <div class="section-classification-box">
-
+      <ClassificationList/>
     </div>
   </div>
 
