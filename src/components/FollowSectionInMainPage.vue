@@ -10,7 +10,7 @@ export default {
 </script>
 
 <template>
-<el-card class="follow-section-display-box"  shadow="hover">
+<el-card class="follow-section-display-box"  shadow="hover" body-style="padding: 0;">
   <el-text class="follow-section-display-title">
     关注的版块
   </el-text>
@@ -87,12 +87,13 @@ onBeforeMount(()=>{
 <style scoped>
 
 .follow-section-display-box {
-  padding: 3px 25px;
+  padding: 10px 0;
   display: flex;
   flex-direction: column;
 }
 
 .follow-section-display-title {
+  margin-left: 30px;
   font-size: large;
   font-weight: bold;
   align-self: start;
@@ -111,10 +112,13 @@ onBeforeMount(()=>{
   display: flex;
   flex-direction: row;
   align-items: start;
-  justify-content: space-between;
   flex-wrap: wrap;
-  gap: 10px 50px;
   margin-top: 5px;
+}
+
+.section-identity-item {
+  margin-left: 30px;
+  
 }
 
 </style>
