@@ -90,12 +90,7 @@ let section = reactive<SectionInfo>({
   memberNum: -1,
   createTime: "",
   classify: "",  //分类信息
-  moderator: {
-    uid:-1,
-    avatarURL:"http://47.113.194.64:22222/image/default-avatar.png",
-    nickname:""
-  },  //版主信息
-  admin: [],  //管理员列表
+  adminList: [],  //管理员列表
   hasJoin: false,  //个人加入信息
   joinTime: "",  //个人加入时间
   identity: 0  //个人身份信息

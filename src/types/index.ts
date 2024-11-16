@@ -60,12 +60,7 @@ export interface SectionInfo {
   memberNum: number,
   createTime: string,
   classify: string,  //分类信息
-  moderator: {
-    uid:number,
-    avatarURL:string,
-    nickname:string
-  },  //版主信息
-  admin: {
+  adminList: {
     uid:number,
     avatarURL:string,
     nickname:string
