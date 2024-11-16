@@ -40,8 +40,8 @@ export default {
           </div>
 
           <template v-if="hasLoad[index]">
-            <div v-for="post in sectionPreviewLists[index]" :key="post.classify" class="section-preview-item">
-              <SectionIdentity :sectionId="post.classify" :iconURL="post.iconURL" :name="post.name"/>
+            <div v-for="section in sectionPreviewLists[index]" :key="section.classify" class="section-preview-item">
+              <SectionIdentity :sectionId="section.sectionId" :iconURL="section.iconURL" :name="section.name"/>
             </div>
           </template>
         </div>
