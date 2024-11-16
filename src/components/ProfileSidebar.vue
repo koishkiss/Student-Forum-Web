@@ -40,7 +40,7 @@ export default {
     </div>
   </div>
 
-  <div class="total">
+  <div class="page-content-box">
     <div class="left-side">
       <nav class="nav-tabs">
 
@@ -194,7 +194,7 @@ onBeforeMount(()=>{
 
 
 
-.total {
+.page-content-box {
   min-width: 900px;
   display: flex; /* 使用 Flexbox 布局 */
   gap: 5px; /* 两边内容的间距 */

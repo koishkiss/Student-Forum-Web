@@ -49,3 +49,20 @@ export interface UserInfo {
   joinNum:number,
   avatarURL:string
 }
+
+
+export interface SectionInfo {
+  sectionId: number,
+  name: string,
+  iconURL: string,
+  slogan: string,
+  postNum: number,
+  memberNum: number,
+  createTime: string,
+  classify: string,  //分类信息
+  moderator: number,  //版主id
+  admin: number[],  //管理员列表
+  hasJoin: boolean,  //个人加入信息
+  joinTime: string,  //个人加入时间
+  identity: number  //个人身份信息
+}

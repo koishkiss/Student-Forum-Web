@@ -12,7 +12,7 @@ export default {
 <template>
 <div class="classify-list-box">
   <el-text tag="p" class="classify-list-title">
-    板块分类
+    板块分区
   </el-text>
 
   <div class="classify-list-content">
