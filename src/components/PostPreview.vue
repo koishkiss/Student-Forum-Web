@@ -101,7 +101,7 @@ import { useHttpStore } from "@/store/Http";
 import Cookies from "js-cookie";
 import { onBeforeMount, ref } from "vue";
 import axios from "axios";
-import { ElNotification } from "element-plus";
+import { ElMessage,ElMessageBox } from "element-plus";
 
 let props = defineProps([
   "id",
@@ -161,12 +161,9 @@ function like() {
       isLoved.value = true;
       like_num.value += 1;
     } else if (data.code === 40012) {
-      ElNotification({
-        title: "请不要进行重复的操作!",
-        duration:1000
-      })
+      ElMessage({message:"操作的太快了！休息一下吧",type:"error"});
     } else {
-      window.alert(data.message);
+      ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
     }
   })
   .catch(function (error) {
@@ -190,12 +187,9 @@ function dislike() {
       isLoved.value = false;
       like_num.value -= 1;
     } else if (data.code === 40012) {
-      ElNotification({
-        title: "请不要进行重复的操作!",
-        duration:1000
-      })
+      ElMessage({message:"操作的太快了！休息一下吧",type:"error"});
     } else {
-      window.alert(data.message);
+      ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
     }
   })
   .catch(function (error) {
@@ -219,12 +213,9 @@ function mark() {
       isMarked.value = true;
       mark_num.value += 1;
     } else if (data.code === 40012) {
-      ElNotification({
-        title: "请不要进行重复的操作!",
-        duration:1000
-      })
+      ElMessage({message:"操作的太快了！休息一下吧",type:"error"});
     } else {
-      window.alert(data.message);
+      ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
     }
   })
   .catch(function (error) {
@@ -248,12 +239,9 @@ function dismark() {
       isMarked.value = false;
       mark_num.value -= 1;
     } else if (data.code === 40012) {
-      ElNotification({
-        title: "请不要进行重复的操作!",
-        duration:1000
-      })
+      ElMessage({message:"操作的太快了！休息一下吧",type:"error"});
     } else {
-      window.alert(data.message);
+      ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
     }
   })
   .catch(function (error) {

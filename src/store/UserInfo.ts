@@ -26,7 +26,7 @@ export const useUserInfoStore = defineStore("UserInfo",{
             } else if (user.authority === 2) {
                 return { type: 'success', label: '小版主' }
             } else {
-                return { type: 'warning', label: '版主' }
+                return { type: 'warning', label: '总版主' }
             }
         }
     }

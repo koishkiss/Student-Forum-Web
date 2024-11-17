@@ -1,6 +1,10 @@
 <script lang="ts">
+import MyIdentityCardInSection from '@/components/MyIdentityCardInSection.vue';
 export default {
-  name:'SectionPage'  //组件名
+  name:'SectionPage',  //组件名
+  components:{
+    MyIdentityCardInSection
+  }
 }
 </script>
 
@@ -55,7 +59,14 @@ export default {
 
       <div class="right-side">
         <div class="personal-info-in-section-box">
-
+          <MyIdentityCardInSection 
+            :hasJoin="hasJoin" 
+            :joinTime="joinTime" 
+            :identity="identity" 
+            :sectionId="section.sectionId" 
+            @join-section="joinSection" 
+            @cancel-join-section="cancelJoinSection" 
+          />
         </div>
 
         <div class="other-section-info-box">
@@ -69,7 +80,7 @@ export default {
 
 
 <script lang="ts" setup>
-import { onBeforeMount, reactive, ref } from 'vue';
+import { onBeforeMount, reactive, ref, toRef } from 'vue';
 import { useHttpStore } from '@/store/Http';
 import { useRoute, useRouter } from 'vue-router';
 import { SectionInfo } from '@/types';
@@ -96,7 +107,41 @@ let section = reactive<SectionInfo>({
   identity: 0  //个人身份信息
 });
 
+let hasJoin = toRef(section,"hasJoin");
+let joinTime = toRef(section,"joinTime");
+let identity = toRef(section,"identity");
+
 const isLoading = ref(true);
+
+function joinSection() {
+  axios({
+    method: "get",
+    url: `${ip_port}/section/info?sectionId=${route.query.id}`,
+    headers: {
+      "Authorization": Cookies.get("Authorization"),
+      "uid": Cookies.get("uid")
+    }
+  })
+  .then(function (response) {
+    const data = response.data;
+    if (data.code == 200) {
+      hasJoin.value = data.data.hasJoin;
+      joinTime.value =  data.data.joinTime;
+      identity.value = data.data.identity;
+    } else {
+      ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  })
+}
+
+function cancelJoinSection() {
+  hasJoin.value = false;
+  joinTime.value = "";
+  identity.value = 0;
+}
 
 //初始化
 onBeforeMount(()=>{
@@ -112,6 +157,9 @@ onBeforeMount(()=>{
     const data = response.data;
     if (data.code == 200) {
       section = data.data;
+      hasJoin.value = section.hasJoin;
+      joinTime.value = section.joinTime;
+      identity.value = section.identity;
     } else {
       ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
       router.push('/main');
