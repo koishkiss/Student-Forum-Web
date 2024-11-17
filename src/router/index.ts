@@ -4,6 +4,8 @@ import MainPage from "@/page/MainPage.vue";
 import PersonalPage from "@/page/PersonalPage.vue";
 import LoginPage from "@/page/LoginPage.vue";
 import postPage from "@/components/postPage.vue"
+import SectionPage from "@/page/SectionPage.vue";
+
 import Activities from "../page/personal/ActivitiesInPersonalPage.vue"
 import Collections from "../page/personal/CollectionsInPersonalPage.vue"
 import Person from "../page/personal/PersonInPersonalPage.vue"
@@ -38,22 +40,27 @@ routes:[
         children:[
             {
                 path:"activity",
-                component:Activities,
+                component:Activities
             },
             {
                 path:"post",
-                component:Person,
+                component:Person
             },
             {
                 path:"mark",
-                component:Collections,
+                component:Collections
             },
             {
                 path:"setting",
-                component:Settings,
+                component:Settings
             },
 
         ]
+    },
+    {
+        name:"section-page",
+        path:"/section",
+        component:SectionPage
     }
 ]})
 

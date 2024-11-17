@@ -3,44 +3,47 @@
   import AnnouncementBar from '@/components/AnnouncementBar.vue';
   import FollowSection from '@/components/FollowSectionInMainPage.vue';
   import PostPreviewScrollList from '@/components/PostPreviewScrollList.vue';
+  import ClassificationList from "@/components/ClassificationList.vue";
   export default {
     name:'MainPage',  //组件名
     components:{
-      AnnouncementBar,FollowSection,PostPreviewScrollList,Refresh
+      AnnouncementBar,FollowSection,PostPreviewScrollList,ClassificationList,Refresh
     }
   }
 </script>
 
 <template>
 <div class="main-page-box">
-  <div class="left-sidebar-box">
-    <div class="announcement-bar-box">
-      <AnnouncementBar/>
-    </div>
-
-    <div class="section-classification-box">
-
-    </div>
-  </div>
-
-  <div class="right-sidebar-box">
-    <div class="follow-section-box">
-      <FollowSection/>
-    </div>
-
-    <div class="right-bottom-item-box">
-      <div class="public-trend-box">
-        <div class="public-trend-title">
-          丨 热门动态
-          <el-icon class="top-control-icon" @click="reloadPostList" >
-            <Refresh />
-          </el-icon>
-        </div>
-        <PostPreviewScrollList ref="postList"/>
+  <div class="main-page-flex-box">
+    <div class="left-sidebar-box">
+      <div class="announcement-bar-box">
+        <AnnouncementBar/>
       </div>
 
-      <div class="hot-issue-box">
-        
+      <div class="section-classification-box">
+        <ClassificationList/>
+      </div>
+    </div>
+
+    <div class="right-sidebar-box">
+      <div class="follow-section-box">
+        <FollowSection/>
+      </div>
+
+      <div class="right-bottom-item-box">
+        <div class="public-trend-box">
+          <div class="public-trend-title">
+            丨 热门动态
+            <el-icon class="top-control-icon" @click="reloadPostList" >
+              <Refresh />
+            </el-icon>
+          </div>
+          <PostPreviewScrollList ref="postList"/>
+        </div>
+
+        <div class="hot-issue-box">
+          
+        </div>
       </div>
     </div>
   </div>
@@ -64,6 +67,9 @@ function reloadPostList() {
 
 .main-page-box {
   padding: 150px 300px;
+}
+
+.main-page-flex-box {
   display: flex;
 }
 
@@ -79,14 +85,13 @@ function reloadPostList() {
 }
 
 .section-classification-box {
-  background-color: brown;
-  min-height: 300px;
+  position: sticky;
+  top: 60px;
 }
 
 .right-sidebar-box {
   min-width: 600px;
   width: 68%;
-  height: 100px;
 }
 
 .follow-section-box {

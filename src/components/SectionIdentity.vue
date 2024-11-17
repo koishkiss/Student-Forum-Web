@@ -1,20 +1,20 @@
 <script lang="ts">
-  import { Menu,Avatar,Promotion } from '@element-plus/icons-vue';
-  export default {
-    name:'SectionIdentity',  //组件名
-    components: {
-      Menu,Avatar,Promotion
-    }
+import { Menu,Avatar,Promotion } from '@element-plus/icons-vue';
+export default {
+  name:'SectionIdentity',  //组件名
+  components: {
+    Menu,Avatar,Promotion
   }
+}
 </script>
 
 <template>
 <div class="section-identity-box">
   <div class="cover-title">
-    <div class="cover-wrap">
+    <div class="cover-wrap" @click="toTheSectionPage">
       <el-image :src="iconURL" fit="cover" lazy class="cover"/>
     </div>
-    <a class="liner-text1">
+    <a class="liner-text1" @click="toTheSectionPage">
       {{ name }}
     </a>
   </div>
@@ -35,8 +35,15 @@
 
 
 <script lang="ts" setup>
+import { useRouter } from 'vue-router';
 
-defineProps(["sectionId","iconURL","name","classify","classifyName","memberNum","postNum"]);
+let props = defineProps(["sectionId","iconURL","name","classify","classifyName","memberNum","postNum"]);
+
+const router = useRouter();
+
+function toTheSectionPage() {
+  router.push(`/section?id=${props.sectionId}`);
+}
 
 </script>
 

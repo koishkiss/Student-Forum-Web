@@ -49,3 +49,27 @@ export interface UserInfo {
   joinNum:number,
   avatarURL:string
 }
+
+interface Admin {
+  uid:number,
+  avatarURL:string,
+  nickname:string,
+  identity:Number
+}
+
+export type AdminList = Array<Admin>
+
+export interface SectionInfo {
+  sectionId: number,
+  name: string,
+  iconURL: string,
+  slogan: string,
+  postNum: number,
+  memberNum: number,
+  createTime: string,
+  classify: string,  //分类信息
+  adminList: AdminList,  //管理员信息列表
+  hasJoin: boolean,  //个人加入信息
+  joinTime: string,  //个人加入时间
+  identity: number  //个人身份信息
+}

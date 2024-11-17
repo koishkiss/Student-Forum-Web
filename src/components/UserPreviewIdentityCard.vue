@@ -1,14 +1,29 @@
 <script lang="ts">
-  export default {
-    name:'UserPreviewInfoCard'  //组件名
+import { Loading } from '@element-plus/icons-vue';
+export default {
+  name:'UserPreviewInfoCard',  //组件名
+  components:{
+    Loading
   }
+}
 </script>
 
 <template>
-  <div class="user-preview-info-box">
+<div class="user-preview-info-box">
+
+  <div class="loading-box" v-if="isLoading">
+    <Loading/>
+  </div>
+
+  <div class="no-data-box" v-if="!hasUser">
+    <el-empty :image-size="50" description="这位用户好像走丢了!"/>
+  </div>
+
+  <div v-if="!isLoading&&hasUser" class="user-preview-info-box">
     <div class="avatar-box">
       <el-avatar :src="theUser.avatarURL" fit="cover" shape="square" class="avatar"/>
     </div>
+
     <div class="info-box">
       <el-text class="nickname-box" tag="p">
         {{ theUser.nickname }}
@@ -16,33 +31,40 @@
           {{ auth.label }}
         </el-tag>
       </el-text>
+      
       <div class="other-info">
         <el-text class="info-item">发帖：{{ theUser.postNum }}</el-text>
         <el-divider direction="vertical" />
         <el-text class="info-item">获赞：{{ theUser.likeNum }}</el-text>
       </div>
+
       <div class="signature-box">
         <el-text class="signature" tag="p">{{ theUser.signature }}</el-text>
       </div>
     </div>
   </div>
+</div>
 </template>
 
 
 <script lang="ts" setup>
+import { useHttpStore } from '@/store/Http';
 import { UserInfo } from '@/types';
-import { computed, reactive } from 'vue';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { computed, onBeforeMount, reactive, ref } from 'vue';
 
+const props = defineProps(["theUid"]);
 
-defineProps(["theUid"]);
+const { ip_port } = useHttpStore();
 
-const theUser = reactive<UserInfo>({
+let theUser = reactive<UserInfo>({
   uid:-1,
-  sid:"asdasd",
+  sid:"",
   authority:1,
-  nickname:"koishikiss",
-  signature:"你所热爱的，就是你的生活",
-  registerTime:"aaa",
+  nickname:"",
+  signature:"",
+  registerTime:"",
   likeNum:-1,
   bookmarkNum:-1,
   postNum:-1,
@@ -62,6 +84,30 @@ let auth = computed(()=>{
   }
 })
 
+const isLoading = ref(true);
+const hasUser = ref(true);
+
+onBeforeMount(()=>{
+  axios({
+    method:"get",
+    url:`${ip_port}/user/other/info?uid=${props.theUid}`,
+    headers:{"Authorization":Cookies.get("Authorization"),"uid":Cookies.get("uid")}
+  })
+  .then(function (response) {
+    const data = response.data;
+      if (data.code === 200) {
+        theUser = data.data;
+        isLoading.value = false;
+      } else {
+        hasUser.value = false;
+        isLoading.value = false;
+      }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+})
+
 </script>
 
 
@@ -76,6 +122,17 @@ let auth = computed(()=>{
   border-radius: 10px;
   display: flex;
   z-index: 1;
+}
+
+.loading-box {
+  margin: auto;
+  width: 25px;
+  color: rgb(155, 155, 155);
+}
+
+.no-data-box {
+  display: flex;
+  margin: auto;
 }
 
 .avatar-box {

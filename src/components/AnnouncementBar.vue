@@ -41,7 +41,7 @@
 }
 
 .announcement-bar:hover {
-  transform: translateY(-5px);
+  transform: translateY(-4px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
