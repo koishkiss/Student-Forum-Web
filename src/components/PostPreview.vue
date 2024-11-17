@@ -142,7 +142,7 @@ function userInfoCardDelayLeave() {
   timeId = setTimeout(()=>{
     showUserIdentityCard.value=false;
     timeId = undefined;
-  },300)
+  },100)
 }
 
 //喜欢帖子

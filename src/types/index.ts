@@ -50,6 +50,14 @@ export interface UserInfo {
   avatarURL:string
 }
 
+interface Admin {
+  uid:number,
+  avatarURL:string,
+  nickname:string,
+  identity:Number
+}
+
+export type AdminList = Array<Admin>
 
 export interface SectionInfo {
   sectionId: number,
@@ -60,11 +68,7 @@ export interface SectionInfo {
   memberNum: number,
   createTime: string,
   classify: string,  //分类信息
-  adminList: {
-    uid:number,
-    avatarURL:string,
-    nickname:string
-  }[],  //管理员信息列表
+  adminList: AdminList,  //管理员信息列表
   hasJoin: boolean,  //个人加入信息
   joinTime: string,  //个人加入时间
   identity: number  //个人身份信息

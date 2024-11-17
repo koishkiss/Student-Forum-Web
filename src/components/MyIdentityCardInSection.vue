@@ -53,7 +53,7 @@ export default {
       </div>
 
       <el-text class="join-time" v-if="hasJoin">
-        于 {{ joinTime }} 成为该板块中的一员
+        于{{ joinTime }}成为该板块中的一员
       </el-text>
     </div>
   </div>
@@ -84,7 +84,7 @@ const hasLogin = computed(()=>{
 let identityTag = computed(()=>{
   if (props.identity === 0) {
     return { type: 'primary', label: '成员' }
-  } else if (user.authority === 1) {
+  } else if (props.identity === 1) {
     return { type: 'success', label: '管理' }
   } else {
     return { type: 'warning', label: '版主' }
@@ -168,7 +168,6 @@ function unfollowTheSection() {
 }
 
 .avatar {
-  border-radius: 5px;
   border: 2px double #a1a1a1;
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);

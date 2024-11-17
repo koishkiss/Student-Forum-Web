@@ -1,9 +1,10 @@
 <script lang="ts">
 import MyIdentityCardInSection from '@/components/MyIdentityCardInSection.vue';
+import AdminIdentityList from '@/components/AdminIdentityList.vue';
 export default {
   name:'SectionPage',  //组件名
   components:{
-    MyIdentityCardInSection
+    MyIdentityCardInSection,AdminIdentityList
   }
 }
 </script>
@@ -58,19 +59,23 @@ export default {
       </div>
 
       <div class="right-side">
-        <div class="personal-info-in-section-box">
-          <MyIdentityCardInSection 
-            :hasJoin="hasJoin" 
-            :joinTime="joinTime" 
-            :identity="identity" 
-            :sectionId="section.sectionId" 
-            @join-section="joinSection" 
-            @cancel-join-section="cancelJoinSection" 
-          />
-        </div>
+        <div class="right-side-item">
+          <div class="personal-info-in-section-box">
+            <MyIdentityCardInSection 
+              :hasJoin="hasJoin" 
+              :joinTime="joinTime" 
+              :identity="identity" 
+              :sectionId="section.sectionId" 
+              @join-section="joinSection" 
+              @cancel-join-section="cancelJoinSection" 
+            />
+          </div>
 
-        <div class="other-section-info-box">
+          <el-divider style="margin-top: 10px;margin-bottom: 10px;"/>
 
+          <div class="other-section-info-box">
+            <AdminIdentityList :adminList="section.adminList" />
+          </div>
         </div>
       </div>
     </div>
@@ -290,6 +295,12 @@ onBeforeMount(()=>{
 
 .right-side {
   flex: 4; /* 占右边 30% */
+}
+
+.right-side-item {
+  position: sticky;
+  top: 60px;
+  padding: 5px;
 }
 
 .follow-section-box {
