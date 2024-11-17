@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import MainPage from "@/page/MainPage.vue";
 import PersonalPage from "@/page/PersonalPage.vue";
 import LoginPage from "@/page/LoginPage.vue";
-
+import postPage from "@/components/postPage.vue"
 import Activities from "../page/personal/ActivitiesInPersonalPage.vue"
 import Collections from "../page/personal/CollectionsInPersonalPage.vue"
 import Person from "../page/personal/PersonInPersonalPage.vue"
