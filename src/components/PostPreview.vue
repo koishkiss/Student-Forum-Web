@@ -344,6 +344,7 @@ onBeforeMount(()=>{
 }
 
 .post-preview-text {
+  white-space: pre-line;
   margin-top: 5px;
 }
 
