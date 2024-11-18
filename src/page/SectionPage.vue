@@ -47,11 +47,23 @@ export default {
       <div class="left-side">
         <nav class="nav-tabs">
 
-          <RouterLink to="/personal/activity" class="router cta" active-class="router-choose">
+          <RouterLink :to="{
+            path:'/section/postList',
+            query:{
+              sectionId:section.sectionId
+            }
+            }" 
+            class="router cta" active-class="router-choose">
             <span class="hover-underline-animation"> 看帖 </span>
           </RouterLink>
 
-          <RouterLink to="/personal/post" class="router cta" active-class="router-choose">
+          <RouterLink :to="{
+            path:'/section/selectedList',
+            query:{
+              sectionId:section.sectionId
+            }
+            }" 
+            class="router cta" active-class="router-choose">
             <span class="hover-underline-animation"> 精选 </span>
           </RouterLink>
         </nav>
