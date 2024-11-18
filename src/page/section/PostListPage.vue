@@ -1,97 +1,161 @@
+<script lang="ts">
+import PostPreview from '@/components/PostPreview.vue';
+export default {
+  name:'PostListPage',  //组件名
+  components:{
+    PostPreview
+  }
+}
+</script>
+
 <template>
-    <div class="sections-post-box" v-if="!isLoading">
-        <ul>
-            <li v-for="post in sectionPostList" :key="post.id" class="post-preview-list">
+<div class="sections-post-box" v-if="!isLoading">
+
+    <div class="no-data-box" v-if="!hasData">
+        <el-empty :image-size="100" description="这里还什么都没有呢"/>
+    </div>
+
+    <div class="post-preview-list-box" v-if="hasData">
+        <ul class="post-preview-list">
+            <li v-for="post in sectionPostList" :key="post.id" class="post-preview-item">
                 <PostPreview v-bind=post />
             </li>
         </ul>
-        <div class="page-select-item">
-            <el-pagination v-model:current-page="currentPage" background :page-size="1" :pager-count="7"
-            layout="prev, pager, next" :page-count="maxPagination" @current-change="handleCurrentChange" />
-        </div>
     </div>
+
+    <div class="page-select-item" v-if="hasData">
+        <el-pagination
+            v-model:current-page="currentPage" 
+            v-model:page-size="pageSize" 
+            layout="total, prev, pager, next, jumper"
+            :page-count="maxPagination" 
+            :total="recordsCount"
+            @current-change="handleCurrentChange"
+        />
+    </div>
+
+    <el-divider/>
+
+    <div class="post-new-post-box">
+
+    </div>
+</div>
 </template>
 
 <script lang="ts" setup>
 import { PostPreviewItemList } from '@/types';
 import axios from 'axios';
-import { onMounted, onBeforeMount, reactive, ref } from 'vue';
+import { onBeforeMount, reactive, ref } from 'vue';
 import { useHttpStore } from '@/store/Http';
+import { ElMessageBox } from 'element-plus';
 import { useRoute } from 'vue-router';
 import Cookies from 'js-cookie';
-import PostPreview from '@/components/PostPreview.vue';
 
 const { ip_port } = useHttpStore();
-const route = useRoute()
+const route = useRoute();
+
 let sectionPostList = reactive<PostPreviewItemList>([]);
-let maxPagination = ref(10)
-let pagination = ref(1)
 const isLoading = ref(true);
+const hasData = ref(true);
+
+const maxPagination = ref(1);
 const currentPage = ref(1);
+const pageSize = ref(5);
+const recordsCount = ref(0)
 
 onBeforeMount(() => {
     axios({
         method: "post",
-        url: ip_port + "/post/get?sectionId=" + route.query.sectionId,
+        url: ip_port + "/post/get?sectionId=" + route.params.id,
         data: {
             "pagination": 1,
-            "pageSize": 1
+            "pageSize": pageSize.value
         },
         headers: {
             "Authorization": Cookies.get("Authorization"),
             "uid": Cookies.get("uid")
         }
     })
-        .then(function (response) {
-            const data = response.data;
-            maxPagination = data.data.maxPagination;
+    .then(function (response) {
+        const data = response.data;
+        if (data.code == 200) {
             sectionPostList = data.data.records;
+            recordsCount.value = data.data.totalRecordNum;
+            maxPagination.value = data.data.maxPagination;
             isLoading.value = false;
-        })
-        .catch(function (error) {
-            console.log(error);
+        } else if (data.code === 40010) {
             isLoading.value = false;
-        });
+            hasData.value = false;
+        } else {
+            isLoading.value = false;
+            ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
+            hasData.value = false;
+        }
+    })
+    .catch(function (error) {
+        console.log(error);
+        isLoading.value = false;
+    });
 })
 
 const handleCurrentChange = (val: number) => {
-    isLoading.value = true;
-    console.log(val);
-    sectionPostList = []
     axios({
         method: "post",
-        url: ip_port + "/post/get?sectionId=" + route.query.sectionId,
+        url: ip_port + "/post/get?sectionId=" + route.params.id,
         data: {
             "pagination": val,
-            "pageSize": 1
+            "pageSize": pageSize.value
         },
         headers: {
             "Authorization": Cookies.get("Authorization"),
             "uid": Cookies.get("uid")
         }
     })
-        .then(function (response) {
-            const data = response.data;
-            maxPagination = data.data.maxPagination;
+    .then(function (response) {
+        const data = response.data;
+        if (data.code == 200) {
+            isLoading.value = true;
+            sectionPostList = [];
             sectionPostList = data.data.records;
-            isLoading.value = false
-        })
-        .catch(function (error) {
-            console.log(error);
+            recordsCount.value = data.data.totalRecordNum;
+            maxPagination.value = data.data.maxPagination;
             isLoading.value = false;
-        });
+        } else {
+            ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
+        }
+    })
+    .catch(function (error) {
+        console.log(error);
+        isLoading.value = false;
+    });
 }
 
 </script>
 
-<style>
+<style scoped>
+
+.sections-post-box {
+    padding: 0 20px;
+}
+
+.post-preview-list-box {
+    margin-top: 10px;
+}
+
 .post-preview-list {
-    list-style-type: none;
-    padding: 0;
-    margin-top: 50px;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.post-preview-item {
+  padding: 5px;
 }
 
 .page-select-item {
-    margin-left: 40px;
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+    justify-content: center;
 }
 </style>

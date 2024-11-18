@@ -46,24 +46,19 @@ export default {
     <div class="page-content-box">
       <div class="left-side">
         <nav class="nav-tabs">
-
-          <RouterLink :to="{
-            path:'/section/postList',
-            query:{
-              sectionId:section.sectionId
-            }
-            }" 
-            class="router cta" active-class="router-choose">
+          <RouterLink 
+            :to="`/section/${section.sectionId}/post/all`" 
+            class="router cta" 
+            active-class="router-choose"
+          >
             <span class="hover-underline-animation"> 看帖 </span>
           </RouterLink>
 
-          <RouterLink :to="{
-            path:'/section/selectedList',
-            query:{
-              sectionId:section.sectionId
-            }
-            }" 
-            class="router cta" active-class="router-choose">
+          <RouterLink 
+            :to="`/section/${section.sectionId}/post/selected`" 
+            class="router cta" 
+            active-class="router-choose"
+          >
             <span class="hover-underline-animation"> 精选 </span>
           </RouterLink>
         </nav>
@@ -133,7 +128,7 @@ const isLoading = ref(true);
 function joinSection() {
   axios({
     method: "get",
-    url: `${ip_port}/section/info?sectionId=${route.query.id}`,
+    url: `${ip_port}/section/info?sectionId=${section.sectionId}`,
     headers: {
       "Authorization": Cookies.get("Authorization"),
       "uid": Cookies.get("uid")
@@ -164,7 +159,7 @@ function cancelJoinSection() {
 onBeforeMount(()=>{
   axios({
     method: "get",
-    url: `${ip_port}/section/info?sectionId=${route.query.id}`,
+    url: `${ip_port}/section/info?sectionId=${route.params.id}`,
     headers: {
       "Authorization": Cookies.get("Authorization"),
       "uid": Cookies.get("uid")
@@ -177,6 +172,7 @@ onBeforeMount(()=>{
       hasJoin.value = section.hasJoin;
       joinTime.value = section.joinTime;
       identity.value = section.identity;
+      router.push(`/section/${route.params.id}/post/all`)
     } else {
       ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
       router.push('/main');
