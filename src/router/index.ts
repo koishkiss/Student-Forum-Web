@@ -36,7 +36,7 @@ routes:[
     },
     {
         name:"post-detail-page",
-        path:"/postPage",
+        path:"/post",
         component:postPage
     },
     {

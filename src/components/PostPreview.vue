@@ -43,10 +43,10 @@ export default {
   <div class="post-content-box">
     <el-text class="post-title">
       <el-tag type="warning" v-if="status === 1" class="el-tag">精华</el-tag>
-      <span class="title">{{ title }}</span>
+      <span class="title" @click="toPostPage">{{ title }}</span>
     </el-text>
 
-    <el-text class="post-preview-text" tag="p">
+    <el-text class="post-preview-text" tag="p" @click="toPostPage">
       {{ content }}
     </el-text>
 
@@ -70,7 +70,7 @@ export default {
 
   <div class="post-data-box"> 
     <div class="post-data-num-box">
-      <el-text class="data-num-item">
+      <el-text class="data-num-item" @click="toPostPage">
         <el-icon class="operator-svg">
           <ChatLineSquare />
         </el-icon>
@@ -102,6 +102,7 @@ import Cookies from "js-cookie";
 import { onBeforeMount, ref } from "vue";
 import axios from "axios";
 import { ElMessage,ElMessageBox } from "element-plus";
+import { useRouter } from "vue-router";
 
 let props = defineProps([
   "id",
@@ -123,6 +124,7 @@ let props = defineProps([
 ])
 
 const { ip_port } = useHttpStore();
+const router = useRouter();
 
 const showUserIdentityCard = ref(false);
 const isLoved = ref(false);
@@ -143,6 +145,10 @@ function userInfoCardDelayLeave() {
     showUserIdentityCard.value=false;
     timeId = undefined;
   },100)
+}
+
+function toPostPage() {
+  router.push(`/post?id=${props.id}`);
 }
 
 //喜欢帖子
@@ -335,6 +341,7 @@ onBeforeMount(()=>{
   align-items: center;
 }
 .post-title .title {
+  cursor: pointer;
   font-size: 20px;
   font-weight: bold;
   color: #000;
@@ -344,6 +351,7 @@ onBeforeMount(()=>{
 }
 
 .post-preview-text {
+  cursor: pointer;
   white-space: pre-line;
   margin-top: 5px;
 }
