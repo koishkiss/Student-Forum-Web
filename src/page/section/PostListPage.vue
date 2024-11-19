@@ -1,9 +1,10 @@
 <script lang="ts">
 import PostPreview from '@/components/PostPreview.vue';
+import PostingBox from '@/components/PostingBox.vue';
 export default {
   name:'PostListPage',  //组件名
   components:{
-    PostPreview
+    PostPreview,PostingBox
   }
 }
 </script>
@@ -27,17 +28,17 @@ export default {
         <el-pagination
             v-model:current-page="currentPage" 
             v-model:page-size="pageSize" 
-            layout="total, prev, pager, next, jumper"
+            layout="total, prev, pager, next, jumper" 
             :page-count="maxPagination" 
-            :total="recordsCount"
-            @current-change="handleCurrentChange"
+            :total="recordsCount" 
+            @current-change="handleCurrentChange" 
         />
     </div>
 
-    <el-divider/>
+    <el-divider style="margin-bottom: 10px;"/>
 
     <div class="post-new-post-box">
-
+        <PostingBox :sectionId="route.params.id"/>
     </div>
 </div>
 </template>
