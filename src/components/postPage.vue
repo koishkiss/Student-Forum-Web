@@ -10,13 +10,50 @@ export default {
 
 <template>
         <div class="post-list">
-        <postThread />
-        <postThread />
+            <li v-for ="commentPost in commentPostList" :key="commentPost.id">
+                <postThread v-bind=commentPost />
+            </li>
     </div>
 </template>
 
 <script lang="ts" setup >
 import postThread from './postThread.vue';
+import {useRoute} from 'vue-router'
+import Cookies from 'js-cookie';
+import axios from 'axios';
+import {reactive,ref} from 'vue';
+import { useHttpStore } from '@/store/Http';
+import { CommentPostList } from '@/types';
+const { ip_port } = useHttpStore();
+let route = useRoute();
+let commentPostList = reactive<CommentPostList>([])
+console.log(route);
+console.log(route.query.id);
+axios({
+    method:"post",
+    url:ip_port+"/comment/get",
+    params:{
+        "postId":route.query.id
+    },
+    headers:{
+        "Authorization":Cookies.get("Authorization"),
+        "uid":Cookies.get("uid")
+    },
+    data:{
+        "pagination": 1,
+        "pageSize": 2
+    }
+    
+})
+.then((response)=> {
+    const data = response.data;
+    if(data.code === 200) {
+        commentPostList = data.data.commentList;
+    }else {
+        window.alert(data.message);
+    }
+})
+
 </script>
 <style scoped>
 

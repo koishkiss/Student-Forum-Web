@@ -11,7 +11,7 @@ components: {
 <div class="post-floor">
   <!-- 用户信息 -->
   <div class="user-info">
-    <img src="" alt="用户头像" class="user-avatar">
+    <img :src="avatarURL" alt="用户头像" class="user-avatar">
     <div class="user-details">
       <span class="user-name">用户名</span>
       <span class="user-title">贴吧头衔</span>
@@ -44,7 +44,26 @@ components: {
   </div>
 </div>
 </template>
+<script lang="ts" setup>
+import {useRouter} from "vue-router"
+let props = defineProps([
+  "isModerator",
+  "avatarURL",
+  "isPoster",
+  "postId",
+  "avatar",
+  "commentTime",
+  "content",
+  "likeNum",
+  "floorId",
+  "uid",
+  "authority",
+  "replyNum",
+  "nickname",
+  "id"
+])
 
+</script>
 <style scoped>
 .post-floor {
   border-bottom: 1px solid #ccc;
