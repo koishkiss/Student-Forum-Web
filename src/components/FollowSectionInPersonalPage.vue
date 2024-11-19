@@ -1,3 +1,55 @@
+<script lang="ts">
+import { Delete } from '@element-plus/icons-vue';
+export default {
+  name:"FollowSectionInPersonalPage",
+  components:{
+    Delete
+  }
+}
+</script>
+
+<template>
+  <div class="follow-section">
+
+    <div class="no-data-box" v-if="!hasData">
+        <el-empty :image-size="100" description="你还没有加入过论坛呢"/>
+    </div>
+
+    <div class="management" v-if="hasData">
+      <el-button type="primary" :icon="Edit" plain @click="showCancelButton = !showCancelButton">
+        {{ showCancelButton ? '取消' : '管理'}}
+      </el-button>
+    </div>
+
+    <div class="follow-list" v-if="!isLoading&&hasData">
+      <div v-for="identity in sectionList" :key="identity.sectionId" class="follow-item">
+        <el-popconfirm title="你确定要退出论坛吗？" @confirm="cancelJoinSection(identity.sectionId)">
+          <template #reference>
+            <div class="exit-section-box">
+              <Transition name="exit-section-show">
+                <el-button  
+                  class='exit-section' 
+                  v-if="showCancelButton" 
+                  type="danger" 
+                  :icon="Delete" 
+                />
+              </Transition>
+            </div>
+          </template>
+        </el-popconfirm>
+
+        <SectionIdentity 
+          :sectionId="identity.sectionId" 
+          :iconURL="identity.iconURL"
+          :name="identity.name"
+          class="section-identity"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
+
 <script lang="ts" setup>
 import { ref, onBeforeMount, reactive } from 'vue';
 import Cookies from 'js-cookie';
@@ -6,20 +58,18 @@ import { useHttpStore } from '@/store/Http';
 import { Edit } from "@element-plus/icons-vue";
 import SectionIdentity from './SectionIdentity.vue';
 import { SectionIdentityList } from '@/types';
-import { dialogEmits } from 'element-plus';
+import { ElMessage } from 'element-plus';
 
 // 使用HttpStore获取IP和端口配置
 const { ip_port } = useHttpStore();
 
 // 定义响应数据的状态
 const isLoading = ref(true);
-let sectionList = ref<SectionIdentityList>([]);
+const hasData = ref(true);
+let sectionList = reactive<SectionIdentityList>([]);
 
 // 控制编辑对话框的显示状态
 const showCancelButton = ref(false);
-// 控制
-const showConfirmDialog = ref(false);
-const sectionToCancel = ref(null); 
 
 
 // 初始化数据加载
@@ -29,6 +79,7 @@ onBeforeMount(() => {
 
 // 加载板块列表
 function loadSectionList() {
+  isLoading.value = true;
   axios({
     method: "get",
     url: `${ip_port}/section/mine`,
@@ -40,10 +91,11 @@ function loadSectionList() {
   .then((response) => {
     const { code, message, data } = response.data;
     if (code === 200) {
-      sectionList.value = data;
+      sectionList = data;
+    } else if (code === 40010) {
+      hasData.value = false;
     } else {
-      console.log(message);
-      sectionList.value = null
+      ElMessage({message:message,type:"error"});
     }
   })
   .catch((error) => {
@@ -66,12 +118,11 @@ function cancelJoinSection(sectionId: number) {
     params: { sectionId }
   })
   .then((response) => {
-    const { code, message } = response.data;
+    const { code } = response.data;
     if (code === 200) {
-      console.log("成功取消加入:", message);
-      loadSectionList(); // 重新加载列表，更新UI
+      loadSectionList();
     } else {
-      console.log("取消加入失败:", message);
+      ElMessage({message:"取消关注失败!",type:"error"});
     }
   })
   .catch((error) => {
@@ -80,38 +131,16 @@ function cancelJoinSection(sectionId: number) {
 }
 </script>
 
-<template>
-  <div class="follow-section">
-    <div class="management">
-      <el-button type="primary" :icon="Edit" plain @click="showCancelButton = !showCancelButton">管理</el-button>
-    </div>
-    <div class="follow-list" v-if="!isLoading">
-      <div v-for="identity in sectionList" :key="identity.sectionId" class="follow-item">
-        <div>
-          <div>
-            <el-popconfirm title="你确定要退出论坛吗？" @confirm="cancelJoinSection(identity.sectionId)">
-              <template #reference>
-                <el-button  class='exitSection' v-if="showCancelButton" ><span style="color:red">X</span></el-button>
-              </template>
-            </el-popconfirm>
-          </div>
-          <SectionIdentity 
-            :sectionId="identity.sectionId" 
-            :iconURL="identity.iconURL"
-            :name="identity.name"
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
+
 <style scoped>
 .follow-section {
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  padding-left: 33px;
-  padding-right: 32px;
+  padding: 10px;
+}
+
+.management {
+  margin-left: 15px;
 }
 
 /* 关注列表样式 */
@@ -119,20 +148,41 @@ function cancelJoinSection(sectionId: number) {
   margin-top: 15px;
   display: flex;
   flex-direction: row;
+  align-items: start;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 6px 5px;
 }
 
 /* 每个关注项的样式 */
 .follow-item {
-  align-self: start;
+  margin-left: 15px;
 }
-.exitSection{
-  width: 10px;
-  height: 10px;
-  position: relative;
-  left: 70px;
-  top:10px;
+
+.exit-section-box {
+  margin-top: 6px;
+  margin-left: 79px;
+  position: absolute;
+  display: flex;
+  z-index: 1;
 }
+
+.exit-section {
+  padding: 0;
+  width: 25px;
+  height: 25px;
+  font-size: 12px;
+}
+
+
+/* 删除按钮动画 */
+.exit-section-show-enter-active  {
+  transition: opacity 0.1s ease-out, transform 0.1s ease-out;
+}
+.exit-section-show-leave-active {
+  transition: opacity 0.1s ease-out, transform 0.1s ease-out;
+}
+.exit-section-show-enter-from,
+.exit-section-show-leave-to {
+  opacity: 0;
+}
+
 </style>

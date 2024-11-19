@@ -121,6 +121,7 @@ const handleCurrentChange = (val: number) => {
             recordsCount.value = data.data.totalRecordNum;
             maxPagination.value = data.data.maxPagination;
             isLoading.value = false;
+            scrollTo(0,0);
         } else {
             ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
         }
