@@ -13,6 +13,9 @@ import Settings from "../page/personal/SettingsInPersonalPage.vue"
 
 import PostListPage from "@/page/section/PostListPage.vue";
 import PostSelectedListPage from "@/page/section/PostSelectedListPage.vue";
+import MyPost from "@/page/personal/personSection/MyPostInPersonalPage.vue"
+import MyLikePost from "@/page/personal/personSection/MyLikePostPageInPersonalPage.vue"
+import ViewHistory from "@/page/personal/personSection/ViewHistoryInPersonalPage.vue"
 
 const router = createRouter({
 history:createWebHistory(),
@@ -47,7 +50,21 @@ routes:[
             },
             {
                 path:"post",
-                component:Person
+                component:Person,
+                children:[
+                    {
+                        path:"my-post",
+                        component:MyPost
+                    },
+                    {
+                        path:"my-like-post",
+                        component:MyLikePost
+                    },
+                    {
+                        path:"view-history",
+                        component:ViewHistory
+                    }
+                ]
             },
             {
                 path:"mark",
