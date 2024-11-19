@@ -99,7 +99,7 @@ const navItems = reactive([
     labelIcon: markRaw(Clock), 
     options: [], 
     visible: false,
-    to:toPersonalPage
+    to:toViewHistoryPage
   }
 ]);
 
@@ -131,7 +131,10 @@ function toPersonalPage() {
     router.push("/login")
   }
 }
-
+//去浏览历史页
+function toViewHistoryPage(){
+  router.push("/personal/post/view-history")
+}
 //去个人收藏页
 function toPersonalMarkPage() {
   router.push("/personal/mark")
@@ -139,7 +142,7 @@ function toPersonalMarkPage() {
 
 //去个人发帖页
 function toPersonalPostPage() {
-  router.push("/personal/post")
+  router.push("/personal/post/my-post")
 }
 
 //初始化

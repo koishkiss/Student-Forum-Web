@@ -56,7 +56,6 @@
             Authorization: Authorization.value,
             uid: uidLocal.value,
         };
-        
         try {
             const response = await axios.get(`${ip_port}/post/get`, {
                 headers,
