@@ -83,22 +83,24 @@ function cancelJoinSection(sectionId: number) {
 <template>
   <div class="follow-section">
     <div class="management">
-      <el-button type="primary" :icon="Edit" plain @click="showCancelButton = true">管理</el-button>
+      <el-button type="primary" :icon="Edit" plain @click="showCancelButton = !showCancelButton">管理</el-button>
     </div>
     <div class="follow-list" v-if="!isLoading">
       <div v-for="identity in sectionList" :key="identity.sectionId" class="follow-item">
         <div>
-          <el-popconfirm title="Are you sure to delete this?" @confirm="cancelJoinSection(identity.sectionId)">
-            <template #reference>
-              <el-button  v-if="showCancelButton" >XXXXX</el-button>
-            </template>
-          </el-popconfirm>
+          <div>
+            <el-popconfirm title="你确定要退出论坛吗？" @confirm="cancelJoinSection(identity.sectionId)">
+              <template #reference>
+                <el-button  class='exitSection' v-if="showCancelButton" ><span style="color:red">X</span></el-button>
+              </template>
+            </el-popconfirm>
+          </div>
+          <SectionIdentity 
+            :sectionId="identity.sectionId" 
+            :iconURL="identity.iconURL"
+            :name="identity.name"
+          />
         </div>
-        <SectionIdentity 
-          :sectionId="identity.sectionId" 
-          :iconURL="identity.iconURL"
-          :name="identity.name"
-        />
       </div>
     </div>
   </div>
@@ -125,5 +127,12 @@ function cancelJoinSection(sectionId: number) {
 /* 每个关注项的样式 */
 .follow-item {
   align-self: start;
+}
+.exitSection{
+  width: 10px;
+  height: 10px;
+  position: relative;
+  left: 70px;
+  top:10px;
 }
 </style>
