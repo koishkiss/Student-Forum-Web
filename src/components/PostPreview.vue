@@ -50,7 +50,7 @@ export default {
       {{ content }}
     </el-text>
 
-    <div class="post-cover-box">
+    <div class="post-cover-box" v-if="coverURL!=undefined">
       <el-image 
         :src="coverURL" 
         fit="cover" 
@@ -344,6 +344,7 @@ onBeforeMount(()=>{
 }
 
 .post-preview-text {
+  white-space: pre-line;
   margin-top: 5px;
 }
 
@@ -355,6 +356,10 @@ onBeforeMount(()=>{
 .post-cover {
   border-radius: 5px;
   width: 100%;
+}
+
+.post-preview-text + .post-time-box {
+  margin-top: 10px;
 }
 
 .post-time-box {

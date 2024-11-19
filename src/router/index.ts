@@ -11,6 +11,9 @@ import Collections from "../page/personal/CollectionsInPersonalPage.vue"
 import Person from "../page/personal/PersonInPersonalPage.vue"
 import Settings from "../page/personal/SettingsInPersonalPage.vue"
 
+import PostListPage from "@/page/section/PostListPage.vue";
+import PostSelectedListPage from "@/page/section/PostSelectedListPage.vue";
+
 const router = createRouter({
 history:createWebHistory(),
 routes:[
@@ -59,8 +62,18 @@ routes:[
     },
     {
         name:"section-page",
-        path:"/section",
-        component:SectionPage
+        path:"/section/:id",
+        component:SectionPage,
+        children:[
+            {
+                path:"post/all",
+                component:PostListPage
+            },
+            {
+                path:"post/selected",
+                component:PostSelectedListPage
+            }
+        ]
     }
 ]})
 

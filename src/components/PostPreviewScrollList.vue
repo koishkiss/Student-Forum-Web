@@ -70,6 +70,7 @@ async function reloadAll() {
       previewPostList = data.data.records;
       lastData.value = data.data.lastData;
       isLoadingMore.value = false;
+      noMore.value = false;
     } else if (data.code === 40010) {
       isLoadingMore.value = false;
       noMore.value = true;
@@ -106,6 +107,7 @@ async function loadMore() {
       previewPostList.push.apply(previewPostList,data.data.records)
       lastData.value = data.data.lastData;
       isLoadingMore.value = false;
+      noMore.value = false;
     } else if (data.code === 40006) {
       isLoadingMore.value = false;
       noMore.value = true;

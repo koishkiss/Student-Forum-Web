@@ -42,7 +42,7 @@ let props = defineProps(["sectionId","iconURL","name","classify","classifyName",
 const router = useRouter();
 
 function toTheSectionPage() {
-  router.push(`/section?id=${props.sectionId}`);
+  router.push(`/section/${props.sectionId}`);
 }
 
 </script>
