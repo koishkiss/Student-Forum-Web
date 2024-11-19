@@ -129,7 +129,7 @@ const isLoved = ref(false);
 const isMarked = ref(false);
 const like_num = ref(props.likeNum);
 const mark_num = ref(props.bookmarkNum);
-
+const id = ref(props.id)
 var timeId;
 function userInfoCardEnter() {
   if (timeId !== undefined) {
