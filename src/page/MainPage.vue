@@ -33,7 +33,7 @@
       <div class="right-bottom-item-box">
         <div class="public-trend-box">
           <div class="public-trend-title">
-            丨 热门动态
+            丨 最新动态
             <el-icon class="top-control-icon" @click="reloadPostList" >
               <Refresh />
             </el-icon>
