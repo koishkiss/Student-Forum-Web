@@ -5,25 +5,7 @@
     <div v-if="error" class="error">{{ error }}</div>
     <ul v-if="posts.length > 0">
     <li v-for="post in posts" :key="post.postId" class="post-item">
-        <div class="post-thumbnail">
-            <!-- 封面图片 -->
-            <el-image 
-                :src="post.coverURL || 'https://via.placeholder.com/150'"
-                fit="cover"
-                class="cover-img"
-                alt="封面图片"
-            />
-        </div>
-        <div class="post-content">
-            <!-- 标题和信息 -->
-            <h3 class="post-title">{{ post.title }}</h3>
-            <p class="post-description">{{ post.content }}</p>
-            <div class="post-info">
-                <span>👍 {{ post.likeNum }}</span>
-                <span>💬 {{ post.commentNum }}</span>
-                <span>👁️ {{ post.viewNum }}</span>
-            </div>
-        </div>
+        <PostSimplePreview v-bind="post"/>
     </li>
     </ul>
     <div v-else>
@@ -34,6 +16,7 @@
 
 
 <script lang="ts" setup name="Collections">
+import PostSimplePreview from '@/components/PostSimplePreview.vue';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import Cookies from 'js-cookie';
