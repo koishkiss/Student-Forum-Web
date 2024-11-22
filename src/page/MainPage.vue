@@ -4,10 +4,11 @@
   import FollowSection from '@/components/FollowSectionInMainPage.vue';
   import PostPreviewScrollList from '@/components/PostPreviewScrollList.vue';
   import ClassificationList from "@/components/ClassificationList.vue";
+  import SideBar from "@/components/SideBar.vue";
   export default {
     name:'MainPage',  //组件名
     components:{
-      AnnouncementBar,FollowSection,PostPreviewScrollList,ClassificationList,Refresh
+      AnnouncementBar,FollowSection,PostPreviewScrollList,ClassificationList,Refresh,SideBar
     }
   }
 </script>
@@ -42,7 +43,7 @@
         </div>
 
         <div class="hot-issue-box">
-          
+          <SideBar/>
         </div>
       </div>
     </div>
@@ -142,8 +143,6 @@ function reloadPostList() {
 .hot-issue-box {
   min-width: 30%;
   min-height: 500px;
-  max-height: 600px;
-  background-color: #c200f3;
 }
 
 </style>
