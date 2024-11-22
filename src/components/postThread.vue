@@ -11,40 +11,85 @@ components: {
 <div class="post-floor">
   <!-- 用户信息 -->
   <div class="user-info">
-    <img src="" alt="用户头像" class="user-avatar">
+    <img :src="avatarURL" alt="用户头像" class="user-avatar">
     <div class="user-details">
-      <span class="user-name">用户名</span>
-      <span class="user-title">贴吧头衔</span>
-      <span class="post-time">发帖时间：2024-11-17 12:00</span>
+      <span class="user-name">{{ nickname }}</span>
+      <!-- <span class="user-title">贴吧头衔</span> -->
+      <!-- <span class="post-time">发帖时间：{{ commentTime }}</span> -->
     </div>
   </div>
   
   <!-- 帖子内容 -->
   <div class="post-content">
-    <h2 class="post-title">帖子标题</h2>
-    <p class="post-text">这里是帖子的具体内容，可以包含文本、图片、视频等多媒体元素。</p>
+    <!-- <h2 class="post-title">帖子标题</h2> -->
+    <p class="post-text">{{ content }}</p>
   </div>
   
   <!-- 回复按钮 -->
   <div class="reply-section">
-    <button class="reply-btn">回复</button>
+    <span class="post-time">{{ commentTime }}</span>
+    <button class="reply-btn" >回复</button>
   </div>
   
   <!-- 回复列表 -->
-  <div class="replies">
+  <div class="reply-box">
     <div class="reply">
       <img src="" alt="回复用户头像" class="reply-avatar">
       <div class="reply-content">
         <span class="reply-user">回复用户名</span>
         <span class="reply-text">这是一条回复内容。</span>
-        <span class="reply-time">回复时间：2024-11-17 12:05</span>
+        <!-- <span class="reply-time">2024-11-17 12:05</span> -->
       </div>
     </div>
-    <!-- 更多回复 -->
+    <div class="reply-time">2024-11-17 12:05</div>
   </div>
 </div>
 </template>
+<script lang="ts" setup>
+import {useRouter} from "vue-router"
+import Cookies from 'js-cookie';
+import { useHttpStore } from '@/store/Http';
+const { ip_port } = useHttpStore();
+let props = defineProps([
+  "isModerator",
+  "avatarURL",
+  "isPoster",
+  "postId",
+  "avatar",
+  "commentTime",
+  "content",
+  "likeNum",
+  "floorId",
+  "uid",
+  "authority",
+  "replyNum",
+  "nickname",
+  "id"
+])
 
+// function relypost{
+
+// }
+
+// axios({
+//   method:"get",
+//   url:ip_port+"/reply/get",
+//   params:{
+//     commentId:"id",
+//   },
+//   headers:{
+//         "Authorization":Cookies.get("Authorization"),
+//         "uid":Cookies.get("uid")
+//     },
+// })
+// .then((response)=> {
+//   const data = response.data;
+//   if(data.code === 200){
+    
+//   }
+// })
+
+</script>
 <style scoped>
 .post-floor {
   border-bottom: 1px solid #ccc;
@@ -97,6 +142,9 @@ components: {
 .replies {
   margin-top: 10px;
 }
+.reply-box{
+  margin-top: 10px;
+}
 
 .reply {
   display: flex;
@@ -113,10 +161,14 @@ components: {
 
 .reply-content {
   display: flex;
-  flex-direction: column;
+  flex-direction: rows;
 }
 
-.reply-user, .reply-text, .reply-time {
+.reply-user, .reply-text {
+  margin: 0;
+  padding: 0;
+}
+.reply-time{
   margin: 0;
   padding: 0;
 }
