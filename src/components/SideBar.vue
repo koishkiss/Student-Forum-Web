@@ -39,7 +39,7 @@ const router = useRouter();
 onBeforeMount(()=>{
     axios({
         method:"get",
-        url:ip_port + "/popular/active/10",
+        url:ip_port + "/popular/active/12",
         headers:{
             "Authorization": Cookies.get("Authorization"),
             "uid": Cookies.get("uid")
@@ -67,12 +67,19 @@ function watchPosting(id:number){
 
 <style scoped>
 .side-bar-box {
-    position: sticky;
-    top: 60px;
-    display: flex;
-    flex-direction: column;
-    justify-items: baseline;
-    background-color: rgb(210, 232, 233);
+  position: sticky;
+  top: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-items: baseline;
+  border-radius: 5px;
+  border-end-start-radius: 0;
+  background-color: rgb(232, 243, 244);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+}
+.side-bar-box:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .classify-list-title {
@@ -83,14 +90,8 @@ function watchPosting(id:number){
 
 .side-bar {
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-.side-bar:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .side-bar p {
@@ -105,17 +106,27 @@ function watchPosting(id:number){
   display: flex;
   flex-direction: column;
   padding: 0;
-  margin-bottom: 0%;
+  margin-top: 10px;
+  margin-bottom: 0;
 }
 
 .side-bar li {
   font-size: 16px;
   height: 40px;
-  background-color: #ffffff;
-  border-left: 5px solid #4f46e5;
-  border-radius: 4px;
+  border-left: 5px solid yellowgreen;
+  margin-top: 1px;
+  margin-bottom: 1px;
   transition: background-color 0.3s ease, padding-left 0.3s ease;
   cursor: pointer;
+}
+.side-bar li:nth-child(1) {
+    border-left: 5px solid red;
+}
+.side-bar li:nth-child(2) {
+    border-left: 5px solid orange;
+}
+.side-bar li:nth-child(3) {
+    border-left: 5px solid #FFD83B;
 }
 
 .side-bar li:hover {

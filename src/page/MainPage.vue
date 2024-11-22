@@ -71,10 +71,12 @@ function reloadPostList() {
 }
 
 .main-page-flex-box {
+  gap: 10px;
   display: flex;
 }
 
 .left-sidebar-box {
+  gap: 10px;
   width: 32%;
   min-width: 300px;
   display: flex;
@@ -100,9 +102,11 @@ function reloadPostList() {
   max-height: 400px;
   scroll-behavior: smooth;
   border-radius: 6px;
+  margin-bottom: 10px;
 }
 
 .right-bottom-item-box {
+  gap: 10px;
   display: flex;
   flex-direction: row;
 }
@@ -141,7 +145,7 @@ function reloadPostList() {
 }
 
 .hot-issue-box {
-  min-width: 30%;
+  min-width: 28%;
   min-height: 500px;
 }
 

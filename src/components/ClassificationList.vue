@@ -123,11 +123,15 @@ onBeforeMount(()=>{
 .classify-list-box {
   border-radius: 10px;
   background-color: #fff1f1;
-  border: 2px solid #b7b7b7;
   padding: 6px;
   min-height: 400px;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+}
+.classify-list-box:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .classify-list-title {

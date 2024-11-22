@@ -57,7 +57,7 @@ async function reloadAll() {
     method:"post",
     url:ip_port + "/post/get/recommend",
     data:{
-      "pageSize":5
+      "pageSize":10
     },
     headers:{
       "Authorization":Cookies.get("Authorization"),
