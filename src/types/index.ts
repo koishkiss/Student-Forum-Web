@@ -12,7 +12,23 @@ export interface SectionIdentityItem {
 }
 
 export type SectionIdentityList = Array<SectionIdentityItem>
-
+export interface CommentPostItem{
+  isModerator:number,
+  avatarURL:string,
+  isPoster:number,
+  postId:number,
+  // avatar:string,
+  commentTime:string,
+  content:string,
+  likeNum:number,
+  floorId:number,
+  uid:number,
+  authority:number,
+  replyNum:number,
+  nickname:string,
+  id:number
+}
+export type CommentPostList =Array<CommentPostItem>
 
 export interface PostPreviewItem {
   id: number,

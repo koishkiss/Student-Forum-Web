@@ -10,7 +10,7 @@ export default {
 
 <template>
 <div class="activities-post-box">
-  <el-text  class="page-title" tag="p" >动态</el-text>
+  <el-text  class="page-title" tag="p" >动态广场</el-text>
   <PostPreviewScrollList/>
 </div>
 </template>
