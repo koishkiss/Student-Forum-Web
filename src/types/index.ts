@@ -17,7 +17,7 @@ export interface CommentPostItem{
   avatarURL:string,
   isPoster:number,
   postId:number,
-  avatar:string,
+  // avatar:string,
   commentTime:string,
   content:string,
   likeNum:number,

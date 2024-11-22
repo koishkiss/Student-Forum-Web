@@ -1,19 +1,19 @@
 <script lang="ts">
 export default {
+  components: { CommentBox, postThread },
     name:'postPage',
-    component:{
-        
-    }
 }
+import commentBox from './CommentBox.vue';
 </script >
 
 
 <template>
-        <div class="post-list">
+        <div class="post-list" v-if="!isLoading">
             <li v-for ="commentPost in commentPostList" :key="commentPost.id">
                 <postThread v-bind=commentPost />
             </li>
     </div>
+    <CommentBox :postId="route.query.id"/>
 </template>
 
 <script lang="ts" setup >
@@ -24,8 +24,10 @@ import axios from 'axios';
 import {reactive,ref} from 'vue';
 import { useHttpStore } from '@/store/Http';
 import { CommentPostList } from '@/types';
+import CommentBox from './CommentBox.vue';
 const { ip_port } = useHttpStore();
 let route = useRoute();
+let isLoading = ref(true);
 let commentPostList = reactive<CommentPostList>([])
 console.log(route);
 console.log(route.query.id);
@@ -48,7 +50,10 @@ axios({
 .then((response)=> {
     const data = response.data;
     if(data.code === 200) {
-        commentPostList = data.data.commentList;
+        commentPostList = data.data.records;
+        console.log("hahha")
+        console.log(commentPostList)
+        isLoading.value = false;
     }else {
         window.alert(data.message);
     }
