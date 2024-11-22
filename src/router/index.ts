@@ -6,16 +6,16 @@ import LoginPage from "@/page/LoginPage.vue";
 import postPage from "@/components/postPage.vue"
 import SectionPage from "@/page/SectionPage.vue";
 
-import Activities from "../page/personal/ActivitiesInPersonalPage.vue"
-import Collections from "../page/personal/CollectionsInPersonalPage.vue"
-import Person from "../page/personal/PersonInPersonalPage.vue"
-import Settings from "../page/personal/SettingsInPersonalPage.vue"
+import Activities from "../page/personal/ActivityPage.vue"
+import Collections from "../page/personal/CollectionPage.vue"
+import Person from "../page/personal/RecordPage.vue"
+import Settings from "../page/personal/SettingPage.vue"
 
 import PostListPage from "@/page/section/PostListPage.vue";
 import PostSelectedListPage from "@/page/section/PostSelectedListPage.vue";
-import MyPost from "@/page/personal/personSection/MyPostInPersonalPage.vue"
-import MyLikePost from "@/page/personal/personSection/MyLikePostPageInPersonalPage.vue"
-import ViewHistory from "@/page/personal/personSection/ViewHistoryInPersonalPage.vue"
+import MyOwnPostPage from "@/page/personal/record/MyOwnPostPage.vue"
+import MyLikedPostPage from "@/page/personal/record/MyLikedPostPage.vue"
+import MyViewedPostPage from "@/page/personal/record/MyViewedPostPage.vue"
 
 import MessagePage from "@/page/MessagePage.vue";
 import MyReplyPage from "@/page/message/MyReplyPage.vue";
@@ -58,16 +58,16 @@ routes:[
                 component:Person,
                 children:[
                     {
-                        path:"my-post",
-                        component:MyPost
+                        path:"mine",
+                        component:MyOwnPostPage
                     },
                     {
-                        path:"my-like-post",
-                        component:MyLikePost
+                        path:"liked",
+                        component:MyLikedPostPage
                     },
                     {
-                        path:"view-history",
-                        component:ViewHistory
+                        path:"viewed",
+                        component:MyViewedPostPage
                     }
                 ]
             },

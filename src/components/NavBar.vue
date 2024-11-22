@@ -137,7 +137,7 @@ function toPersonalPage() {
 }
 //去浏览历史页
 function toViewHistoryPage(){
-  router.push("/personal/post/view-history")
+  router.push("/personal/post/viewed")
 }
 //去个人收藏页
 function toPersonalMarkPage() {
@@ -146,7 +146,7 @@ function toPersonalMarkPage() {
 
 //去个人发帖页
 function toPersonalPostPage() {
-  router.push("/personal/post/my-post")
+  router.push("/personal/post/mine")
 }
 
 //去个人收到的赞页

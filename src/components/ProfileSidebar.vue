@@ -45,10 +45,10 @@ export default {
       <nav class="nav-tabs">
 
         <RouterLink to="/personal/activity" class="router cta" active-class="router-choose">
-          <span class="hover-underline-animation"> 广场 </span>
+          <span class="hover-underline-animation"> 动态 </span>
         </RouterLink>
 
-        <RouterLink to="/personal/post/my-post" class="router cta" active-class="router-choose">
+        <RouterLink to="/personal/post" class="router cta" active-class="router-choose">
           <span class="hover-underline-animation"> 个人 </span>
         </RouterLink>
 
