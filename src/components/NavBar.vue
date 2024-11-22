@@ -82,7 +82,7 @@ const navItems = reactive([
       {label:'通知', to:toMessageNoticePage}
     ],
     visible: false,
-    to:toPersonalPage
+    to:toMessageLikePage
   },
   { 
     label: '动态', 
