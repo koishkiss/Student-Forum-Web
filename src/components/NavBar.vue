@@ -76,7 +76,11 @@ const navItems = reactive([
   { 
     label: '消息', 
     labelIcon: markRaw(Message), 
-    options: [{label:'点赞', to:toPersonalPage}, {label:'回复', to:toPersonalPage}, {label:'通知', to:toPersonalPage}], 
+    options: [
+      {label:'点赞', to:toMessageLikePage},
+      {label:'回复', to:toMessageReplyPage},
+      {label:'通知', to:toMessageNoticePage}
+    ],
     visible: false,
     to:toPersonalPage
   },
@@ -143,6 +147,21 @@ function toPersonalMarkPage() {
 //去个人发帖页
 function toPersonalPostPage() {
   router.push("/personal/post/my-post")
+}
+
+//去个人收到的赞页
+function toMessageLikePage() {
+  router.push("/message/like")
+}
+
+//去个人收到的回复页
+function toMessageReplyPage() {
+  router.push("/message/reply")
+}
+
+//去个人收到的通知页
+function toMessageNoticePage() {
+  router.push("/message/notice")
 }
 
 //初始化

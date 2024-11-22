@@ -17,6 +17,11 @@ import MyPost from "@/page/personal/personSection/MyPostInPersonalPage.vue"
 import MyLikePost from "@/page/personal/personSection/MyLikePostPageInPersonalPage.vue"
 import ViewHistory from "@/page/personal/personSection/ViewHistoryInPersonalPage.vue"
 
+import MessagePage from "@/page/MessagePage.vue";
+import MyReplyPage from "@/page/message/MyReplyPage.vue";
+import MyNoticePage from "@/page/message/MyNoticePage.vue";
+import MyLikePage from "@/page/message/MyLikePage.vue";
+
 const router = createRouter({
 history:createWebHistory(),
 routes:[
@@ -89,6 +94,25 @@ routes:[
             {
                 path:"post/selected",
                 component:PostSelectedListPage
+            }
+        ]
+    },
+    {
+        name:"message-box",
+        path:"/message",
+        component:MessagePage,
+        children:[
+            {
+                path:"like",
+                component:MyLikePage
+            },
+            {
+                path:"reply",
+                component:MyReplyPage
+            },
+            {
+                path:"notice",
+                component:MyNoticePage
             }
         ]
     }
