@@ -166,7 +166,7 @@ onBeforeMount(()=>{
   display: flex;
   flex-direction: column;
   border-left: 3px dashed #eea8da;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   background-color: #ffc6f3;
   border-radius: 7px;
   transition: padding-left 0.3s ease;

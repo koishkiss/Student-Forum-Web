@@ -26,7 +26,7 @@ import { useRoute, useRouter } from 'vue-router';
     </div>
 
     <div class="has-login" v-if="hasLogin">
-      <el-text class="nickname-text">
+      <el-text class="nickname-text" @click="toPersonalPage">
         {{ user.nickname }}
       </el-text>
 
@@ -35,17 +35,17 @@ import { useRoute, useRouter } from 'vue-router';
       </el-tag>
 
       <div class="data-statistics">
-        <div class="statistics-item">
+        <div class="statistics-item" @click="toMyLikesPage">
           <span class="statistics-num">{{ user.likeNum }}</span> 
           <span class="statistics-describe">获赞</span>
         </div>
         <el-divider direction="vertical" class="column-divider" />
-        <div class="statistics-item">
+        <div class="statistics-item" @click="toMyPostPage">
           <span class="statistics-num">{{ user.postNum }}</span> 
           <span class="statistics-describe">发帖</span>
         </div>
         <el-divider direction="vertical" class="column-divider" />
-        <div class="statistics-item">
+        <div class="statistics-item" @click="toPersonalPage">
           <span class="statistics-num">{{ user.joinNum }}</span> 
           <span class="statistics-describe">关注</span>
         </div>
@@ -101,12 +101,20 @@ const route = useRoute();
 const isLoading = ref(true);
 const hasLogin = ref(false);
 
+function toMyLikesPage() {
+  router.push("/message/like");
+}
+
+function toMyPostPage() {
+  router.push("/personal/post/mine")
+}
+
 function toLoginPage() {
   router.push("/login");
 }
 
 function toPersonalPage() {
-  router.push("/personal/activity")
+  router.push("/personal/activity");
 }
 
 function toPersonalPostPage() {
@@ -240,6 +248,7 @@ onBeforeMount(()=>{
 }
 
 .nickname-text {
+  cursor: pointer;
   margin-top: 18px;
   font-size: 30px;
 }
@@ -255,6 +264,7 @@ onBeforeMount(()=>{
   align-items: center;
 }
 .statistics-item {
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;

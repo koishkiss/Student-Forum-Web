@@ -57,7 +57,7 @@ export default {
 
 .router-link-content {
   position: sticky;
-  top: 60px;
+  top: 57px;
   display: flex;
   flex-direction: column;
   background-color: #f1feff;

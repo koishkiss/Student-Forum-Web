@@ -1,56 +1,62 @@
 <script lang="ts">
 import UserPreviewIdentityCard from '@/components/UserPreviewIdentityCard.vue';
+import { Loading } from '@element-plus/icons-vue';
 export default {
   name:"MyLikePage",
   components:{
-    UserPreviewIdentityCard
+    UserPreviewIdentityCard,Loading
   }
 }
 </script>
 
 <template>
-<div v-if="!isFirstLoading" class="my-like-page-box">
+<div class="my-like-page-box">
+<el-text class="box-title" tag="p">
+  收到的赞
+</el-text>
+
+<div v-if="!isFirstLoading&&!isEmpty" class="my-like-list-box">
   <ul 
     v-infinite-scroll="loadMore" 
     :infinite-scroll-disabled="isLoadingMore || noMore" 
     class="like-list" 
   >
     <li v-for="(like,index) in likeList" :key="index" class="like-item">
-      <div v-if="like.type === 'comment'">
+      <div v-if="like.type === 'comment'" class="like-item-box">
         <el-text tag="p" class="like-title">
-          <transition name="user-identity-card-content">
-            <div class="identity-card-container" v-if="showUserIdentityCard[index]">
-              <UserPreviewIdentityCard :theUid="like.uid"/>
-            </div>
-          </transition>
           <span class="like-nickname" 
             @mouseenter="userInfoCardEnter(index)" 
             @mouseleave="userInfoCardDelayLeave(index)"
           >
+            <transition name="user-identity-card-content">
+              <div class="identity-card-container" v-if="showUserIdentityCard[index]">
+                <UserPreviewIdentityCard :theUid="like.uid"/>
+              </div>
+            </transition>
             {{ like.nickname }}
           </span> 
           赞了你的评论
         </el-text>
-        <el-text tag="p" class="like-content">{{ like.content }}</el-text>
+        <el-text tag="p" class="like-content" @click="toThePost(like.postId)">{{ like.content }}</el-text>
         <el-text tag="p" class="like-time">{{ like.likeTime }}</el-text>
       </div>
 
-      <div v-if="like.type === 'post'">
+      <div v-if="like.type === 'post'" class="like-item-box">
         <el-text tag="p" class="like-title">
-          <transition name="user-identity-card-content">
-            <div class="identity-card-container" v-if="showUserIdentityCard[index]">
-              <UserPreviewIdentityCard :theUid="like.uid"/>
-            </div>
-          </transition>
           <span class="like-nickname" 
             @mouseenter="userInfoCardEnter(index)" 
             @mouseleave="userInfoCardDelayLeave(index)"
           >
+            <transition name="user-identity-card-content">
+              <div class="identity-card-container" v-if="showUserIdentityCard[index]">
+                <UserPreviewIdentityCard :theUid="like.uid"/>
+              </div>
+            </transition>
             {{ like.nickname }}
           </span>
           赞了你的帖子
         </el-text>
-        <el-text tag="p" class="like-content">{{ like.content }}</el-text>
+        <el-text tag="p" class="like-content" @click="toThePost(like.postId)">{{ like.content }}</el-text>
         <el-text tag="p" class="like-time">{{ like.likeTime }}</el-text>
       </div>
       <el-divider/>
@@ -63,6 +69,16 @@ export default {
       <el-icon class="tail-control-icon"><Refresh /></el-icon>
     </span>
   </div>
+</div>
+
+<div class="loading-identity-item-box" v-if="isFirstLoading&&!isEmpty">
+  <Loading/>
+</div>
+
+<div class="no-data-box" v-if="isEmpty">
+  <el-empty :image-size="100" description="你还没有点过赞哦"/>
+</div>
+
 </div>
 </template>
 
@@ -100,6 +116,10 @@ function userInfoCardDelayLeave(id: number) {
   },100)
 }
 
+function toThePost(id: number) {
+  router.push("/post?id=" + id)
+}
+
 //加载更多
 async function loadMore() {
   isLoadingMore.value = true;
@@ -108,7 +128,7 @@ async function loadMore() {
     url:ip_port + "/user/mine/like",
     data:{
       "lastData":lastData,
-      "pageSize":5
+      "pageSize":10
     },
     headers:{
       "Authorization":Cookies.get("Authorization"),
@@ -143,7 +163,7 @@ onBeforeMount(()=>{
     method:"post",
     url:ip_port + "/user/mine/like",      
     data:{
-      "pageSize":5
+      "pageSize":10
     },
     headers:{
       "Authorization":Cookies.get("Authorization"),
@@ -177,6 +197,21 @@ onBeforeMount(()=>{
 
 
 <style scoped>
+
+.box-title {
+  position: sticky;
+  top: 57px;
+  background-color: #fff;
+  z-index: 1;
+  color: #343434;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.my-like-list-box {
+  margin-top: 10px;
+}
+
 .like-list {
   list-style-type: none;
   padding: 0;
@@ -188,6 +223,9 @@ onBeforeMount(()=>{
   padding: 5px;
 }
 
+.like-item-box {
+  margin-left: 10px;
+}
 .like-title {
   font-size: 17px;
 }
@@ -202,6 +240,7 @@ onBeforeMount(()=>{
 }
 
 .like-content {
+  cursor: pointer;
   margin-top: 5px;
   color: #141414;
   font-size: 17px;
@@ -232,6 +271,15 @@ onBeforeMount(()=>{
   font-size: 14px;
   padding-top: 2px;
   margin-left: 5px;
+}
+
+.loading-identity-item-box {
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  width: 25px;
+  height: 110px;
+  color: rgb(155, 155, 155);
 }
 
 
