@@ -1,6 +1,10 @@
 <script lang="ts">
+import UserPreviewIdentityCard from '@/components/UserPreviewIdentityCard.vue';
 export default {
-  name:"MyLikePage"
+  name:"MyLikePage",
+  components:{
+    UserPreviewIdentityCard
+  }
 }
 </script>
 
@@ -11,17 +15,40 @@ export default {
     :infinite-scroll-disabled="isLoadingMore || noMore" 
     class="like-list" 
   >
-    <li v-for="like in likeList" :key="like.id" class="like-item">
+    <li v-for="(like,index) in likeList" :key="index" class="like-item">
       <div v-if="like.type === 'comment'">
         <el-text tag="p" class="like-title">
-          <span class="like-nickname">{{ like.nickname }}</span> 赞了你的评论
+          <transition name="user-identity-card-content">
+            <div class="identity-card-container" v-if="showUserIdentityCard[index]">
+              <UserPreviewIdentityCard :theUid="like.uid"/>
+            </div>
+          </transition>
+          <span class="like-nickname" 
+            @mouseenter="userInfoCardEnter(index)" 
+            @mouseleave="userInfoCardDelayLeave(index)"
+          >
+            {{ like.nickname }}
+          </span> 
+          赞了你的评论
         </el-text>
         <el-text tag="p" class="like-content">{{ like.content }}</el-text>
         <el-text tag="p" class="like-time">{{ like.likeTime }}</el-text>
       </div>
+
       <div v-if="like.type === 'post'">
         <el-text tag="p" class="like-title">
-          <span class="like-nickname">{{ like.nickname }}</span> 赞了你的帖子
+          <transition name="user-identity-card-content">
+            <div class="identity-card-container" v-if="showUserIdentityCard[index]">
+              <UserPreviewIdentityCard :theUid="like.uid"/>
+            </div>
+          </transition>
+          <span class="like-nickname" 
+            @mouseenter="userInfoCardEnter(index)" 
+            @mouseleave="userInfoCardDelayLeave(index)"
+          >
+            {{ like.nickname }}
+          </span>
+          赞了你的帖子
         </el-text>
         <el-text tag="p" class="like-content">{{ like.content }}</el-text>
         <el-text tag="p" class="like-time">{{ like.likeTime }}</el-text>
@@ -56,6 +83,22 @@ const isLoadingMore = ref(false);
 let lastData = reactive(null);
 const isEmpty = ref(false);
 const noMore = ref(false);
+
+const showUserIdentityCard = reactive<Array<boolean>>([]);
+var timeId: any[] = [];
+function userInfoCardEnter(id: number) {
+  if (timeId[id] !== undefined) {
+    clearTimeout(timeId[id]);
+  } else {
+    showUserIdentityCard[id] = true;
+  }
+}
+function userInfoCardDelayLeave(id: number) {
+  timeId[id] = setTimeout(()=>{
+    showUserIdentityCard[id] = false;
+    timeId[id] = undefined;
+  },100)
+}
 
 //加载更多
 async function loadMore() {
@@ -148,6 +191,11 @@ onBeforeMount(()=>{
 .like-title {
   font-size: 17px;
 }
+.identity-card-container {
+  position: absolute;
+  margin-left: -355px;
+  margin-top: -55px;
+}
 .like-nickname {
   color: #000;
   font-weight: bold;
@@ -184,5 +232,20 @@ onBeforeMount(()=>{
   font-size: 14px;
   padding-top: 2px;
   margin-left: 5px;
+}
+
+
+
+/* 发帖者身份卡片动画 */
+.user-identity-card-content-enter-active  {
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+.user-identity-card-content-leave-active {
+  transition: opacity 0.3s ease-out, transform 0.2s ease-out;
+}
+.user-identity-card-content-enter-from,
+.user-identity-card-content-leave-to {
+  transform: translateX(10px);
+  opacity: 0;
 }
 </style>
