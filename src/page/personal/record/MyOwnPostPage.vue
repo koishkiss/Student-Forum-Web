@@ -9,7 +9,7 @@ export default {
 </script>
 
 <template>
-<div class="collections">
+<div class="my-own-post-page-box">
     <el-text  class="page-title" tag="p" >我的帖子</el-text>
     <div v-if="loading" class="loading">
         加载中...
@@ -86,7 +86,7 @@ onMounted(() => {
 
 
 <style scoped>
-.collections {
+.my-own-post-page-box {
     padding: 0 20px;
 }
 
