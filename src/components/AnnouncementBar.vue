@@ -22,9 +22,9 @@
 
   onMounted(() => {
     announcements.value = [
-      { id: 1, message: '公告1:XXXXXXXXXXXXX' },
-      { id: 2, message: '公告2:XXXXXXXXXXXXX' },
-      { id: 3, message: '公告3:XXXXXXXXXXXXX' },
+      { id: 1, message: '公告1:为了账号安全，请各位同学尽快修改自己的默认密码' },
+      { id: 2, message: '公告2:为了账号安全，请各位同学尽快修改自己的默认密码' },
+      { id: 3, message: '公告3:为了账号安全，请各位同学尽快修改自己的默认密码' },
     ];
   });
 </script>
