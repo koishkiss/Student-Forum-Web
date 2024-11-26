@@ -48,12 +48,14 @@ export default {
 </template>
 
 <script lang="ts" setup>
-import { useRouter } from 'vue-router';
-
+import { useRoute, useRouter } from 'vue-router';
 
 const router = useRouter();
+const route = useRoute();
 
-router.push("/personal/post/mine")
+if (route.query.to) {
+  router.push(`/personal/post/${route.query.to}`);
+}
 
 </script>
 

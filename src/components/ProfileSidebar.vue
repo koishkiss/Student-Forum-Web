@@ -48,7 +48,7 @@ export default {
           <span class="hover-underline-animation"> 动态 </span>
         </RouterLink>
 
-        <RouterLink to="/personal/post" class="router cta" active-class="router-choose">
+        <RouterLink to="/personal/post?to=mine" class="router cta" active-class="router-choose">
           <span class="hover-underline-animation"> 个人 </span>
         </RouterLink>
 
