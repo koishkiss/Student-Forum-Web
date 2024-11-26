@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import MainPage from "@/page/MainPage.vue";
 import PersonalPage from "@/page/PersonalPage.vue";
 import LoginPage from "@/page/LoginPage.vue";
-import postPage from "@/components/postPage.vue"
+import PostPage from "@/page/PostPage.vue";
 import SectionPage from "@/page/SectionPage.vue";
 
 import Activities from "../page/personal/ActivityPage.vue"
@@ -42,7 +42,7 @@ routes:[
     {
         name:"post-detail-page",
         path:"/post",
-        component:postPage
+        component:PostPage
     },
     {
         name:"personal-page",

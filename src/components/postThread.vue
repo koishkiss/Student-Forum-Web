@@ -1,13 +1,14 @@
 <script lang="ts">
-import PostingBoxforComment from "./PostingBoxforComment.vue";
 import CommentBoxForComment from "./CommentBoxForComment.vue";
-import { ref } from "vue";
+import PostingBoxforComment from "./PostingBoxforComment.vue";
+import UserPreviewIdentityCard from "./UserPreviewIdentityCard.vue";
+import EmptyLoveSVG from "./icon/EmptyLoveSVG.vue";
+import FullLoveSVG from "./icon/FullLoveSVG.vue";
 export default {
-name:'postThread',
-components: {
-CommentBoxForComment
-
-}
+  name:'postThread',
+  components: {
+    CommentBoxForComment,PostingBoxforComment,UserPreviewIdentityCard,EmptyLoveSVG,FullLoveSVG
+  }
 }
 </script>
 
@@ -15,160 +16,247 @@ CommentBoxForComment
 <div class="post-floor">
   <!-- 用户信息 -->
   <div class="user-info">
-    <img :src="avatarURL" alt="用户头像" class="user-avatar">
-    <div class="user-details">
-      <span class="user-name">{{ nickname }}</span>
-      <!-- <span class="user-title">贴吧头衔</span> -->
-      <!-- <span class="post-time">发帖时间：{{ commentTime }}</span> -->
+    <div class="avatar-container" 
+      @mouseenter="userInfoCardEnter" 
+      @mouseleave="userInfoCardDelayLeave"
+    >
+      <transition name="user-identity-card-content">
+        <div class="identity-card-container" v-if="showUserIdentityCard">
+          <UserPreviewIdentityCard :theUid="uid"/>
+        </div>
+      </transition>
+      <el-avatar :src="avatarURL" shape="square" fit="cover" class="author-avatar"/>
+    </div>
+
+    <div class="user-name-box">
+      <el-text class="user-name">{{ nickname }}</el-text>
+    </div>
+
+    <div class="user-tag-box">
+      <el-tag v-if="isPoster" type="primary">
+        楼主
+      </el-tag>
+
+      <el-tag v-if="isModerator" type="warning">
+        版主
+      </el-tag>
     </div>
   </div>
   
-  <!-- 帖子内容 -->
-  <div class="post-content">
-    <!-- <h2 class="post-title">帖子标题</h2> -->
-    <p class="post-text">{{ content }}</p>
-  </div>
-  
-  <!-- 回复按钮 -->
-  <div class="reply-section">
-    <span class="post-time">{{ commentTime }}</span>
-    <el-button class="reply-btn" @click="extend=!extend" >回复</el-button>
-  </div>
-  <div v-if="extend">
-    <CommentBoxForComment :commentId="props.commentId"/>
-    <div>
-      <PostingBoxforComment :commentId="props.commentId"/>
+  <!-- 评论内容 -->
+  <div class="comment-content-box">
+    <div class="comment-text-box">
+      <el-text tag="p" class="comment-text">
+        {{ content }}
+      </el-text>
+    </div>
+    
+    <div class="comment-bottom-box">
+      <el-text class="data-num-item" @click="likeTime?dislike():like()" >
+        <el-icon class="operator-svg">
+          <EmptyLoveSVG v-if="!likeTime" />
+          <FullLoveSVG v-if="likeTime" />
+        </el-icon>
+        <span>{{ likeNum }}</span>
+      </el-text>
+
+      <el-text class="comment-time">
+        {{ commentTime }}
+      </el-text>
+
+      <el-text class="comment-floor-id">
+        {{ floorId }}楼
+      </el-text>
+
+      <el-button class="reply-btn" @click="extend=!extend" text >
+        {{ extend ? `收起(${replyNum})` : `回复(${replyNum})` }}
+      </el-button>
+    </div>
+
+    <div v-if="extend">
+      <div>
+        <CommentBoxForComment :commentId="props.commentId"/>
+      </div>
+
+      <div>
+        <PostingBoxforComment :commentId="props.commentId"/>
+      </div>
     </div>
   </div>
-  
 </div>
 </template>
+
+
 <script lang="ts" setup>
-import {useRouter} from "vue-router"
-import Cookies from 'js-cookie';
-import { useHttpStore } from '@/store/Http';
-const { ip_port } = useHttpStore();
-const extend=ref(false)
+import { ref } from "vue";
+
+const extend = ref(false);
+
 let props = defineProps([
   "isModerator",
-  "avatarURL",
   "isPoster",
-  "postId",
-  "avatar",
-  "commentTime",
-  "content",
-  "likeNum",
-  "floorId",
-  "uid",
-  "authority",
-  "replyNum",
   "nickname",
-  "commentId"
+  "uid",
+  "avatarURL",
+  "content",
+  "floorId",
+  "commentTime",
+  "commentId",
+  "likeNum",
+  "replyNum",
+  "likeTime"
 ])
 
-// function relypost{
+const showUserIdentityCard = ref(false);
+var timeId;
+function userInfoCardEnter() {
+  if (timeId !== undefined) {
+    clearTimeout(timeId);
+  } else {
+    showUserIdentityCard.value = true;
+  }
+}
+function userInfoCardDelayLeave() {
+  timeId = setTimeout(()=>{
+    showUserIdentityCard.value=false;
+    timeId = undefined;
+  },100)
+}
 
-// }
+function like() {
 
-// axios({
-//   method:"get",
-//   url:ip_port+"/reply/get",
-//   params:{
-//     commentId:"id",
-//   },
-//   headers:{
-//         "Authorization":Cookies.get("Authorization"),
-//         "uid":Cookies.get("uid")
-//     },
-// })
-// .then((response)=> {
-//   const data = response.data;
-//   if(data.code === 200){
-    
-//   }
-// })
-console.log(props.commentId)
+}
+
+function dislike() {
+
+}
+
 </script>
+
+
 <style scoped>
 .post-floor {
-  border-bottom: 1px solid #ccc;
-  padding: 10px;
-  margin-bottom: 10px;
-  /* width: 700px; */
+  border: solid 1px rgb(211, 211, 211);
+  display: flex;
+  flex-direction: row;
+  min-height: 200px;
 }
 
 .user-info {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.user-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-.user-details {
+  padding: 20px;
+  width: 100px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  background-color: #ececec;
 }
 
-.user-name, .user-title, .post-time {
-  margin: 0;
-  padding: 0;
+.avatar-container {
+  width: 100px;
+  height: 100px;
+}
+.avatar-container:hover .author-avatar {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+  transition: all 0.1s ease-in-out;
+}
+.author-avatar {
+  border: double rgb(183, 183, 183);
+  cursor: pointer;
+  width: 100px;
+  height: 100px;
+  transition: all 0.2s ease-in-out;
+}
+.identity-card-container {
+  position: absolute;
+  margin-left: -355px;
+  margin-top: -30px;
 }
 
-.post-content {
-  margin-bottom: 10px;
+.user-name-box {
+  margin-top: 10px;
+}
+.user-name {
+  font-size: 13px;
 }
 
-.post-title {
+.user-tag-box {
+  margin-top: 10px;
+}
+
+.comment-content-box {
+  flex: 1;
+  padding: 15px;
+  padding-bottom: 5px;
+}
+
+.comment-text-box {
+  min-height: 145px;
+}
+
+.comment-text {
+  font-size: 16px;
+  color: #000;
+}
+
+.comment-bottom-box {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.data-num-item {
+  width: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+}
+.operator-svg {
+  width: 30px;
+  transition: font-size 0.1s;
+}
+.data-num-item:hover .operator-svg {
   font-size: 18px;
-  margin: 0 0 5px 0;
+  transition: font-size 0.1s;
+}
+.data-num-item:active .operator-svg {
+  font-size: 16px;
+  transition: font-size 0.1s;
+}
+.data-num-item span {
+  width: 20px;
+  margin-left: 0;
 }
 
-.reply-section {
-  text-align: right;
+.comment-time {
+  margin-left: 5px;
+}
+
+.comment-floor-id {
+  margin-left: 10px;
 }
 
 .reply-btn {
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.replies {
-  margin-top: 10px;
-}
-.reply-box{
-  margin-top: 10px;
-}
-
-.reply {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 5px;
-}
-
-.reply-avatar {
-  width: 30px;
+  margin-left: 10px;
+  width: 50px;
   height: 30px;
-  border-radius: 50%;
-  margin-right: 10px;
 }
 
-.reply-content {
-  display: flex;
-  flex-direction: rows;
-}
 
-.reply-user, .reply-text {
-  margin: 0;
-  padding: 0;
+
+/* 发帖者身份卡片动画 */
+.user-identity-card-content-enter-active  {
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 }
-.reply-time{
-  margin: 0;
-  padding: 0;
+.user-identity-card-content-leave-active {
+  transition: opacity 0.3s ease-out, transform 0.2s ease-out;
+}
+.user-identity-card-content-enter-from,
+.user-identity-card-content-leave-to {
+  transform: translateX(10px);
+  opacity: 0;
 }
 </style>
