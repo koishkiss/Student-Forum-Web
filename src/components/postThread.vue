@@ -1,7 +1,11 @@
 <script lang="ts">
+import PostingBoxforComment from "./PostingBoxforComment.vue";
+import CommentBoxForComment from "./CommentBoxForComment.vue";
+import { ref } from "vue";
 export default {
 name:'postThread',
 components: {
+CommentBoxForComment
 
 }
 }
@@ -28,21 +32,15 @@ components: {
   <!-- 回复按钮 -->
   <div class="reply-section">
     <span class="post-time">{{ commentTime }}</span>
-    <button class="reply-btn" >回复</button>
+    <el-button class="reply-btn" @click="extend=!extend" >回复</el-button>
+  </div>
+  <div v-if="extend">
+    <CommentBoxForComment :commentId="props.commentId"/>
+    <div>
+      <PostingBoxforComment :commentId="props.commentId"/>
+    </div>
   </div>
   
-  <!-- 回复列表 -->
-  <div class="reply-box">
-    <div class="reply">
-      <img src="" alt="回复用户头像" class="reply-avatar">
-      <div class="reply-content">
-        <span class="reply-user">回复用户名</span>
-        <span class="reply-text">这是一条回复内容。</span>
-        <!-- <span class="reply-time">2024-11-17 12:05</span> -->
-      </div>
-    </div>
-    <div class="reply-time">2024-11-17 12:05</div>
-  </div>
 </div>
 </template>
 <script lang="ts" setup>
@@ -50,6 +48,7 @@ import {useRouter} from "vue-router"
 import Cookies from 'js-cookie';
 import { useHttpStore } from '@/store/Http';
 const { ip_port } = useHttpStore();
+const extend=ref(false)
 let props = defineProps([
   "isModerator",
   "avatarURL",
@@ -64,7 +63,7 @@ let props = defineProps([
   "authority",
   "replyNum",
   "nickname",
-  "id"
+  "commentId"
 ])
 
 // function relypost{
@@ -88,7 +87,7 @@ let props = defineProps([
     
 //   }
 // })
-
+console.log(props.commentId)
 </script>
 <style scoped>
 .post-floor {
