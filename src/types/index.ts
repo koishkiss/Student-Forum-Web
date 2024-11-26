@@ -26,7 +26,7 @@ export interface CommentPostItem{
   authority:number,
   replyNum:number,
   nickname:string,
-  id:number
+  commentId:number
 }
 export type CommentPostList =Array<CommentPostItem>
 
@@ -50,7 +50,20 @@ export interface PostPreviewItem {
 }
 
 export type PostPreviewItemList = Array<PostPreviewItem>
-
+export interface replyItemForComment{
+  called:number,
+  uid:number,
+  replyTime:string,
+  callOrderId:number,
+  avatarURL:string,
+  orderId:number,
+  nickname:string,
+  commentId:number,
+  id:number,
+  avatar:string,
+  content:string,
+}
+export type replyListForComment = Array<replyItemForComment>
 
 export interface UserInfo {
   uid:number,
