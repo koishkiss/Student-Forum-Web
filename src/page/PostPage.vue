@@ -16,13 +16,13 @@ import { ElMessageBox } from 'element-plus';
     </div>
 
     <div class="post-page-bottom-box">
-        <div class="post-content-box">
-
-        </div>
-
         <div class="post-comment-box">
+            <div class="post-content-box">
+
+            </div>
+            
             <div class="no-data-box" v-if="!hasData">
-                <el-empty :image-size="100" description="别让楼主等太久哦"/>
+                <el-empty :image-size="100" description="别让楼主寂寞太久哦"/>
             </div>
 
             <ul class="comment-list" v-if="!isLoading && hasData">
@@ -161,7 +161,7 @@ onBeforeMount(() => {
 <style scoped>
 .post-page-box {
   flex: 8; /* 70% 宽度 */
-  padding: 150px 300px;
+  padding: 150px 340px;
   display: flex;
   flex-direction: column;
   margin-top: 20px;
@@ -170,14 +170,19 @@ onBeforeMount(() => {
 }
 
 .post-page-bottom-box {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .post-comment-box {
   flex: 6;
   display: flex;
   flex-direction: column;
+}
+
+.no-data-box {
+  border: solid 1px rgb(211, 211, 211);
+  border-bottom: none;
 }
 
 .comment-list {
@@ -187,13 +192,22 @@ onBeforeMount(() => {
 }
 
 .page-select-item {
-    display: flex;
-    flex-direction: row;
-    margin-top: 10px;
-    justify-content: center;
+  border: solid 1px rgb(211, 211, 211);
+  border-top: none;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.comment-box {
+  border: solid 1px rgb(211, 211, 211);
+  border-top: none;
+  padding: 10px 20px;
 }
 
 .right-side {
+  background-color: #d6d6d6;
   flex: 2;
 }
 

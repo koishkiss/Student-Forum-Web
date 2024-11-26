@@ -54,7 +54,7 @@ export type CommentPostList = Array<CommentPostItem>
 
 
 export interface replyItemForComment{
-  called:number,
+  callId:number,
   uid:number,
   replyTime:string,
   callOrderId:number,

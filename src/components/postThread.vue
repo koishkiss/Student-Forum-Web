@@ -1,13 +1,12 @@
 <script lang="ts">
 import CommentBoxForComment from "./CommentBoxForComment.vue";
-import PostingBoxforComment from "./PostingBoxforComment.vue";
 import UserPreviewIdentityCard from "./UserPreviewIdentityCard.vue";
 import EmptyLoveSVG from "./icon/EmptyLoveSVG.vue";
 import FullLoveSVG from "./icon/FullLoveSVG.vue";
 export default {
   name:'postThread',
   components: {
-    CommentBoxForComment,PostingBoxforComment,UserPreviewIdentityCard,EmptyLoveSVG,FullLoveSVG
+    CommentBoxForComment,UserPreviewIdentityCard,EmptyLoveSVG,FullLoveSVG
   }
 }
 </script>
@@ -52,12 +51,12 @@ export default {
     </div>
     
     <div class="comment-bottom-box">
-      <el-text class="data-num-item" @click="likeTime?dislike():like()" >
+      <el-text class="data-num-item" @click="isLoved?dislike():like()" >
         <el-icon class="operator-svg">
-          <EmptyLoveSVG v-if="!likeTime" />
-          <FullLoveSVG v-if="likeTime" />
+          <EmptyLoveSVG v-if="!isLoved" />
+          <FullLoveSVG v-if="isLoved" />
         </el-icon>
-        <span>{{ likeNum }}</span>
+        <span>{{ like_num }}</span>
       </el-text>
 
       <el-text class="comment-time">
@@ -73,14 +72,8 @@ export default {
       </el-button>
     </div>
 
-    <div v-if="extend">
-      <div>
-        <CommentBoxForComment :commentId="props.commentId"/>
-      </div>
-
-      <div>
-        <PostingBoxforComment :commentId="props.commentId"/>
-      </div>
+    <div v-if="extend" class="reply-list-box">
+      <CommentBoxForComment :commentId="commentId"/>
     </div>
   </div>
 </div>
@@ -88,11 +81,17 @@ export default {
 
 
 <script lang="ts" setup>
+import axios from "axios";
+import { useHttpStore } from "@/store/Http";
+import { ElMessage, ElMessageBox } from "element-plus";
+import Cookies from "js-cookie";
 import { ref } from "vue";
+
+const { ip_port } = useHttpStore();
 
 const extend = ref(false);
 
-let props = defineProps([
+const props = defineProps([
   "isModerator",
   "isPoster",
   "nickname",
@@ -106,6 +105,9 @@ let props = defineProps([
   "replyNum",
   "likeTime"
 ])
+
+const like_num = ref(props.likeNum);
+const isLoved = ref(props.likeTime !== undefined)
 
 const showUserIdentityCard = ref(false);
 var timeId;
@@ -124,11 +126,53 @@ function userInfoCardDelayLeave() {
 }
 
 function like() {
-
+  axios({
+    method:"get",
+    url:`${ip_port}/comment/like?commentId=${props.commentId}`,
+    headers:{
+      "Authorization": Cookies.get("Authorization"),
+      "uid": Cookies.get("uid")
+    }
+  })
+  .then(function (response) {
+    const data = response.data;
+    if (data.code === 200) {
+      isLoved.value = true;
+      like_num.value += 1;
+    } else if (data.code === 40012) {
+      ElMessage({message:"操作的太快了！休息一下吧",type:"error"});
+    } else {
+      ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
 }
 
 function dislike() {
-
+  axios({
+    method:"get",
+    url:`${ip_port}/comment/disLike?commentId=${props.commentId}`,
+    headers:{
+      "Authorization":Cookies.get("Authorization"),
+      "uid":Cookies.get("uid")
+    }
+  })
+  .then(function (response) {
+    const data = response.data;
+    if (data.code === 200) {
+      isLoved.value = false;
+      like_num.value -= 1;
+    } else if (data.code === 40012) {
+      ElMessage({message:"操作的太快了！休息一下吧",type:"error"});
+    } else {
+      ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
 }
 
 </script>
@@ -245,6 +289,12 @@ function dislike() {
   height: 30px;
 }
 
+.reply-list-box {
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  padding: 10px 15px;
+}
+
 
 
 /* 发帖者身份卡片动画 */
@@ -259,4 +309,5 @@ function dislike() {
   transform: translateX(10px);
   opacity: 0;
 }
+
 </style>
