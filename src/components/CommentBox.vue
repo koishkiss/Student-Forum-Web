@@ -56,8 +56,8 @@ function uploadComment() {
     .then(function (response) {
         const data = response.data;
         if (data.code == 200) {
-
             ElMessage({message:"发布成功",type:"success"});
+            comment.value = '';
         } else {
             ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
         }

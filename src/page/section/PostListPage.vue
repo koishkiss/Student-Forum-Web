@@ -69,7 +69,7 @@ onBeforeMount(() => {
         method: "post",
         url: ip_port + "/post/get?sectionId=" + route.params.id,
         data: {
-            "pagination": 1,
+            "pagination": currentPage.value,
             "pageSize": pageSize.value
         },
         headers: {
