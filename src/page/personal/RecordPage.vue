@@ -1,24 +1,46 @@
 <script lang="ts">
+import { ArrowDown } from '@element-plus/icons-vue';
 export default {
-  name:"RecordPage"
+  name:"RecordPage",
+  components:{
+    ArrowDown
+  }
 }
 </script>
 
 <template>
-<div class="left-side">
+<div class="record-page-box">
   <nav class="nav-tabs">
+    
+    <el-dropdown placement="bottom">
+      <span class="el-dropdown-link">
+        切换
+        <el-icon class="el-icon--right">
+          <ArrowDown />
+        </el-icon>
+      </span>
+      <template #dropdown>
+        <el-dropdown-menu class="drop-list">
+          <RouterLink to="/personal/post/mine" class="router" active-class="router-link-active">
+            <div class="router-box">
+              <span>我的帖子</span>
+            </div>
+          </RouterLink>
 
-    <RouterLink to="/personal/post/mine" class="router cta" active-class="router-link-active">
-      <span class="hover-underline-animation"> 我的帖子 </span>
-    </RouterLink>
+          <RouterLink to="/personal/post/liked" class="router" active-class="router-link-active">
+            <div class="router-box">
+              <span>我的点赞</span>
+            </div>
+          </RouterLink>
 
-    <RouterLink to="/personal/post/liked" class="router cta" active-class="router-link-active">
-      <span class="hover-underline-animation"> 我的点赞 </span>
-    </RouterLink>
-
-    <RouterLink to="/personal/post/viewed" class="router cta" active-class="router-link-active">
-      <span class="hover-underline-animation"> 浏览历史 </span>
-    </RouterLink>
+          <RouterLink to="/personal/post/viewed" class="router" active-class="router-link-active">
+            <div class="router-box">
+              <span>浏览历史</span>
+            </div>
+          </RouterLink>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
 
   </nav>
   <RouterView />
@@ -26,36 +48,72 @@ export default {
 </template>
 
 <script lang="ts" setup>
-import { useRouter } from 'vue-router';
-
+import { useRoute, useRouter } from 'vue-router';
 
 const router = useRouter();
+const route = useRoute();
 
-router.push("/personal/post/mine")
+if (route.query.to) {
+  router.push(`/personal/post/${route.query.to}`);
+}
 
 </script>
 
 
 <style scoped>
+
+.record-page-box {
+  position: relative;
+}
+
 .nav-tabs {
-display: flex;
-justify-content: space-around;
-border-bottom: 2px solid #eee;
+  top: 10px;
+  right: 30px;
+  position: absolute;
+}
+
+.el-dropdown-link {
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--el-color-primary);
+  display: flex;
+  align-items: center;
+}
+
+.drop-list {
+  padding: 0;
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 1px;
+  margin-bottom: 1px;
 }
 
 .router {
-text-decoration: none;
-font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-text-shadow: 1px 1px 2px grey;
-margin-bottom: 10px;
+  font-size: 20px;
+  text-decoration: none;
+  font-weight: bold;
+  text-shadow: .5px .5px 1px grey;
+  color: #000;
+  transition: all 0.2s;
+}
+.router-box {
+  background-color: #ffffff;
+  height: 45px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s;
+}
+.router-box:hover {
+  background-color: #dadada;
+  transition: all 0.2s;
+}
+.router-link-active .router-box {
+  color: #fa541c;
+  text-shadow: none;
+  transition: all 0.2s;
 }
 
-.router-link-active span {
-color: #041500;
-}
-
-.router-link-active .hover-underline-animation::after {
-transform: scaleX(1);
-transform-origin: bottom left;
-}
 </style>

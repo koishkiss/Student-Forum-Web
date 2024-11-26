@@ -22,26 +22,33 @@ export default {
     class="like-list" 
   >
     <li v-for="(like,index) in likeList" :key="index" class="like-item">
-      <div v-if="like.type === 'comment'" class="like-item-box">
-        <el-text tag="p" class="like-title">
-          <span class="like-nickname" 
-            @mouseenter="userInfoCardEnter(index)" 
-            @mouseleave="userInfoCardDelayLeave(index)"
-          >
-            <transition name="user-identity-card-content">
-              <div class="identity-card-container" v-if="showUserIdentityCard[index]">
-                <UserPreviewIdentityCard :theUid="like.uid"/>
-              </div>
-            </transition>
-            {{ like.nickname }}
-          </span> 
-          赞了你的评论
-        </el-text>
-        <el-text tag="p" class="like-content" @click="toThePost(like.postId)">{{ like.content }}</el-text>
-        <el-text tag="p" class="like-time">{{ like.likeTime }}</el-text>
+      <div class="like-item-box">
+        <div class="like-item-box-left">
+          <el-text tag="p" class="like-title">
+            <span class="like-nickname" 
+              @mouseenter="userInfoCardEnter(index)" 
+              @mouseleave="userInfoCardDelayLeave(index)"
+            >
+              <transition name="user-identity-card-content">
+                <div class="identity-card-container" v-if="showUserIdentityCard[index]">
+                  <UserPreviewIdentityCard :theUid="like.uid"/>
+                </div>
+              </transition>
+              {{ like.nickname }}
+            </span> 
+            赞了你的{{ types[like.type] }}
+          </el-text>
+          <el-text tag="p" class="like-time">{{ like.likeTime }}</el-text>
+        </div>
+        
+        <div class="like-item-box-right">
+          <el-text class="like-content" @click="toThePost(like.postId)">
+            {{ like.content }}
+          </el-text>
+        </div>
       </div>
 
-      <div v-if="like.type === 'post'" class="like-item-box">
+      <!-- <div v-if="like.type === 'post'" class="like-item-box">
         <el-text tag="p" class="like-title">
           <span class="like-nickname" 
             @mouseenter="userInfoCardEnter(index)" 
@@ -58,8 +65,8 @@ export default {
         </el-text>
         <el-text tag="p" class="like-content" @click="toThePost(like.postId)">{{ like.content }}</el-text>
         <el-text tag="p" class="like-time">{{ like.likeTime }}</el-text>
-      </div>
-      <el-divider/>
+      </div> -->
+      <el-divider style="margin-top: 10px;margin-bottom: 10px;"/>
     </li>
   </ul>
   <div class="tail-control-box">
@@ -99,6 +106,11 @@ const isLoadingMore = ref(false);
 let lastData = reactive(null);
 const isEmpty = ref(false);
 const noMore = ref(false);
+
+const types = {
+  "comment":"评论",
+  "post":"帖子"
+}
 
 const showUserIdentityCard = reactive<Array<boolean>>([]);
 var timeId: any[] = [];
@@ -224,6 +236,9 @@ onBeforeMount(()=>{
 }
 
 .like-item-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
   margin-left: 10px;
 }
 .like-title {
@@ -239,17 +254,23 @@ onBeforeMount(()=>{
   font-weight: bold;
 }
 
-.like-content {
-  cursor: pointer;
-  margin-top: 5px;
-  color: #141414;
-  font-size: 17px;
-}
-
 .like-time {
-  margin-top: 8px;
+  margin-top: 20px;
   color: #474747;
   font-size: 12px;
+}
+
+.like-item-box-right {
+  margin: auto;
+  margin-right: 0;
+  height: 70px;
+  width: 70px;
+}
+
+.like-content {
+  cursor: pointer;
+  color: #141414;
+  font-size: 16px;
 }
 
 .tail-control-box {
