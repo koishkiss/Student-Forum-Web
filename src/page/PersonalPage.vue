@@ -14,16 +14,12 @@ import ProfileSidebar from '@/components/ProfileSidebar.vue';
 </script>
 
 <style scoped>
-.app {
-  background-color: #ffffff;
-  margin: 0 auto;
-}
 
 .content {
   padding: 150px 300px;
   display: flex;
   margin-top: 20px;
   gap: 5%;
-  margin: 0 auto;
+  margin: 0 auto ;
 }
 </style>

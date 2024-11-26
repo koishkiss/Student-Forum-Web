@@ -25,10 +25,9 @@ export default {
 <script lang="ts" setup>
 import { reactive } from "vue";
 
-// 静态数据
 const noticeList = reactive([
-  "通知1：这是第一条通知",
-  "通知2：这是第二条通知",
+  "正在直播S14总决赛：BLG vs T1！BLG战队首度闯入S赛总决赛舞台，时隔11年，全华班再次与T1在决赛舞台相遇，谁将加冕为王？11月2日22点，上6号直播间看S14总决赛，天选好礼送不停，高能观赛团更是惊喜不断，25万现金红包等你来抽！",
+  "BML2024精彩再来亿遍，进度自由把控！Ave Mujica、CHiCO、SPYAIR、樋口爱、神山羊、Liyuu、洛天依等多组重磅嘉宾演出精选回放已上线～带来仿佛置身于现场的聆听感受。",
 ]);
 </script>
 
