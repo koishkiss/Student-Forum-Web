@@ -2,17 +2,19 @@
 import postThread from '@/components/postThread.vue';
 import CommentBox from '@/components/CommentBox.vue';
 import PostContentBox from '@/components/PostContentBox.vue';
+import PostHead from '@/components/PostHead.vue';
+import router from '@/router';
 export default {
   name:'PostPage',
-  components: { CommentBox, postThread,PostContentBox }
+  components: { CommentBox, postThread,PostContentBox,PostHead }
 }
 </script >
 
 
 <template>
 <div class="post-page-box">
-    <div class="page-head-box">
-
+    <div class="page-head-box" v-if="!isLoadingSection">
+        <PostHead v-bind="section"/>
     </div>
 
     <div class="post-page-bottom-box">
@@ -72,7 +74,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import {onBeforeMount,reactive,ref} from 'vue';
 import { useHttpStore } from '@/store/Http';
-import { CommentPostList, PostContent } from '@/types';
+import { CommentPostList, PostContent, SectionInfo } from '@/types';
 import { ElMessageBox } from 'element-plus';
 
 const { ip_port } = useHttpStore();
@@ -81,6 +83,7 @@ let route = useRoute();
 const hasData = ref(true);
 const isLoading = ref(true);
 const isLoadingContent = ref(true);
+const isLoadingSection = ref(true);
 
 let commentPostList = reactive<CommentPostList>([]);
 let content = reactive<PostContent>({
@@ -101,6 +104,20 @@ let content = reactive<PostContent>({
   status: -1,
   isLiked: false,
   isMarked: false
+});
+let section = reactive<SectionInfo>({
+  sectionId: -1,
+  name: "",
+  iconURL: "",
+  slogan: "这里还什么都没写哦",
+  postNum: -1,
+  memberNum: -1,
+  createTime: "",
+  classify: "",  //分类信息
+  adminList: [],  //管理员列表
+  hasJoin: false,  //个人加入信息
+  joinTime: "",  //个人加入时间
+  identity: 0  //个人身份信息
 });
 
 const maxPagination = ref(1);
@@ -164,6 +181,9 @@ async function getFirstFloor() {
             if (data.code === 200) {
                 isLoadingContent.value = false;
                 content = data.data;
+                if (isLoadingSection.value) {
+                    getSectionInfo();
+                }
             } else {
                 ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
             }
@@ -172,6 +192,33 @@ async function getFirstFloor() {
             console.log(error);
         });
     }
+}
+
+async function getSectionInfo() {
+    isLoadingSection.value = true;
+    axios({
+        method: "get",
+        url: `${ip_port}/section/info?sectionId=${content.sectionId}`,
+        headers: {
+            "Authorization": Cookies.get("Authorization"),
+            "uid": Cookies.get("uid")
+        }
+    })
+    .then(function (response) {
+        const data = response.data;
+        if (data.code == 200) {
+            section = data.data;
+        } else {
+            ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
+            router.push('/main');
+        }
+    })
+    .catch(function (error) {
+        console.log(error);
+    })
+    .finally(()=>{
+        isLoadingSection.value = false;
+    });
 }
 
 onBeforeMount(() => {
@@ -222,7 +269,6 @@ onBeforeMount(() => {
   display: flex;
   flex-direction: column;
   margin-top: 20px;
-  gap: 10px;
   margin: 0 auto;
 }
 
