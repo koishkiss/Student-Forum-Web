@@ -17,7 +17,7 @@
 
     <div class="search-container">
       <el-input v-model="searchQuery" class="search-input" placeholder="搜索..." :prefix-icon="Search"/>
-      <el-button :icon="Search" class="search-button" />
+      <el-button :icon="Search" class="search-button" @click="toSearchPage"/>
     </div>
 
     <div class="item-container">
@@ -69,6 +69,7 @@ import { useHttpStore } from '@/store/Http';
 const router = useRouter();
 const { ip_port } = useHttpStore();
 const user = useUserInfoStore();
+
 
 const searchQuery = ref('');
 const showIdentityCard = ref(false);
@@ -162,6 +163,10 @@ function toMessageReplyPage() {
 //去个人收到的通知页
 function toMessageNoticePage() {
   router.push("/message/notice")
+}
+
+function toSearchPage() {
+  router.push("/search?searchQuery=" + searchQuery.value)
 }
 
 //初始化

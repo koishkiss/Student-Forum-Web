@@ -5,6 +5,7 @@ import PersonalPage from "@/page/PersonalPage.vue";
 import LoginPage from "@/page/LoginPage.vue";
 import PostPage from "@/page/PostPage.vue";
 import SectionPage from "@/page/SectionPage.vue";
+import SearchPage from "@/page/SearchPage.vue";
 
 import Activities from "../page/personal/ActivityPage.vue"
 import Collections from "../page/personal/CollectionPage.vue"
@@ -115,6 +116,11 @@ routes:[
                 component:MyNoticePage
             }
         ]
+    },
+    {
+        name:"search-page",
+        path:"/search",
+        component:SearchPage
     }
 ]})
 
