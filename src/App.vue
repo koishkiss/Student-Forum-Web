@@ -2,7 +2,7 @@
   <div style="height: 95%; width: 99%; position: absolute;">
     <!-- 背景图 -->
     <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;">
-      <img src="  " style="width: 100%; height: 100%; object-fit: cover;" alt="背景图">
+      <img :src="ip_port + '/image/static/background002.jpg'" style="width: 100%; height: 100%; object-fit: cover;" alt="背景图">
     </div>
     
     <!-- 导航栏 -->
@@ -17,6 +17,9 @@
 
 <script setup lang="ts">
 import NavBar from './components/NavBar.vue';
+import { useHttpStore } from './store/Http';
+
+const { ip_port } = useHttpStore();
 </script>
 
 <style scoped>

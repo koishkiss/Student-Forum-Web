@@ -89,6 +89,7 @@ function reloadPostList() {
 
 .section-classification-box {
   position: sticky;
+  margin-top: 10px;
   top: 60px;
 }
 
