@@ -118,7 +118,7 @@ function toPersonalPage() {
 }
 
 function toPersonalPostPage() {
-  router.push("/personal/post")
+  router.push("/personal/post/mine")
 }
 
 //登出
