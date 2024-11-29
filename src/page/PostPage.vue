@@ -275,6 +275,7 @@ onBeforeMount(() => {
 .post-page-bottom-box {
   display: flex;
   flex-direction: row;
+  background-color: #fff;
 }
 
 .post-comment-box {
