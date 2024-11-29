@@ -64,7 +64,7 @@ export interface replyItemForComment{
   commentId:number,
   id:number,
   avatar:string,
-  content:string,
+  content:string
 }
 export type replyListForComment = Array<replyItemForComment>
 
@@ -104,4 +104,25 @@ export interface SectionInfo {
   hasJoin: boolean,  //个人加入信息
   joinTime: string,  //个人加入时间
   identity: number  //个人身份信息
+}
+
+
+export interface PostContent {
+  postId: number,
+  sectionId: number,
+  uid: number,
+  avatarURL: string,
+  nickname:string,
+  isModerator:boolean,
+  title: string,
+  coverURL: string,
+  content: string,
+  postTime: string,
+  viewNum: number,
+  likeNum: number,
+  bookmarkNum: number,
+  commentNum: number,
+  status: number,
+  isLiked: boolean,
+  isMarked: boolean
 }

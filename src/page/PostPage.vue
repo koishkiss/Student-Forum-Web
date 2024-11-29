@@ -1,11 +1,11 @@
 <script lang="ts">
 import postThread from '@/components/postThread.vue';
 import CommentBox from '@/components/CommentBox.vue';
+import PostContentBox from '@/components/PostContentBox.vue';
 export default {
   name:'PostPage',
-  components: { CommentBox, postThread }
+  components: { CommentBox, postThread,PostContentBox }
 }
-import { ElMessageBox } from 'element-plus';
 </script >
 
 
@@ -18,7 +18,7 @@ import { ElMessageBox } from 'element-plus';
     <div class="post-page-bottom-box">
         <div class="post-comment-box">
             <div class="post-content-box">
-
+                <PostContentBox :id="route.query.id"/>
             </div>
             
             <div class="no-data-box" v-if="!hasData">
@@ -72,6 +72,7 @@ import axios from 'axios';
 import {onBeforeMount,reactive,ref} from 'vue';
 import { useHttpStore } from '@/store/Http';
 import { CommentPostList } from '@/types';
+import { ElMessageBox } from 'element-plus';
 
 const { ip_port } = useHttpStore();
 let route = useRoute();
@@ -178,6 +179,16 @@ onBeforeMount(() => {
   flex: 6;
   display: flex;
   flex-direction: column;
+}
+
+.post-content-box {
+  padding: 0;
+  margin: 0;
+  /* border: solid 1px rgb(211, 211, 211);
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center; */
 }
 
 .no-data-box {
