@@ -60,16 +60,16 @@
 .announcement-bar li {
   font-size: 16px;
   margin-bottom: 12px;
-  padding: 10px;
+  padding: 10px 30px 10px 10px;
   background-color: #ffffff;
   border-left: 5px solid #4f46e5;
   border-radius: 4px;
-  transition: background-color 0.3s ease, padding-left 0.3s ease;
+  transition: background-color 0.3s ease, padding-left 0.3s ease, padding-right 0.3s ease;
 }
 
 .announcement-bar li:hover {
   background-color: #f3f4f6;
-  padding-left: 20px;
+  padding:10px 10px 10px 20px;
 }
 
 .announcement-bar li::before {
