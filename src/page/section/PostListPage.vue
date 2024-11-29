@@ -84,6 +84,7 @@ onBeforeMount(() => {
             recordsCount.value = data.data.totalRecordNum;
             maxPagination.value = data.data.maxPagination;
             isLoading.value = false;
+            scrollTo(0,0);
         } else if (data.code === 40010) {
             isLoading.value = false;
             hasData.value = false;

@@ -17,8 +17,8 @@ export default {
 
     <div class="post-page-bottom-box">
         <div class="post-comment-box">
-            <div class="post-content-box">
-                <PostContentBox :id="route.query.id"/>
+            <div class="post-content-box" v-if="currentPage === 1 && !isLoadingContent">
+                <PostContentBox v-bind="content"/>
             </div>
             
             <div class="no-data-box" v-if="!hasData">
@@ -33,6 +33,7 @@ export default {
             
             <div class="page-select-item" v-if="hasData">
                 <el-pagination
+                    v-model:current-page="currentPage" 
                     v-model:page-size="pageSize" 
                     layout="total, prev, pager, next, jumper"
                     :page-count="maxPagination" 
@@ -71,7 +72,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import {onBeforeMount,reactive,ref} from 'vue';
 import { useHttpStore } from '@/store/Http';
-import { CommentPostList } from '@/types';
+import { CommentPostList, PostContent } from '@/types';
 import { ElMessageBox } from 'element-plus';
 
 const { ip_port } = useHttpStore();
@@ -79,14 +80,39 @@ let route = useRoute();
 
 const hasData = ref(true);
 const isLoading = ref(true);
+const isLoadingContent = ref(true);
 
 let commentPostList = reactive<CommentPostList>([]);
+let content = reactive<PostContent>({
+  postId: -1,
+  sectionId: -1,
+  uid: -1,
+  avatarURL: "",
+  nickname: "",
+  isModerator: false,
+  title: "",
+  coverURL: "",
+  content: "",
+  postTime: "",
+  viewNum: -1,
+  likeNum: -1,
+  bookmarkNum: -1,
+  commentNum: -1,
+  status: -1,
+  isLiked: false,
+  isMarked: false
+});
+
 const maxPagination = ref(1);
-// const currentPage = ref(1);
+const currentPage = ref(1);
 const pageSize = ref(10);
 const recordsCount = ref(0);
 
 const handleCurrentChange = (val: number) => {
+    if (currentPage.value === 1) {
+        getFirstFloor();
+    }
+
     axios({
         method: "post",
         url: ip_port + "/comment/get" ,
@@ -111,6 +137,7 @@ const handleCurrentChange = (val: number) => {
             recordsCount.value = data.data.totalRecordNum;
             maxPagination.value = data.data.maxPagination;
             isLoading.value = false;
+            scrollTo(0,0);
         } else {
             ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
         }
@@ -121,7 +148,35 @@ const handleCurrentChange = (val: number) => {
     });
 }
 
+async function getFirstFloor() {
+    isLoadingContent.value = true;
+    if (currentPage.value === 1) {
+        axios({
+            method:"get",
+            url: `${ip_port}/post/view?postId=${route.query.id}`,
+            headers: {
+                "Authorization": Cookies.get("Authorization"),
+                "uid": Cookies.get("uid")
+            }
+        })
+        .then(function (response) {
+            const data = response.data;
+            if (data.code === 200) {
+                isLoadingContent.value = false;
+                content = data.data;
+            } else {
+                ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+}
+
 onBeforeMount(() => {
+    getFirstFloor();
+
     axios({
         method: "post",
         url: ip_port + "/comment/get?postId=" + route.query.id ,
@@ -141,9 +196,11 @@ onBeforeMount(() => {
             recordsCount.value = data.data.totalRecordNum;
             maxPagination.value = data.data.maxPagination;
             isLoading.value = false;
+            scrollTo(0,0);
         } else if (data.code === 40010) {
             isLoading.value = false;
             hasData.value = false;
+            scrollTo(0,0);
         } else {
             isLoading.value = false;
             ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
@@ -155,7 +212,6 @@ onBeforeMount(() => {
         isLoading.value = false;
     });
 })
-
 </script>
 
 

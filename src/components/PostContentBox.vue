@@ -1,5 +1,5 @@
 <script lang="ts">
-import { View,ChatLineSquare } from "@element-plus/icons-vue";
+import { View } from "@element-plus/icons-vue";
 import UserPreviewIdentityCard from "./UserPreviewIdentityCard.vue";
 import EmptyLoveSVG from "./icon/EmptyLoveSVG.vue";
 import FullLoveSVG from "./icon/FullLoveSVG.vue";
@@ -8,13 +8,13 @@ import FullMarkSVG from "./icon/FullMarkSVG.vue";
 export default {
   name:'PostContentBox',
   components: {
-    UserPreviewIdentityCard,EmptyLoveSVG,FullLoveSVG,EmptyMarkSVG,FullMarkSVG,ChatLineSquare
+    UserPreviewIdentityCard,EmptyLoveSVG,FullLoveSVG,EmptyMarkSVG,FullMarkSVG,View
   }
 }
 </script >
 
 <template>
-<div class="post-content" v-if="!isLoading">
+<div class="post-content">
   <!-- 用户信息 -->
   <div class="user-info">
     <div class="avatar-container" 
@@ -23,14 +23,14 @@ export default {
     >
       <transition name="user-identity-card-content">
         <div class="identity-card-container" v-if="showUserIdentityCard">
-          <UserPreviewIdentityCard :theUid="content.uid"/>
+          <UserPreviewIdentityCard :theUid="uid"/>
         </div>
       </transition>
-      <el-avatar :src="content.avatarURL" shape="square" fit="cover" class="author-avatar"/>
+      <el-avatar :src="avatarURL" shape="square" fit="cover" class="author-avatar"/>
     </div>
 
     <div class="user-name-box">
-      <el-text class="user-name">{{ content.nickname }}</el-text>
+      <el-text class="user-name">{{ nickname }}</el-text>
     </div>
 
     <div class="user-tag-box">
@@ -38,7 +38,7 @@ export default {
         楼主
       </el-tag>
 
-      <el-tag v-if="content.isModerator" type="warning">
+      <el-tag v-if="isModerator" type="warning">
         版主
       </el-tag>
     </div>
@@ -48,40 +48,47 @@ export default {
   <div class="comment-content-box">
     <div class="comment-text-box">
       <el-text tag="p" class="comment-text">
-        {{ content.content }}
+        {{ content }}
       </el-text>
 
-      <div class="post-cover-box" v-if="content.coverURL!=undefined">
+      <div class="post-cover-box" v-if="coverURL!=undefined">
         <el-image 
-          :src="content.coverURL" 
+          :src="coverURL" 
           fit="cover" 
           class="post-cover" 
           lazy
-          :preview-src-list="[content.coverURL]" 
+          :preview-src-list="[coverURL]" 
           :initial-index="0"
         />
       </div>
     </div>
     
     <div class="comment-bottom-box">
-      <el-text class="data-num-item" @click="content.isLiked?dislike():like()" >
-        <el-icon class="operator-svg">
-          <EmptyLoveSVG v-if="!content.isLiked" />
-          <FullLoveSVG v-if="content.isLiked" />
+      <el-text class="data-num-item" style="cursor: auto;">
+        <el-icon class="non-operator-svg">
+          <View />
         </el-icon>
-        <span>{{ content.likeNum }}</span>
+        <span>{{ viewNum }}</span>
       </el-text>
 
-      <el-text class="data-num-item" @click="content.isMarked?dismark():mark()" >
+      <el-text class="data-num-item" @click="loved?dislike():like()" >
         <el-icon class="operator-svg">
-          <EmptyMarkSVG v-if="!content.isMarked" />
-          <FullMarkSVG v-if="content.isMarked" />
+          <EmptyLoveSVG v-if="!loved" />
+          <FullLoveSVG v-if="loved" />
         </el-icon>
-        <span>{{ content.bookmarkNum }}</span>
+        <span>{{ like_num }}</span>
+      </el-text>
+
+      <el-text class="data-num-item" @click="marked?dismark():mark()" >
+        <el-icon class="operator-svg">
+          <EmptyMarkSVG v-if="!marked" />
+          <FullMarkSVG v-if="marked" />
+        </el-icon>
+        <span>{{ mark_num }}</span>
       </el-text>
 
       <el-text class="comment-time">
-        {{ content.postTime }}
+        {{ postTime }}
       </el-text>
 
       <el-text class="comment-floor-id">
@@ -95,37 +102,38 @@ export default {
 
 
 <script lang="ts" setup>
-import { onBeforeMount, reactive, ref } from "vue";
+import { ref } from "vue";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useHttpStore } from "@/store/Http";
-import { PostContent } from "@/types";
 import { ElMessage, ElMessageBox } from "element-plus";
 
-const props = defineProps(["id"]);
+const props = defineProps([
+  "postId",
+  "sectionId",
+  "uid",
+  "avatarURL",
+  "nickname",
+  "isModerator",
+  "title",
+  "coverURL",
+  "content",
+  "postTime",
+  "viewNum",
+  "likeNum",
+  "bookmarkNum",
+  "commentNum",
+  "status",
+  "isLiked",
+  "isMarked"
+]);
 
-const isLoading = ref(true);
 const { ip_port } = useHttpStore();
 
-let content = reactive<PostContent>({
-  postId: -1,
-  sectionId: -1,
-  uid: -1,
-  avatarURL: "",
-  nickname: "",
-  isModerator: false,
-  title: "",
-  coverURL: "",
-  content: "",
-  postTime: "",
-  viewNum: -1,
-  likeNum: -1,
-  bookmarkNum: -1,
-  commentNum: -1,
-  status: -1,
-  isLiked: false,
-  isMarked: false
-});
+const loved = ref(props.isLiked);
+const like_num = ref(props.likeNum);
+const marked = ref(props.isMarked);
+const mark_num = ref(props.bookmarkNum);
 
 const showUserIdentityCard = ref(false);
 var timeId;
@@ -147,7 +155,7 @@ function userInfoCardDelayLeave() {
 function like() {
   axios({
     method:"get",
-    url:ip_port + "/post/like?postId=" + props.id,
+    url:ip_port + "/post/like?postId=" + props.postId,
     headers:{
       "Authorization":Cookies.get("Authorization"),
       "uid":Cookies.get("uid")
@@ -156,8 +164,8 @@ function like() {
   .then(function (response) {
     const data = response.data;
     if (data.code === 200) {
-      content.isLiked = true;
-      content.likeNum += 1;
+      loved.value = true;
+      like_num.value += 1;
     } else if (data.code === 40012) {
       ElMessage({message:"操作的太快了！休息一下吧",type:"error"});
     } else {
@@ -173,7 +181,7 @@ function like() {
 function dislike() {
   axios({
     method:"get",
-    url:ip_port + "/post/disLike?postId=" + props.id,
+    url:ip_port + "/post/disLike?postId=" + props.postId,
     headers:{
       "Authorization":Cookies.get("Authorization"),
       "uid":Cookies.get("uid")
@@ -182,8 +190,8 @@ function dislike() {
   .then(function (response) {
     const data = response.data;
     if (data.code === 200) {
-      content.isLiked = false;
-      content.likeNum -= 1;
+      loved.value = false;
+      like_num.value -= 1;
     } else if (data.code === 40012) {
       ElMessage({message:"操作的太快了！休息一下吧",type:"error"});
     } else {
@@ -199,7 +207,7 @@ function dislike() {
 function mark() {
   axios({
     method:"get",
-    url:ip_port + "/post/mark?postId=" + props.id,
+    url:ip_port + "/post/mark?postId=" + props.postId,
     headers:{
       "Authorization":Cookies.get("Authorization"),
       "uid":Cookies.get("uid")
@@ -208,8 +216,8 @@ function mark() {
   .then(function (response) {
     const data = response.data;
     if (data.code === 200) {
-      content.isMarked = true;
-      content.bookmarkNum += 1;
+      marked.value = true;
+      mark_num.value += 1;
     } else if (data.code === 40012) {
       ElMessage({message:"操作的太快了！休息一下吧",type:"error"});
     } else {
@@ -225,7 +233,7 @@ function mark() {
 function dismark() {
   axios({
     method:"get",
-    url:ip_port + "/post/disMark?postId=" + props.id,
+    url:ip_port + "/post/disMark?postId=" + props.postId,
     headers:{
       "Authorization":Cookies.get("Authorization"),
       "uid":Cookies.get("uid")
@@ -234,8 +242,8 @@ function dismark() {
   .then(function (response) {
     const data = response.data;
     if (data.code === 200) {
-      content.isMarked = false;
-      content.bookmarkNum -= 1;
+      marked.value = false;
+      mark_num.value -= 1;
     } else if (data.code === 40012) {
       ElMessage({message:"操作的太快了！休息一下吧",type:"error"});
     } else {
@@ -246,31 +254,6 @@ function dismark() {
     console.log(error);
   });
 }
-
-onBeforeMount(()=>{
-  axios({
-    method:"get",
-    url: `${ip_port}/post/view?postId=${props.id}`,
-    headers: {
-      "Authorization": Cookies.get("Authorization"),
-      "uid": Cookies.get("uid")
-    }
-  })
-  .then(function (response) {
-    const data = response.data;
-    if (data.code === 200) {
-      content = data.data;
-      isLoading.value = false;
-    } else {
-      isLoading.value = false;
-      ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
-    }
-  })
-  .catch(function (error) {
-    console.log(error);
-    isLoading.value = false;
-  });
-})
 
 </script>
 
@@ -336,6 +319,7 @@ onBeforeMount(()=>{
 }
 
 .comment-text {
+  white-space: pre-line;
   font-size: 16px;
   color: #000;
 }
@@ -345,6 +329,7 @@ onBeforeMount(()=>{
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  margin-left: 10px;
 }
 
 .data-num-item {
@@ -355,6 +340,9 @@ onBeforeMount(()=>{
   justify-content: center;
   font-size: 16px;
   cursor: pointer;
+}
+.non-operator-svg {
+  width: 30px;
 }
 .operator-svg {
   width: 30px;
@@ -379,7 +367,7 @@ onBeforeMount(()=>{
 
 .post-cover-box {
   max-height: 400px;
-  margin-top: 5px;
+  margin-top: 10px;
   display: flex;
 }
 .post-cover {
