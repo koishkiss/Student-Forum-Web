@@ -20,7 +20,7 @@ export default {
     <el-empty :image-size="100" description="请登入后查看"/>
   </div>
 
-  <div class="identity-card-in-section-content" v-if="hasLogin">
+  <div :class="['identity-card-in-section-content', flexDirection === 'column' ? 'identity-card-in-section-content-column' : 'identity-card-in-section-content-row']" v-if="hasLogin">
     <el-avatar 
       :src="user.avatarURL" 
       shape="square" 
@@ -70,7 +70,7 @@ import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
-const props = defineProps(["hasJoin","joinTime","identity","sectionId"]);
+const props = defineProps(["hasJoin","joinTime","identity","sectionId","flexDirection"]);
 const emit = defineEmits(["joinSection","cancelJoinSection"]);
 
 const user = useUserInfoStore();
@@ -161,10 +161,15 @@ function unfollowTheSection() {
   font-weight: bold;
 }
 
-.identity-card-in-section-content {
+.identity-card-in-section-content-row {
   margin-top: 10px;
   display: flex;
   flex-direction: row;
+}
+.identity-card-in-section-content-column {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 .avatar {

@@ -4,6 +4,7 @@ import CommentBox from '@/components/CommentBox.vue';
 import PostContentBox from '@/components/PostContentBox.vue';
 import PostHead from '@/components/PostHead.vue';
 import router from '@/router';
+import MyIdentityCardInSection from '@/components/MyIdentityCardInSection.vue';
 export default {
   name:'PostPage',
   components: { CommentBox, postThread,PostContentBox,PostHead }
@@ -52,14 +53,15 @@ export default {
         <div class="right-side">
             <div class="right-side-item">
                 <div class="personal-info-in-section-box">
-                <!-- <MyIdentityCardInSection 
-                    :hasJoin="hasJoin" 
-                    :joinTime="joinTime" 
-                    :identity="identity" 
+                <MyIdentityCardInSection 
+                    :hasJoin="section.hasJoin" 
+                    :joinTime="section.joinTime" 
+                    :identity="section.identity" 
                     :sectionId="section.sectionId" 
+                    :flexDirection="'column'"
                     @join-section="joinSection" 
                     @cancel-join-section="cancelJoinSection" 
-                /> -->
+                />
                 </div>
             </div>
         </div>
@@ -193,7 +195,35 @@ async function getFirstFloor() {
         });
     }
 }
+function joinSection() {
+  axios({
+    method: "get",
+    url: `${ip_port}/section/info?sectionId=${section.sectionId}`,
+    headers: {
+      "Authorization": Cookies.get("Authorization"),
+      "uid": Cookies.get("uid")
+    }
+  })
+  .then(function (response) {
+    const data = response.data;
+    if (data.code == 200) {
+      section.hasJoin = data.data.hasJoin;
+      section.joinTime =  data.data.joinTime;
+      section.identity = data.data.identity;
+    } else {
+      ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  })
+}
 
+function cancelJoinSection() {
+  section.hasJoin = false;
+  section.joinTime = "";
+  section.identity = 0;
+}
 async function getSectionInfo() {
     isLoadingSection.value = true;
     axios({
@@ -207,7 +237,7 @@ async function getSectionInfo() {
     .then(function (response) {
         const data = response.data;
         if (data.code == 200) {
-            section = data.data;
+            section = reactive(data.data);
         } else {
             ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
             router.push('/main');
