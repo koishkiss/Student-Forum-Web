@@ -65,6 +65,7 @@ import { useUserInfoStore } from '@/store/UserInfo';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useHttpStore } from '@/store/Http';
+import { ElMessage } from 'element-plus';
 
 const router = useRouter();
 const { ip_port } = useHttpStore();
@@ -88,9 +89,9 @@ const navItems = reactive([
   { 
     label: '动态', 
     labelIcon: markRaw(View), 
-    options: [{label:'广场', to:toPersonalPage}, {label:'个人', to:toPersonalPostPage}], 
+    options: [{label:'广场', to:toPersonalActivePage}, {label:'个人', to:toPersonalPostPage}], 
     visible: false,
-    to:toPersonalPage
+    to:toPersonalActivePage
   },
   { 
     label: '收藏', 
@@ -136,33 +137,64 @@ function toPersonalPage() {
     router.push("/login")
   }
 }
+function toPersonalActivePage() {
+  if (user.uid !== -1) {
+    router.push("/personal/activity");
+  } else {
+    ElMessage.error("请登入!");
+  }
+}
 //去浏览历史页
 function toViewHistoryPage(){
-  router.push("/personal/post/viewed")
+  if (user.uid !== -1) {
+    router.push("/personal/post/viewed")
+  } else {
+    ElMessage.error("请登入!");
+  }
 }
 //去个人收藏页
 function toPersonalMarkPage() {
-  router.push("/personal/mark")
+  if (user.uid !== -1) {
+    router.push("/personal/mark")
+  } else {
+    ElMessage.error("请登入!");
+  }
 }
 
 //去个人发帖页
 function toPersonalPostPage() {
-  router.push("/personal/post/mine")
+  if (user.uid !== -1) {
+    router.push("/personal/post/mine")
+  } else {
+    ElMessage.error("请登入!");
+  }
 }
 
 //去个人收到的赞页
 function toMessageLikePage() {
-  router.push("/message/like")
+  if (user.uid !== -1) {
+    router.push("/message/like")
+  } else {
+    ElMessage.error("请登入!");
+  }
 }
 
 //去个人收到的回复页
 function toMessageReplyPage() {
-  router.push("/message/reply")
+  if (user.uid !== -1) {
+    router.push("/message/reply")
+  } else {
+    ElMessage.error("请登入!");
+  }
 }
 
 //去个人收到的通知页
 function toMessageNoticePage() {
-  router.push("/message/notice")
+  if (user.uid !== -1) {
+    router.push("/message/notice")
+  } else {
+    ElMessage.error("请登入!");
+  }
 }
 
 function toSearchPage() {

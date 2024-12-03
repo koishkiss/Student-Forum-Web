@@ -95,7 +95,7 @@ onBeforeMount(()=>{
   if (user.uid !== -1) {
     isLoading.value = false;
   } else if (Cookies.get('uid') === undefined) {
-    ElMessageBox.alert("请登录!", "", {confirmButtonText: 'OK'});
+    // ElMessageBox.alert("请登录!", "", {confirmButtonText: 'OK'});
     router.push('/main');
   } else {
     axios({

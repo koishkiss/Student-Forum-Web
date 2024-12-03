@@ -30,6 +30,45 @@ export default {
 
 
 <script lang="ts" setup>
+import { useHttpStore } from '@/store/Http';
+import { useUserInfoStore } from '@/store/UserInfo';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { onBeforeMount } from 'vue';
+import { useRouter } from 'vue-router';
+
+const user = useUserInfoStore();
+const { ip_port } = useHttpStore();
+const router = useRouter();
+
+//初始化
+onBeforeMount(()=>{
+  if (Cookies.get('uid') === undefined) {
+    // ElMessageBox.alert("请登录!", "", {confirmButtonText: 'OK'});
+    router.push('/main');
+  } else {
+    axios({
+      method: "get",
+      url: ip_port + "/user/mine/info",
+      headers: {
+        "Authorization": Cookies.get("Authorization"),
+        "uid": Cookies.get("uid")
+      }
+    })
+    .then(function (response) {
+      const data = response.data;
+      if (data.code == 200) {
+        user.$patch(data.data);
+      } else {
+        console.log(data.message);
+        router.push('/main');
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+  }
+});
 
 </script>
 

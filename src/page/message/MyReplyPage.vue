@@ -81,6 +81,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { onBeforeMount, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { ElMessageBox } from 'element-plus';
 
 
 const { ip_port } = useHttpStore();
@@ -145,7 +146,7 @@ async function loadMore() {
       isLoadingMore.value = false;
       noMore.value = true;
     } else {
-      window.alert(data.message);
+      ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
       isLoadingMore.value = false;
       noMore.value = true;
     }
@@ -180,7 +181,7 @@ onBeforeMount(()=>{
       isFirstLoading.value = false;
     } else {
       console.log(data.message);
-      window.alert(data.message);
+      ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
       isEmpty.value = true;
       isFirstLoading.value = false;
     }
