@@ -32,7 +32,17 @@
       />
     </span>
     <div class="submit-box">
-      <el-button type="primary" :loading="loading" @click="doLogin">登入</el-button>
+      <el-button type="primary" :loading="loading" @click="doNormalLogin">登入</el-button>
+    </div>
+    <el-text class="quick-login-text">快捷登入</el-text>
+    <div class="quick-login-box">
+      <el-button disabled title="没有登入就是游客状态">游客</el-button>
+      <el-button type="primary" plain title="可以看帖、发帖、修改个人信息等" @click="loginWithPrimary">
+        普通成员
+      </el-button>
+      <el-button type="warning" plain title="最高权限" @click="loginWithModerator">
+        版主
+      </el-button>
     </div>
   </div>
 </div>
@@ -54,11 +64,23 @@ const sid = ref('')
 const pwd = ref('')
 const loading = ref(false);
 
-async function doLogin() {
+function loginWithPrimary() {
+  doLogin("202000300514","123456");
+}
+
+function loginWithModerator() {
+  doLogin("202051400514","654321");
+}
+
+function doNormalLogin() {
+  doLogin(sid.value, pwd.value);
+}
+
+async function doLogin(theSid: string, thePwd: string) {
   loading.value = true;
   axios.post(ip_port+'/user/login', {
-    sid: sid.value,
-    password: pwd.value
+    sid: theSid,
+    password: thePwd
   })
   .then(function (response) {
     const data = response.data;
@@ -118,5 +140,14 @@ async function doLogin() {
 
 .submit-box {
   margin-top: 20px;
+}
+
+.quick-login-text {
+  margin-top: 10px;
+  font-size: smaller;
+}
+
+.quick-login-box {
+  margin-top: 10px;
 }
 </style>
