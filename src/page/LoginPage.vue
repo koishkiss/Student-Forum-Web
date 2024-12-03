@@ -5,6 +5,24 @@
 </script>
 
 <template>
+<div class="shell">
+  <div class="box wave"></div>
+  <div class="box wave"></div>
+  <div class="box wave"></div>
+  <div class="text-wrapper">
+    <div class="text-content">
+        <span class="wave">welcome</span>
+        <br>
+        <span class="wave">to student</span>
+    </div>
+    <div class="text-author">
+        <span class="wave">forum</span>
+    </div>
+  </div>
+</div>
+<div class="background">
+  <img src="http://47.113.194.64:22222/image/static/background3.jpg"/>
+</div>
 <div class="login-page-box">
   <div class="input-form">
     <el-text class="mx-1" size="large" style="font-size: 25px; margin-top: 25px; margin-bottom: 5px;">
@@ -46,6 +64,7 @@
     </div>
   </div>
 </div>
+
 </template>
 
 <script  lang="ts" setup>
@@ -111,15 +130,24 @@ async function doLogin(theSid: string, thePwd: string) {
 </script>
 
 <style scoped>
+.background{
+  z-index: -10;
+  position: absolute;
+  object-fit: cover;
+}
 .login-page-box {
+  z-index: 2;
   padding: 150px 100px;
-  display: flex;
+  display: relative;
   flex-direction: row-reverse;
+  
 }
 
 .input-form {
   border-radius: 10px;
-  background-color: var(--color-background-soft);
+  /* background-color: var(--color-background-soft); */
+  background-color:rgba(220, 231, 243, 0.8) ;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 400px;
   height: 400px;
   display: flex;
@@ -149,5 +177,90 @@ async function doLogin(theSid: string, thePwd: string) {
 
 .quick-login-box {
   margin-top: 10px;
+}
+@import url("https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap");
+
+* {
+    box-sizing: border-box;
+    margin: auto;
+}
+
+body {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    font-family: "Yeseva One";
+}
+
+
+.shell {
+    position: absolute;
+    max-width: 100vh;
+    aspect-ratio: 1/1;
+    display: flex;
+    border-radius: 50%;
+    overflow: hidden;
+    text-align: center;
+    filter: drop-shadow(-30px 30px 10px #006e9d);
+    /* left: -50px; */
+}
+
+.text-wrapper {
+    font-size: 110px;
+}
+
+span.wave {
+    background: -50% 0%/200% 100% linear-gradient(90deg, #32967048, #0a26ff, #32967048);
+    color: transparent;
+    background-clip: text;
+    animation: flow 4s linear infinite;
+    padding: 0 70px;
+}
+
+.text-author {
+    font-size: 80px;
+    text-align: right;
+}
+
+.box {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+}
+
+.box:nth-of-type(1) {
+    height: 35%;
+    opacity: 0.6;
+}
+
+.box:nth-of-type(2) {
+    height: 67%;
+    opacity: 0.5;
+}
+
+.box:nth-of-type(3) {
+    height: 93%;
+    opacity: 0.4;
+}
+
+.wave {
+    /* 创建两个径向渐变蒙版，模拟波浪的上下部分 */
+    -webkit-mask: radial-gradient(46.6px at 50% calc(100% - (27px + 38px)),
+            #fff 99%, #ffffff00 101%), radial-gradient(46.6px at 50% calc(100% + 38px),
+            #ffffff00 99%, #fff 101%) repeat-x;
+    /* 设置蒙版的大小，使波浪在水平上重复 */
+    -webkit-mask-size: calc(4*27px) 100%;
+    /* 设置蒙版的初始位置，调整波浪的位置 */
+    -webkit-mask-position: calc(50% - 2*27px) 0, 50% calc(100% - 27px);
+    animation: flow 5s linear infinite;
+}
+
+@keyframes flow {
+    100% {
+        /* 设置动画结束时的蒙版位置，使波浪看起来在移动 */
+        -webkit-mask-position: calc(50% - 6*27px) 0, calc(50% - 4*27px) calc(200% - 27px);
+    }
 }
 </style>
