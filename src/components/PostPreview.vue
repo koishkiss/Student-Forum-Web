@@ -1,5 +1,5 @@
 <script lang="ts">
-import { View,ChatLineSquare } from "@element-plus/icons-vue";
+import { View,ChatLineSquare,CirclePlus } from "@element-plus/icons-vue";
 import EmptyLoveSVG from "./icon/EmptyLoveSVG.vue";
 import FullLoveSVG from "./icon/FullLoveSVG.vue";
 import EmptyMarkSVG from "./icon/EmptyMarkSVG.vue";
@@ -42,7 +42,7 @@ export default {
 
   <div class="post-content-box">
     <el-text class="post-title">
-      <el-tag type="warning" v-if="status === 1" class="el-tag">精华</el-tag>
+      <el-tag type="warning" v-if="isSelected" class="el-tag">精华</el-tag>
       <span class="title" @click="toPostPage">{{ title }}</span>
     </el-text>
 
@@ -90,6 +90,18 @@ export default {
         </el-icon>
         <span>{{ mark_num }}</span>
       </el-text>
+      <el-dropdown :show-timeout="0" :hide-timeout="70" v-if="user.authority >= 3" >
+        <el-text class="data-num-item">
+          <el-icon class="operator-svg"><CirclePlus /></el-icon>
+        </el-text>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item @click="unselectPost" v-if="isSelected">取消精华</el-dropdown-item>
+            <el-dropdown-item @click="selectePost" v-else>设为精华</el-dropdown-item>
+            <el-dropdown-item @click="deletePost">删除</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </div>
   </div>
 </el-card>
@@ -97,6 +109,7 @@ export default {
 
 
 <script lang="ts" setup>
+import { useUserInfoStore } from "@/store/UserInfo";
 import { useHttpStore } from "@/store/Http";
 import Cookies from "js-cookie";
 import { onBeforeMount, ref } from "vue";
@@ -125,13 +138,14 @@ let props = defineProps([
 
 const { ip_port } = useHttpStore();
 const router = useRouter();
+const user = useUserInfoStore();
 
 const showUserIdentityCard = ref(false);
 const isLoved = ref(false);
 const isMarked = ref(false);
 const like_num = ref(props.likeNum);
 const mark_num = ref(props.bookmarkNum);
-const id = ref(props.id);
+const isSelected = ref(false);
 
 var timeId;
 function userInfoCardEnter() {
@@ -256,6 +270,60 @@ function dismark() {
   });
 }
 
+function deletePost() {
+  ElMessage({message:"功能未实现!",type:"error"});
+}
+
+function selectePost() {
+  axios({
+    method:"get",
+    url:ip_port + "/post/select?postId=" + props.id + "&sectionId=" + props.sectionId,
+    headers:{
+      "Authorization":Cookies.get("Authorization"),
+      "uid":Cookies.get("uid")
+    }
+  })
+  .then(function (response) {
+    const data = response.data;
+    if (data.code === 200) {
+      isSelected.value = true;
+      ElMessage({message:"加精成功！",type:"warning"});
+    } else if (data.code === 40012) {
+      ElMessage({message:"操作的太快了！休息一下吧",type:"error"});
+    } else {
+      ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
+function unselectPost() {
+  axios({
+    method:"get",
+    url:ip_port + "/post/disSelect?postId=" + props.id + "&sectionId=" + props.sectionId,
+    headers:{
+      "Authorization":Cookies.get("Authorization"),
+      "uid":Cookies.get("uid")
+    }
+  })
+  .then(function (response) {
+    const data = response.data;
+    if (data.code === 200) {
+      isSelected.value = false;
+      ElMessage({message:"取消加精成功！",type:"warning"});
+    } else if (data.code === 40012) {
+      ElMessage({message:"操作的太快了！休息一下吧",type:"error"});
+    } else {
+      ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
 //初始化
 onBeforeMount(()=>{
   if (props.like_time !== undefined) {
@@ -263,6 +331,9 @@ onBeforeMount(()=>{
   }
   if (props.mark_time !== undefined) {
     isMarked.value = true;
+  }
+  if (props.status === 1) {
+    isSelected.value = true;
   }
 })
 
