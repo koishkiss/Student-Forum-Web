@@ -11,7 +11,7 @@ export default {
     UserPreviewIdentityCard,EmptyLoveSVG,FullLoveSVG,EmptyMarkSVG,FullMarkSVG,View
   }
 }
-</script >
+</script>
 
 <template>
 <div class="post-content">

@@ -2,7 +2,7 @@
 export default {
   name:'PostHead'
 }
-</script >
+</script>
 
 <template>
 <div class="post-head">
