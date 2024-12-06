@@ -9,7 +9,7 @@ export default {
   name:'PostPage',
   components: { CommentBox, postThread,PostContentBox,PostHead }
 }
-</script >
+</script>
 
 
 <template>
