@@ -12,7 +12,6 @@ export default {
 </script>
 
 <template>
-<el-scrollbar max-height="740px">
 <div class="classify-list-box">
   <div class="classify-list-top">
     <el-text tag="span" class="classify-list-title">
@@ -34,47 +33,48 @@ export default {
     </el-popover>
   </div>
 
-  <div class="classify-list-content">
-    <div v-if="isLoading" class="load-classification-box">
-      <Loading/>
-    </div>
+  <el-scrollbar max-height="688px">
+    <div class="classify-list-content">
+      <div v-if="isLoading" class="load-classification-box">
+        <Loading/>
+      </div>
 
-    <el-collapse v-if="!isLoading" class="collapse-list">
-      <el-collapse-item
-        v-for="(classification,index) in classificationList"
-        :name="classification.id"
-        :key="index"
-        class="collapse-item"
-        @click="loadSectionList(classification.id, index)"
-      >
-        <template #title>
-          <el-text class="collapse-item-title">
-            {{ classification.name }}
-          </el-text>
-        </template>
-
-        <div class="section-preview-list-box">
-          <div v-if="!hasLoad[index]" class="load-section-list-box">
-            <Loading/>
-          </div>
-
-          <template v-if="hasLoad[index]">
-            <div v-for="section in sectionPreviewLists[index]" :key="section.classify" class="section-preview-item">
-              <SectionIdentity :sectionId="section.sectionId" :iconURL="section.iconURL" :name="section.name"/>
-            </div>
-
-            <div class="add-section" v-if="user.authority >= 3">
-              <el-button class="add-section-button">
-                <el-icon :size="30" style="color: #b2b2b2;"><Plus/></el-icon>
-              </el-button>
-            </div>
+      <el-collapse v-if="!isLoading" class="collapse-list">
+        <el-collapse-item
+          v-for="(classification,index) in classificationList"
+          :name="classification.id"
+          :key="index"
+          class="collapse-item"
+          @click="loadSectionList(classification.id, index)"
+        >
+          <template #title>
+            <el-text class="collapse-item-title">
+              {{ classification.name }}
+            </el-text>
           </template>
-        </div>
-      </el-collapse-item>
-    </el-collapse>
-  </div>
+
+          <div class="section-preview-list-box">
+            <div v-if="!hasLoad[index]" class="load-section-list-box">
+              <Loading/>
+            </div>
+
+            <template v-if="hasLoad[index]">
+              <div v-for="section in sectionPreviewLists[index]" :key="section.classify" class="section-preview-item">
+                <SectionIdentity :sectionId="section.sectionId" :iconURL="section.iconURL" :name="section.name"/>
+              </div>
+
+              <div class="add-section" v-if="user.authority >= 3">
+                <el-button class="add-section-button">
+                  <el-icon :size="30" style="color: #b2b2b2;"><Plus/></el-icon>
+                </el-button>
+              </div>
+            </template>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
+    </div>
+  </el-scrollbar>
 </div>
-</el-scrollbar>
 </template>
 
 <script lang="ts" setup>
@@ -185,7 +185,7 @@ onBeforeMount(()=>{
 
 .classify-list-box {
   border-radius: 10px;
-  background-color: #fff1f1;
+  background-color: #f5f5f5;
   padding: 6px;
   min-height: 400px;
   /* overflow-y: auto; */
@@ -231,22 +231,10 @@ onBeforeMount(()=>{
 }
 
 .collapse-item {
-  min-width: 260px;
-  max-width: 275px;
   display: flex;
   flex-direction: column;
-  border-left: 3px dashed #eea8da;
   margin-bottom: 10px;
-  background-color: #ffc6f3;
   border-radius: 7px;
-  transition: padding-left 0.3s ease;
-}
-.collapse-item:hover {
-  padding-left: 2px;
-}
-.collapse-item:active {
-  padding-left: 1px;
-  transition: padding-left 0.2s ease;
 }
 
 .collapse-item-title {
@@ -272,13 +260,11 @@ onBeforeMount(()=>{
 
 .section-preview-item {
   margin-right: 70px;
-  margin-left: 10px;
   width: 50px;
 }
 
 .add-section {
   margin-top: 6px;
-  margin-left: 10px;
   height: 105px;
   width: 105px;
   display: flex;
