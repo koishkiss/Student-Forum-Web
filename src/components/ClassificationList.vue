@@ -1,12 +1,11 @@
 <script lang="ts">
-import { Loading, CirclePlus, Plus } from "@element-plus/icons-vue";
+import { Loading, CirclePlus, Plus, Minus } from "@element-plus/icons-vue";
 import SectionIdentity from './SectionIdentity.vue';
-import { useUserInfoStore } from '@/store/UserInfo';
-import { ElMessage } from 'element-plus';
+import CreateSection from './CreateSection.vue';
 export default {
   name:'ClassificationList',  //组件名
   components:{
-    Loading,SectionIdentity,CirclePlus,Plus
+    Loading,SectionIdentity,CirclePlus,Plus,CreateSection,Minus
   }
 }
 </script>
@@ -63,12 +62,20 @@ export default {
                 <SectionIdentity :sectionId="section.sectionId" :iconURL="section.iconURL" :name="section.name"/>
               </div>
 
-              <div class="add-section" v-if="user.authority >= 3">
-                <el-button class="add-section-button">
-                  <el-icon :size="30" style="color: #b2b2b2;"><Plus/></el-icon>
+              <div class="add-section" v-if="user.authority >= 2" title="添加新版块">
+                <el-button class="add-section-button" @click="addNewSectionInClassify(index)">
+                  <el-icon :size="30" style="color: #b2b2b2;" v-if="!addNewSection[index]"><Plus/></el-icon>
+                  <el-icon :size="30" style="color: #b2b2b2;" v-if="addNewSection[index]"><Minus/></el-icon>
                 </el-button>
               </div>
             </template>
+          </div>
+
+          <div v-if="addNewSection[index] && user.authority >= 2">
+            <CreateSection 
+              :classify="classification.id" 
+              @newSectionAdd="newSectionHasAdd(classification.id,index)"
+            />
           </div>
         </el-collapse-item>
       </el-collapse>
@@ -82,6 +89,8 @@ import { ref, reactive, onBeforeMount } from 'vue';
 import axios from 'axios';
 import { useHttpStore } from '@/store/Http';
 import Cookies from 'js-cookie';
+import { useUserInfoStore } from '@/store/UserInfo';
+import { ElMessage } from 'element-plus';
 import { SectionIdentityList } from '@/types';
 
 const { ip_port } = useHttpStore();
@@ -92,6 +101,7 @@ let classificationList = reactive([]);
 let sectionPreviewLists = reactive<Array<SectionIdentityList>>([]);
 let hasLoad = reactive<Array<boolean>>([]);
 const newClassifyName = ref("");
+const addNewSection = reactive([]);
 
 function addNewClassify() {
   axios({
@@ -118,6 +128,16 @@ function addNewClassify() {
   .catch(function (error) {
     console.log(error);
   });
+}
+
+function addNewSectionInClassify(index: number) {
+  addNewSection[index] = !addNewSection[index];
+}
+
+function newSectionHasAdd(classificationId: number, index: number) {
+  hasLoad[index] = false;
+  addNewSection[index] = false;
+  loadSectionList(classificationId, index);
 }
 
 function loadSectionList(classificationId: number, index: number) {
@@ -226,15 +246,15 @@ onBeforeMount(()=>{
 .collapse-list {
   display: flex;
   flex-direction: column;
-  justify-content: baseline;
   padding: 15px 0;
 }
 
 .collapse-item {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  background-color: #fff;
   margin-bottom: 10px;
-  border-radius: 7px;
 }
 
 .collapse-item-title {
@@ -244,11 +264,10 @@ onBeforeMount(()=>{
 }
 
 .section-preview-list-box {
-  align-self: flex-end;
-  justify-self: flex-end;
-  width: 260px;
+  padding: 0 20px;
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
   flex-wrap: wrap;
 }
 
@@ -256,11 +275,6 @@ onBeforeMount(()=>{
   width: 25px;
   height: 25px;
   margin: auto;
-}
-
-.section-preview-item {
-  margin-right: 70px;
-  width: 50px;
 }
 
 .add-section {
