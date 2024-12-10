@@ -8,7 +8,7 @@ import UserPreviewIdentityCard from "./UserPreviewIdentityCard.vue";
 export default {
   name:'PostPreview',  //组件名
   components:{
-    View,ChatLineSquare,EmptyLoveSVG,FullLoveSVG,EmptyMarkSVG,FullMarkSVG,UserPreviewIdentityCard
+    View,ChatLineSquare,EmptyLoveSVG,FullLoveSVG,EmptyMarkSVG,FullMarkSVG,UserPreviewIdentityCard,CirclePlus
   }
 }
 </script>

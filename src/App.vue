@@ -17,8 +17,8 @@
 
 <script setup lang="ts">
 import NavBar from './components/NavBar.vue';
-import { useHttpStore } from './store/Http';
-import use3DBackground from './hooks/Background3D';
+// import { useHttpStore } from './store/Http';
+// import use3DBackground from './hooks/Background3D';
 
 // const { ip_port } = useHttpStore();
 // use3DBackground(ip_port);
@@ -29,8 +29,6 @@ import use3DBackground from './hooks/Background3D';
 .view-box {
   margin-top: 37px;
   padding-top: 10px;
-  height: 100%;
-  width: 100%;
   z-index: 1; /* 确保内容在背景图之上 */
 }
 

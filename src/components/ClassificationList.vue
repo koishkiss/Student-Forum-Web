@@ -1,19 +1,38 @@
 <script lang="ts">
-import { Loading } from "@element-plus/icons-vue";
+import { Loading, CirclePlus, Plus } from "@element-plus/icons-vue";
 import SectionIdentity from './SectionIdentity.vue';
+import { useUserInfoStore } from '@/store/UserInfo';
+import { ElMessage } from 'element-plus';
 export default {
   name:'ClassificationList',  //组件名
   components:{
-    Loading,SectionIdentity
+    Loading,SectionIdentity,CirclePlus,Plus
   }
 }
 </script>
 
 <template>
+<el-scrollbar max-height="740px">
 <div class="classify-list-box">
-  <el-text tag="p" class="classify-list-title">
-    板块分区
-  </el-text>
+  <div class="classify-list-top">
+    <el-text tag="span" class="classify-list-title">
+      板块分区
+    </el-text>
+
+    <el-popover placement="right" trigger="click" width="200" v-if="user.authority >= 3">
+      <template #reference>
+        <el-button type="info" link class="add-new-classify-button" title="添加新分区">
+          <el-icon :size="25"><CirclePlus/></el-icon>
+        </el-button>
+      </template>
+      <div style="display: flex;flex-direction: column; align-items: center;">
+        <el-input v-model="newClassifyName" placeholder="请输入分区标题"></el-input>
+        <el-button style="height: 25px; width: 45px; margin-top: 5px;" @click="addNewClassify">
+          添加
+        </el-button>
+      </div>
+    </el-popover>
+  </div>
 
   <div class="classify-list-content">
     <div v-if="isLoading" class="load-classification-box">
@@ -43,12 +62,19 @@ export default {
             <div v-for="section in sectionPreviewLists[index]" :key="section.classify" class="section-preview-item">
               <SectionIdentity :sectionId="section.sectionId" :iconURL="section.iconURL" :name="section.name"/>
             </div>
+
+            <div class="add-section" v-if="user.authority >= 3">
+              <el-button class="add-section-button">
+                <el-icon :size="30" style="color: #b2b2b2;"><Plus/></el-icon>
+              </el-button>
+            </div>
           </template>
         </div>
       </el-collapse-item>
     </el-collapse>
   </div>
 </div>
+</el-scrollbar>
 </template>
 
 <script lang="ts" setup>
@@ -59,12 +85,40 @@ import Cookies from 'js-cookie';
 import { SectionIdentityList } from '@/types';
 
 const { ip_port } = useHttpStore();
+const user = useUserInfoStore();
 
 const isLoading = ref(true);
 let classificationList = reactive([]);
 let sectionPreviewLists = reactive<Array<SectionIdentityList>>([]);
 let hasLoad = reactive<Array<boolean>>([]);
+const newClassifyName = ref("");
 
+function addNewClassify() {
+  axios({
+    method:"post",
+    url:ip_port + "/classify/add",
+    headers:{
+      "Authorization":Cookies.get("Authorization"),
+      "uid":Cookies.get("uid")
+    },
+    data:{
+      "name":newClassifyName.value
+    }
+  })
+  .then(function (response) {
+    newClassifyName.value = "";
+    const data = response.data;
+    if (data.code === 200) {
+      ElMessage({message: '添加成功！',type: 'success',plain: true});
+      loadClassifyList();
+    } else {
+      ElMessage({message: data.message,type: 'error',plain: true});
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
 
 function loadSectionList(classificationId: number, index: number) {
   if (!hasLoad[index]) {
@@ -81,6 +135,8 @@ function loadSectionList(classificationId: number, index: number) {
       if (data.code == 200){
         sectionPreviewLists[index] = data.data;
         hasLoad[index] = true;
+      } else if (data.code == 40010) {
+        hasLoad[index] = true;
       } else {
         window.alert(data.message);
       }
@@ -91,8 +147,8 @@ function loadSectionList(classificationId: number, index: number) {
   }
 }
 
-//初始化
-onBeforeMount(()=>{
+function loadClassifyList() {
+  isLoading.value = true;
   axios({
     method:"get",
     url:ip_port + "/classify",
@@ -106,6 +162,8 @@ onBeforeMount(()=>{
     if (data.code == 200){
       classificationList = data.data;
       isLoading.value = false;
+    } else if (data.code == 40010) {
+      isLoading.value = false;
     } else {
       window.alert(data.message);
       isLoading.value = false;
@@ -114,6 +172,11 @@ onBeforeMount(()=>{
   .catch(function (error) {
     console.log(error);
   });
+}
+
+//初始化
+onBeforeMount(()=>{
+  loadClassifyList();
 })
 
 </script>
@@ -125,6 +188,7 @@ onBeforeMount(()=>{
   background-color: #fff1f1;
   padding: 6px;
   min-height: 400px;
+  /* overflow-y: auto; */
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -134,8 +198,14 @@ onBeforeMount(()=>{
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.classify-list-title {
+.classify-list-top {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
   margin-top: 10px;
+}
+
+.classify-list-title {
   font-size: large;
   font-weight: bold;
 }
@@ -172,7 +242,7 @@ onBeforeMount(()=>{
   transition: padding-left 0.3s ease;
 }
 .collapse-item:hover {
-  padding-left: 3px;
+  padding-left: 2px;
 }
 .collapse-item:active {
   padding-left: 1px;
@@ -204,6 +274,22 @@ onBeforeMount(()=>{
   margin-right: 70px;
   margin-left: 10px;
   width: 50px;
+}
+
+.add-section {
+  margin-top: 6px;
+  margin-left: 10px;
+  height: 105px;
+  width: 105px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-section-button {
+  height: 100px;
+  width: 100px;
+  border-style: dashed;
 }
 
 </style>
