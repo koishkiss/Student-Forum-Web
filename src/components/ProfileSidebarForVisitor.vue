@@ -27,7 +27,7 @@
           {{ user.auth.label }}
         </el-tag>
       </el-text>
-      <div class="other-info" v-if="!loading">
+      <div class="other-info" v-if="!isLoading">
         <el-text class="info-item">UID：{{ props.uid }}</el-text>
         <el-divider direction="vertical" />
         <el-text class="info-item">发帖数：{{ other.postNum }}</el-text>
@@ -113,12 +113,6 @@
 });
 
   onBeforeMount(()=>{
-    if (user.uid !== -1) {
-    isLoading.value = false;
-  } else if (Cookies.get('uid') === undefined) {
-    // ElMessageBox.alert("请登录!", "", {confirmButtonText: 'OK'});
-    router.push('/main');
-  } else {
     axios({
       method:"get",
       url: ip_port + "/user/other/info?uid="+props.uid,
@@ -133,7 +127,7 @@
         console.log(data.data);
         other = data.data;
         console.log(other.nickname);
-        loading.value = false;
+        isLoading.value = false;
       } else {
         ElMessageBox.alert(data.message)
       }
@@ -144,7 +138,6 @@
     .finally(()=>{
       isLoading.value = false;
     })
-  }
   })
 </script>
 
