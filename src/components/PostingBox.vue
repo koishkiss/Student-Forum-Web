@@ -44,7 +44,7 @@ export default {
       <el-upload 
         ref="upload"
         class="cover-uploader" 
-        action="http://47.113.194.64:22222/upload/photo" 
+        :action="ip_port+'/upload/photo'" 
         :headers="{
           Authorization: Cookies.get('Authorization'),
           uid: Cookies.get('uid')

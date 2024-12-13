@@ -18,7 +18,6 @@ export default {
         </div>
       </div>
       <div class="right-sidebar-box">
-        <div class="right-bottom-item-box">
           <div class="public-trend-box">
             <div class="search-page-content-box">
               <div class="search-page-title">
@@ -40,14 +39,13 @@ export default {
           <div class="hot-issue-box">
             <SideBar />
           </div>
-        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from 'vue';
+import { watch } from 'vue';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useHttpStore } from '@/store/Http';
@@ -64,36 +62,40 @@ const isLoading = ref(true);
 const route = useRoute();
 const hasData = ref(true);
 
-onBeforeMount(() => {
-  axios({
-    method: "get",
-    url: ip_port + "/post/get" + "?search=" + route.query.searchQuery,
-    headers: {
-      "Authorization": Cookies.get("Authorization"),
-      "uid": Cookies.get("uid")
-    },
-  })
-    .then((response) => {
-      const data = response.data;
-      console.log(data);
-      if (data.code === 200) {
-        searchList = data.data;
-        isLoading.value = false;
-      }
-      else if (data.code === 40010) {
-        isLoading.value = false;
-        hasData.value = false;
-      } else {
-        isLoading.value = false;
-        hasData.value = false;
-        ElMessageBox.alert(data.message, "", { confirmButtonText: 'OK' });
-      }
-    })
-    .catch(function (error) {
-      console.log(error);
-      isLoading.value = false;
-    });
-})
+const fetchSearchResults = () => {  
+  isLoading.value = true;
+  axios({  
+    method: "get",  
+    url: ip_port + "/post/get" + "?search=" + route.query.searchQuery,  
+    headers: {  
+      "Authorization": Cookies.get("Authorization"),  
+      "uid": Cookies.get("uid")  
+    },  
+  })  
+    .then((response) => {  
+      const data = response.data;  
+      if (data.code === 200) {  
+        searchList = data.data;  
+        hasData.value = searchList.length > 0;
+      } else {  
+        hasData.value = false;  
+        ElMessageBox.alert(data.message, "", { confirmButtonText: 'OK' });  
+      }  
+      isLoading.value = false; 
+    })  
+    .catch(function (error) {  
+      console.log(error);  
+      isLoading.value = false; 
+    });  
+};  
+
+watch(() => route.query.searchQuery, () => {  
+  fetchSearchResults();  
+});  
+
+onBeforeMount(() => {  
+  fetchSearchResults();  
+});  
 
 </script>
 
@@ -117,13 +119,17 @@ onBeforeMount(() => {
 
 .section-classification-box {
   position: sticky;
+  margin-top: 10px;
   top: 60px;
-  background-color: aqua;
 }
 
 .right-sidebar-box {
+  display: flex;
+  flex-direction: row;
   min-width: 600px;
   width: 68%;
+  position: sticky;
+  top: 60px;
 }
 
 .right-bottom-item-box {
@@ -136,7 +142,7 @@ onBeforeMount(() => {
   display: flex;
   flex-direction: column;
   min-width: 70%;
-  min-height: 700px;
+  min-height: 800px;
   border-top: none;
   border: solid 1px rgb(201, 201, 201);
   border-radius: 5px;
@@ -147,7 +153,6 @@ onBeforeMount(() => {
 .search-page-content-box {
   display: flex;
   flex-direction: column;
-  height: 40px;
   font-size: 28px;
   font-weight: bold;
   border: thick double rgb(255, 255, 255);
