@@ -100,6 +100,7 @@ export interface SectionInfo {
   memberNum: number,
   createTime: string,
   classify: string,  //分类信息
+  classifyId:number,
   adminList: AdminList,  //管理员信息列表
   hasJoin: boolean,  //个人加入信息
   joinTime: string,  //个人加入时间

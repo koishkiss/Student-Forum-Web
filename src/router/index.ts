@@ -22,6 +22,7 @@ import MessagePage from "@/page/MessagePage.vue";
 import MyReplyPage from "@/page/message/MyReplyPage.vue";
 import MyNoticePage from "@/page/message/MyNoticePage.vue";
 import MyLikePage from "@/page/message/MyLikePage.vue";
+import SectionSettingPage from "@/page/section/SectionSettingPage.vue";
 
 const router = createRouter({
 history:createWebHistory(),
@@ -95,6 +96,10 @@ routes:[
             {
                 path:"post/selected",
                 component:PostSelectedListPage
+            },
+            {
+                path:"setting",
+                component:SectionSettingPage
             }
         ]
     },

@@ -279,7 +279,6 @@ onMounted(()=>{
 .item {
   font-size: 16px;
   min-width: 50px;
-  
 }
 
 .uid {

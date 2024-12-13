@@ -1,6 +1,7 @@
 <script lang="ts">
 import MyIdentityCardInSection from '@/components/MyIdentityCardInSection.vue';
 import AdminIdentityList from '@/components/AdminIdentityList.vue';
+import { useUserInfoStore } from '@/store/UserInfo';
 export default {
   name:'SectionPage',  //组件名
   components:{
@@ -19,10 +20,10 @@ export default {
     <div class="profile" v-if="!isLoading">
       <div class="cover-icon-box">
         <el-image 
-          :src="section.iconURL" 
+          :src="iconURL" 
           fit="cover" 
           class="avatar"
-          :preview-src-list="[section.iconURL]" 
+          :preview-src-list="[iconURL]" 
           :initial-index="0"
         />
       </div>
@@ -35,11 +36,11 @@ export default {
           <el-divider direction="vertical" />
           <el-text class="info-item">帖子：{{ section.postNum }}</el-text>
           <el-divider direction="vertical" />
-          <el-text class="info-item">分区：{{ section.classify }}</el-text>
+          <el-text class="info-item">分区：{{ classify }}</el-text>
           <el-divider direction="vertical" />
           <el-text class="info-item">创建时间：{{ section.createTime }}</el-text>
         </div>
-        <el-text tag="p" class="slogan">简介: {{ section.slogan }}</el-text>
+        <el-text tag="p" class="slogan">简介: {{ slogan }}</el-text>
       </div>
     </div>
 
@@ -61,8 +62,17 @@ export default {
           >
             <span class="hover-underline-animation"> 精选 </span>
           </RouterLink>
+
+          <RouterLink 
+            :to="`/section/${section.sectionId}/setting`" 
+            class="router cta" 
+            active-class="router-choose" 
+            v-if="!isLoading && (user.authority >= 3 || (user.authority >= 2 && hasJoin))"
+          >
+            <span class="hover-underline-animation"> 设置 </span>
+          </RouterLink>
         </nav>
-        <RouterView />
+        <RouterView @update:sectionInfo="changeSectionData" />
       </div>
 
       <div class="right-side">
@@ -102,6 +112,7 @@ import { ElMessageBox } from 'element-plus';
 
 const route = useRoute();
 const router = useRouter();
+const user = useUserInfoStore();
 const { ip_port } = useHttpStore();
 
 let section = reactive<SectionInfo>({
@@ -113,17 +124,31 @@ let section = reactive<SectionInfo>({
   memberNum: -1,
   createTime: "",
   classify: "",  //分类信息
+  classifyId:-1,
   adminList: [],  //管理员列表
   hasJoin: false,  //个人加入信息
   joinTime: "",  //个人加入时间
   identity: 0  //个人身份信息
 });
 
+let iconURL = toRef(section,"iconURL");
+let slogan = toRef(section,"slogan");
+let classify = toRef(section,"classify");
 let hasJoin = toRef(section,"hasJoin");
 let joinTime = toRef(section,"joinTime");
 let identity = toRef(section,"identity");
 
 const isLoading = ref(true);
+
+function changeSectionData(theIconURL, theSlogan, theClassify) {
+  if (theIconURL) {
+    iconURL.value = theIconURL;
+  } else if (theSlogan) {
+    slogan.value = theSlogan;
+  } else if (theClassify) {
+    classify.value = theClassify;
+  }
+}
 
 function joinSection() {
   axios({
@@ -169,10 +194,12 @@ onBeforeMount(()=>{
     const data = response.data;
     if (data.code == 200) {
       section = data.data;
+      iconURL.value = section.iconURL;
+      slogan.value = section.slogan;
+      classify.value = section.classify;
       hasJoin.value = section.hasJoin;
       joinTime.value = section.joinTime;
       identity.value = section.identity;
-      router.push(`/section/${route.params.id}/post/all`)
     } else {
       ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
       router.push('/main');
