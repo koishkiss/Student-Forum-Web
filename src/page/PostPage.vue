@@ -116,6 +116,7 @@ let section = reactive<SectionInfo>({
   memberNum: -1,
   createTime: "",
   classify: "",  //分类信息
+  classifyId:-1,
   adminList: [],  //管理员列表
   hasJoin: false,  //个人加入信息
   joinTime: "",  //个人加入时间
