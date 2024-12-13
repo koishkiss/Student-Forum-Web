@@ -38,7 +38,7 @@ export default {
     <el-divider style="margin-bottom: 10px;"/>
 
     <div class="post-new-post-box">
-        <PostingBox :sectionId="route.params.id"/>
+        <PostingBox :sectionId="route.params.id" @uploadPost="reloadPost"/>
     </div>
 </div>
 </template>
@@ -62,7 +62,12 @@ const hasData = ref(true);
 const maxPagination = ref(1);
 const currentPage = ref(1);
 const pageSize = ref(5);
-const recordsCount = ref(0)
+const recordsCount = ref(0);
+
+function reloadPost() {
+    handleCurrentChange(1);
+    hasData.value = true;
+}
 
 onBeforeMount(() => {
     axios({

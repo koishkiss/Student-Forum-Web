@@ -89,6 +89,8 @@ import { ElMessage, UploadProps, UploadRawFile } from 'element-plus';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
+const emits = defineEmits(["uploadPost"])
+
 const props = defineProps(["sectionId"]);
 const { ip_port } = useHttpStore();
 
@@ -134,6 +136,7 @@ axios({
     imageName.value = '';
     addCover.value = false;
     ElMessage({message:"发布成功",type:"success"});
+    emits("uploadPost");
   } else {
     ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
   }

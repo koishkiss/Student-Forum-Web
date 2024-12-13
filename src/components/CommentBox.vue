@@ -40,6 +40,8 @@ const comment = ref("");
 const props = defineProps(["postId"]);
 const { ip_port } = useHttpStore();
 
+const emits = defineEmits(["uploadComment"])
+
 function uploadComment() {
     axios({
         method:"post",
@@ -58,6 +60,7 @@ function uploadComment() {
         if (data.code == 200) {
             ElMessage({message:"发布成功",type:"success"});
             comment.value = '';
+            emits("uploadComment");
         } else {
             ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
         }

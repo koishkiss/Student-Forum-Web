@@ -46,7 +46,7 @@ export default {
             </div>
 
             <div class="comment-box">
-                <CommentBox :postId="route.query.id"/>
+                <CommentBox :postId="route.query.id" @uploadComment="reloadComment"/>
             </div>
         </div>
 
@@ -127,6 +127,13 @@ const maxPagination = ref(1);
 const currentPage = ref(1);
 const pageSize = ref(10);
 const recordsCount = ref(0);
+
+function reloadComment() {
+    if (!hasData || recordsCount.value + 1 <= pageSize.value) {
+        handleCurrentChange(1);
+        hasData.value = true;
+    }
+}
 
 const handleCurrentChange = (val: number) => {
     if (currentPage.value === 1) {
