@@ -49,7 +49,6 @@ onBeforeMount(()=>{
         const data = response.data;
         if (data.code == 200) {
             postList.value = data.data;
-            console.log(postList);
             isLoading.value = false;
         } else if (data.code === 40010) {
             isLoading.value = false;

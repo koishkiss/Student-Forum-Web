@@ -7,6 +7,9 @@ import PostPage from "@/page/PostPage.vue";
 import SectionPage from "@/page/SectionPage.vue";
 import SearchPage from "@/page/SearchPage.vue";
 
+import PersonalPageForVisitor from "@/page/PersonalPageForVisitor.vue";
+import RecordPageForVisitor from "@/components/RecordPageForVisitor.vue";
+import CollectionPageForVisitor from "@/components/CollectionPageForVisitor.vue";
 import Activities from "../page/personal/ActivityPage.vue"
 import Collections from "../page/personal/CollectionPage.vue"
 import Person from "../page/personal/RecordPage.vue"
@@ -44,6 +47,21 @@ routes:[
         name:"post-detail-page",
         path:"/post",
         component:PostPage
+    },
+    {
+        name:"visit-other-personal-page",
+        path:"/visit/other/person/:uid",
+        component:PersonalPageForVisitor,
+        children:[
+            {
+                path:"post",
+                component:RecordPageForVisitor
+            },
+            {
+                path:"marked",
+                component:CollectionPageForVisitor
+            }
+        ]
     },
     {
         name:"personal-page",

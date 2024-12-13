@@ -20,6 +20,7 @@ export default {
       <div class="avatar-container" 
         @mouseenter="userInfoCardEnter" 
         @mouseleave="userInfoCardDelayLeave"
+        @click="toPersonalPageForVisitor"
       >
         <transition name="user-identity-card-content">
           <div class="identity-card-container" v-if="showUserIdentityCard">
@@ -150,6 +151,16 @@ function userInfoCardDelayLeave() {
 
 function toPostPage() {
   router.push(`/post?id=${props.id}`);
+}
+function toPersonalPageForVisitor(){
+  // router.push({
+  //   name:"visit-other-personal-page",
+  //   params:{
+  //     uid:props.uid,
+  //   }
+  // })
+  if(props.uid != Cookies.get("uid") )
+  router.push(`/visit/other/person/${props.uid}/post`);
 }
 
 //喜欢帖子
