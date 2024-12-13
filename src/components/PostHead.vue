@@ -46,7 +46,7 @@ const props = defineProps(["sectionId","iconURL","name","memberNum","postNum","c
 const router = useRouter();
 
 function toTheSection() {
-  router.push(`/section/${props.sectionId}`);
+  router.push(`/section/${props.sectionId}/post/all`);
 }
 
 </script>
