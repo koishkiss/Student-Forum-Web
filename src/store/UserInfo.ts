@@ -14,7 +14,7 @@ export const useUserInfoStore = defineStore("UserInfo",{
             bookmarkNum:-1,
             postNum:-1,
             joinNum:-1,
-            avatarURL:"http://47.113.194.64:22222/image/default-avatar.png"
+            avatarURL:`http://47.113.194.64:22222/image/default-avatar.png`
         }
     },
     getters: {

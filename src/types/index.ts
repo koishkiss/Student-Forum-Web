@@ -82,7 +82,7 @@ export interface UserInfo {
   avatarURL:string
 }
 
-interface Admin {
+export interface Admin {
   uid:number,
   avatarURL:string,
   nickname:string,
