@@ -93,7 +93,7 @@ import RightArraySVG from './icon/RightArraySVG.vue';
 import LogoutSVG from './icon/LogoutSVG.vue';
 import NoneIcon from './icon/NoneIcon.vue';
 
-const {ip_port} = useHttpStore();
+const {ip_port, static_ip_port} = useHttpStore();
 const user = useUserInfoStore();
 const router = useRouter();
 const route = useRoute();
@@ -140,7 +140,7 @@ function doLogout() {
     bookmarkNum:-1,
     postNum:-1,
     joinNum:-1,
-    avatarURL:"http://47.113.194.64:22222/image/default-avatar.png"
+    avatarURL:`${static_ip_port}/image/default-avatar.png`
   })
 
   if (route.path === "/main") {

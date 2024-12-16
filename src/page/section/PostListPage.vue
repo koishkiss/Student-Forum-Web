@@ -19,7 +19,7 @@ export default {
     <div class="post-preview-list-box" v-if="hasData">
         <ul class="post-preview-list">
             <li v-for="post in sectionPostList" :key="post.id" class="post-preview-item">
-                <PostPreview v-bind=post />
+                <PostPreview v-bind="post" :adminList="adminList"/>
             </li>
         </ul>
     </div>
@@ -51,6 +51,8 @@ import { useHttpStore } from '@/store/Http';
 import { ElMessageBox } from 'element-plus';
 import { useRoute } from 'vue-router';
 import Cookies from 'js-cookie';
+
+defineProps(["adminList"])
 
 const { ip_port } = useHttpStore();
 const route = useRoute();

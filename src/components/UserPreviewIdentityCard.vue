@@ -1,5 +1,6 @@
 <script lang="ts">
 import { Loading } from '@element-plus/icons-vue';
+import { useUserInfoStore } from '@/store/UserInfo';
 export default {
   name:'UserPreviewInfoCard',  //组件名
   components:{
@@ -41,6 +42,15 @@ export default {
       <div class="signature-box">
         <el-text class="signature" tag="p">{{ theUser.signature }}</el-text>
       </div>
+
+      <div class="set-admin-box" v-if="user.authority >= 3 && adminLevel != 0">
+        <el-button class="set-auth-button" v-if="adminLevel==2" @click="beNotAdmin" plain type="danger">
+          取消版块管理权限
+        </el-button>
+        <el-button class="set-auth-button" v-else-if="adminLevel==1" @click="beAdmin" plain type="success">
+          设为版块管理权限
+        </el-button>
+      </div>
     </div>
   </div>
 </div>
@@ -52,11 +62,14 @@ import { useHttpStore } from '@/store/Http';
 import { UserInfo } from '@/types';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { ElMessage } from 'element-plus';
 import { computed, onBeforeMount, reactive, ref } from 'vue';
 
-const props = defineProps(["theUid"]);
+const props = defineProps(["theUid","adminLevel","sectionId"]);
+const emits = defineEmits(["update:adminLevel"]);
 
-const { ip_port } = useHttpStore();
+const { ip_port,static_ip_port } = useHttpStore();
+const user = useUserInfoStore();
 
 let theUser = reactive<UserInfo>({
   uid:-1,
@@ -69,7 +82,7 @@ let theUser = reactive<UserInfo>({
   bookmarkNum:-1,
   postNum:-1,
   joinNum:-1,
-  avatarURL:"http://47.113.194.64:22222/image/default-avatar.png"
+  avatarURL:`${static_ip_port}/image/default-avatar.png`
 });
 
 let auth = computed(()=>{
@@ -86,6 +99,55 @@ let auth = computed(()=>{
 
 const isLoading = ref(true);
 const hasUser = ref(true);
+
+function beAdmin() {
+  axios({
+    method:"post",
+    url:`${ip_port}/section/member/addAdmin`,
+    headers:{"Authorization":Cookies.get("Authorization"),"uid":Cookies.get("uid")},
+    data:axios.toFormData({
+      sectionId:props.sectionId,
+      uid:theUser.uid
+    })
+  })
+  .then(function (response) {
+    const data = response.data;
+    if (data.code === 200) {
+      emits("update:adminLevel",2)
+      ElMessage.success("设置成功!");
+    } else {
+      ElMessage.error(data.message);
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
+function beNotAdmin() {
+  axios({
+    method:"post",
+    url:`${ip_port}/section/member/deleteAdmin`,
+    headers:{"Authorization":Cookies.get("Authorization"),"uid":Cookies.get("uid")},
+    data:axios.toFormData({
+      sectionId:props.sectionId,
+      uid:theUser.uid
+    })
+  })
+  .then(function (response) {
+    const data = response.data;
+    if (data.code === 200) {
+      emits("update:adminLevel",1)
+      ElMessage.success("取消成功!");
+    } else {
+      ElMessage.error(data.message);
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
 
 onBeforeMount(()=>{
   axios({
@@ -191,5 +253,15 @@ onBeforeMount(()=>{
   margin-left: 0;
   width: 175px;
   font-size: 12px;
+}
+
+.set-admin-box {
+  margin-top: 10px;
+}
+
+.set-auth-button {
+  font-size: 12px;
+  width: 105px;
+  height: 25px;
 }
 </style>

@@ -14,7 +14,7 @@ export default {
 </script>
 
 <template>
-<el-card class="post-preview-box" shadow="hover">
+<el-card class="post-preview-box" shadow="hover" v-if="ok">
   <div class="preview-head-box">
     <div class="author-box">
       <div class="avatar-container" 
@@ -24,7 +24,11 @@ export default {
       >
         <transition name="user-identity-card-content">
           <div class="identity-card-container" v-if="showUserIdentityCard">
-            <UserPreviewIdentityCard :theUid="uid"/>
+            <UserPreviewIdentityCard 
+              :theUid="uid" 
+              v-model:adminLevel="adminLevel" 
+              :sectionId="sectionId"
+            />
           </div>
         </transition>
         <el-avatar :src="avatarURL" fit="cover" class="author-avatar"/>
@@ -113,7 +117,7 @@ export default {
 import { useUserInfoStore } from "@/store/UserInfo";
 import { useHttpStore } from "@/store/Http";
 import Cookies from "js-cookie";
-import { onBeforeMount, ref } from "vue";
+import { onMounted, ref } from "vue";
 import axios from "axios";
 import { ElMessage,ElMessageBox } from "element-plus";
 import { useRouter } from "vue-router";
@@ -134,19 +138,22 @@ let props = defineProps([
   "uid",
   "nickname",
   "avatarURL",
-  "status"
+  "status",
+  "adminList"
 ])
 
 const { ip_port } = useHttpStore();
 const router = useRouter();
 const user = useUserInfoStore();
 
+const ok = ref(false);
 const showUserIdentityCard = ref(false);
 const isLoved = ref(false);
 const isMarked = ref(false);
 const like_num = ref(props.likeNum);
 const mark_num = ref(props.bookmarkNum);
 const isSelected = ref(false);
+const adminLevel = ref(0);
 
 var timeId;
 function userInfoCardEnter() {
@@ -336,7 +343,7 @@ function unselectPost() {
 }
 
 //初始化
-onBeforeMount(()=>{
+onMounted(()=>{
   if (props.like_time !== undefined) {
     isLoved.value = true;
   }
@@ -346,6 +353,23 @@ onBeforeMount(()=>{
   if (props.status === 1) {
     isSelected.value = true;
   }
+  
+  if (props.adminList !== undefined) {
+    if (props.adminList.length === 0) {
+      adminLevel.value = 1;
+    } else if (props.adminList[0].uid === props.uid) {
+      adminLevel.value = 3;
+    } else {
+      adminLevel.value = 1;
+      for (var i = 1; i < props.adminList.length; i++) {
+        if (props.adminList[i].uid == props.uid) {
+          adminLevel.value = 2;
+          break;
+        }
+      }
+    }
+  }
+  ok.value = true;
 })
 
 </script>

@@ -6,7 +6,7 @@
 
 <template>
 <div class="login-page-box">
-  <el-image fit="fill" class="image" src="http://47.113.194.64:22222/image/static/background3.jpg"/>
+  <el-image fit="fill" class="image" :src="imagrURL"/>
 
   <div class="shell">
     <div class="box wave"></div>
@@ -75,13 +75,14 @@ import axios from 'axios';
 import { ref } from 'vue';
 import Cookies from 'js-cookie';
 
-const {ip_port} = useHttpStore();
+const {ip_port, static_ip_port} = useHttpStore();
 const user = useUserInfoStore();
 const router = useRouter();
 
 const sid = ref('')
 const pwd = ref('')
 const loading = ref(false);
+const imagrURL = `${static_ip_port}/image/static/background3.jpg`
 
 function loginWithPrimary() {
   doLogin("202000300514","123456");

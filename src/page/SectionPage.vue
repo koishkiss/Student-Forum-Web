@@ -72,7 +72,7 @@ export default {
             <span class="hover-underline-animation"> 设置 </span>
           </RouterLink>
         </nav>
-        <RouterView @update:sectionInfo="changeSectionData" />
+        <RouterView @update:sectionInfo="changeSectionData" :adminList="section.adminList" />
       </div>
 
       <div class="right-side">
