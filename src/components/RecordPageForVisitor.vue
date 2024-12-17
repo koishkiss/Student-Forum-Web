@@ -10,13 +10,13 @@ import PostSimplePreview from './PostSimplePreview.vue';
 
 <template>
   <div class="my-own-post-page-box">
-    <el-text  class="page-title" tag="p" >他发过的帖子</el-text>
+    <el-text  class="page-title" tag="p" >ta的动态</el-text>
     <div v-if="loading" class="loading">
         加载中...
     </div>
 
     <div v-if="!hasData" class="no-data">
-        <el-empty :image-size="100" description="还没有发表过帖子呢"/>
+        <el-empty :image-size="100" description="这个人还什么都没有说哦"/>
     </div>
 
     <ul v-if="!loading && hasData">
@@ -34,7 +34,7 @@ import PostSimplePreview from './PostSimplePreview.vue';
 
 <script lang="ts" setup>
 
-import { ref, onMounted, reactive } from 'vue';
+import { ref, reactive } from 'vue';
 import { PostPreviewItemList } from '@/types';
 import axios from 'axios';
 import Cookies from 'js-cookie';

@@ -68,7 +68,7 @@ export default {
 </div>
 
 <div class="no-data-box" v-if="isEmpty">
-  <el-empty :image-size="100" description="你还没有点过赞哦"/>
+  <el-empty :image-size="100" description="你还没有收到过回复哦"/>
 </div>
 
 </div>

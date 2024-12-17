@@ -10,13 +10,13 @@ export default {
 
 <template>
     <div class="collections">
-        <el-text  class="page-title" tag="p" >我的收藏</el-text>
+        <el-text  class="page-title" tag="p" >ta的收藏</el-text>
         <div v-if="loading" class="loading">
             加载中...
         </div>
     
         <div v-if="!hasData" class="no-data">
-            <el-empty :image-size="100" description="你还没有收藏过帖子哦"/>
+            <el-empty :image-size="100" description="这个人还什么都没有收藏哦"/>
         </div>
     
         <ul v-if="!loading && hasData">

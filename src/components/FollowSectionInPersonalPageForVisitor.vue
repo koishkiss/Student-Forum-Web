@@ -7,10 +7,10 @@ export default {
 
 <template>
   <div class="no-data-box" v-if="!hasData">
-    <el-empty :image-size="100" description="你还没有加入过论坛呢"/>
+    <el-empty :image-size="100" description="这个人还没有加入过论坛呢"/>
   </div>
   <div class="title-for-section-part">
-    <el-text>他关注的论坛</el-text>
+    <el-text>ta关注的论坛</el-text>
   </div>
   <div class="follow-list" v-if="!isLoading&&hasData">
     <div v-for="identity in sectionList" :key="identity.sectionId" class="follow-item">

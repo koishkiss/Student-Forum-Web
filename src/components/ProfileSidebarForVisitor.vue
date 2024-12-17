@@ -47,7 +47,7 @@
         </RouterLink> -->
 
         <RouterLink :to="`/visit/other/person/${props.uid}/post`" class="router cta" active-class="router-choose">
-          <span class="hover-underline-animation"> 个人 </span>
+          <span class="hover-underline-animation"> 发帖 </span>
         </RouterLink>
 
         <RouterLink :to="`/visit/other/person/${props.uid}/marked`" class="router cta" active-class="router-choose">
