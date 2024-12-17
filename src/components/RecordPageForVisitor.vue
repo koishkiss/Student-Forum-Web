@@ -58,7 +58,9 @@ axios({
       const data = response.data;
       if (data.code == 200) {
         posts = data.data;
-        console.log(posts);
+        hasData.value = true;
+      } else if (data.code == 40010) {
+        hasData.value = false;
       } else {
         ElMessageBox.alert(data.message)
       }
@@ -69,8 +71,6 @@ axios({
     })
     .finally(()=>{
       loading.value = false;
-      console.log(hasData.value)
-      console.log(loading.value)
     })
 </script>
 
