@@ -1,9 +1,10 @@
 <script lang="ts">
+import { Delete, Edit } from '@element-plus/icons-vue';
 import AdminIdentityList from '@/components/AdminIdentityList.vue';
 export default {
   name:"SectionSettingPage",
   components:{
-    AdminIdentityList
+    AdminIdentityList, Delete, Edit
   }
 }
 </script>
@@ -78,39 +79,66 @@ export default {
     <input type="file" accept=".jpg,.png,.bmp,.jpeg" @change="upload" ref="inputAvatar" hidden>
   </div>
 
-    <div class="section-info-setting-box"  v-if="!isLoadingSection && !isLoadingClassifyList">
-    <el-text tag="p" class="section-info-setting-title">
-      管理员信息设置
-    </el-text>
-    <div class="admin-identity-list-content">
-    <div v-for="(admin,index) in section.adminList" :key="index" class="admin-identity-item"> 
-      <div class="item-box">
-        <div class="avatar-container" 
-          @mouseenter="userInfoCardEnter(index)" 
-          @mouseleave="userInfoCardDelayLeave(index)"
-        >
-          <transition name="user-identity-card-content">
-            <div class="identity-card-container" v-if="showUserIdentityCard[index]">
-              <UserPreviewIdentityCard :theUid="admin.uid"/>
-            </div>
-          </transition>
-          <el-avatar 
-            :src="admin.avatarURL" 
-            shape="square" 
-            :size="90"
-            fit="cover" 
-            class="admin-avatar"
-          />
-        </div>
+  <div class="section-info-setting-box"  v-if="!isLoadingSection && !isLoadingClassifyList">
+    <div class="management">
+      <el-text tag="p" class="section-info-setting-title">
+        管理员信息设置
+      </el-text>
 
-        <el-text class="admin-name">
-          {{ admin.nickname }}
-          <el-tag :type="admin.identity===1?'success':'warning'" class="identity">
-            {{ admin.identity===1?'管理':'版主' }}
-          </el-tag>
-        </el-text>
+      <el-button 
+        :type="showCancelButton ? 'danger' : 'primary'" 
+        v-if="hasPerson" 
+        :icon="Edit" 
+        plain 
+        style="margin-left: 8px; height: 30px; width: 30px;"
+        @click="showCancelButton = !showCancelButton"
+      >
+      </el-button>
+    </div>
+
+    <div class="admin-identity-list-content" v-if="hasPerson">
+      <div v-for="(admin,index) in section.adminList" :key="index" class="admin-identity-item"> 
+        <el-popconfirm 
+          v-if="index !==0"
+          title="你确定要撤销该管理员吗？" 
+          @confirm="deleteAdmin(admin.uid)"
+        >
+          <template #reference>
+            <div class="exit-section-box">
+              <Transition name="exit-section-show">
+                <el-button  
+                  class='exit-section' 
+                  v-if="showCancelButton" 
+                  type="danger" 
+                  :icon="Delete" 
+                />
+              </Transition>
+            </div>
+          </template>
+        </el-popconfirm>
+
+        <div class="item-box">
+          <div class="avatar-container">
+            <el-avatar 
+              :src="admin.avatarURL" 
+              shape="square" 
+              :size="90"
+              fit="cover" 
+              class="admin-avatar"
+            />
+          </div>
+
+          <el-text class="admin-name">
+            {{ admin.nickname }}
+            <el-tag :type="admin.identity===1?'success':'warning'" class="identity">
+              {{ admin.identity===1?'管理':'版主' }}
+            </el-tag>
+          </el-text>
+        </div>
       </div>
     </div>
+    <div v-else>
+      <el-empty image-size="90" description="这个板块还没有管理员!"/>
     </div>
   </div>
 </div>
@@ -130,9 +158,6 @@ const emits = defineEmits(["update:sectionInfo"])
 
 const { ip_port } = useHttpStore();
 const route = useRoute();
-const hasPerson = computed(()=>{
-  return section.adminList.length === 0 ? false : true;
-})
 
 let section = reactive<SectionInfo>({
   sectionId: -1,
@@ -151,8 +176,6 @@ let section = reactive<SectionInfo>({
 });
 
 let classificationList = reactive([]);
-const showUserIdentityCard = reactive<Array<boolean>>([]);
-var timeId: any[] = [];
 
 const isLoadingSection = ref(true);
 const isLoadingClassifyList = ref(true);
@@ -164,6 +187,34 @@ const selectClassify = ref();
 const sloganHasChanged = computed(()=>{
   return slogan.value !== section.slogan;
 })
+const hasPerson = computed(()=>{
+  return section.adminList.length === 0 ? false : true;
+})
+const showCancelButton = ref(false);
+
+function deleteAdmin(uid: number) {
+  axios({
+    method:"post",
+    url:`${ip_port}/section/member/deleteAdmin`,
+    headers:{"Authorization":Cookies.get("Authorization"),"uid":Cookies.get("uid")},
+    data:axios.toFormData({
+      sectionId:section.sectionId,
+      uid:uid
+    })
+  })
+  .then(function (response) {
+    const data = response.data;
+    if (data.code === 200) {
+      ElMessage.success("删除成功!");
+      location.reload();
+    } else {
+      ElMessage.error(data.message);
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
 
 function updateIcon() {
   inputAvatar.value.click();
@@ -295,20 +346,6 @@ onBeforeMount(()=>{
   loadClassifyList();
   loadSection();
 })
-
-function userInfoCardEnter(id: number) {
-  if (timeId[id] !== undefined) {
-    clearTimeout(timeId[id]);
-  } else {
-    showUserIdentityCard[id] = true;
-  }
-}
-function userInfoCardDelayLeave(id: number) {
-  timeId[id] = setTimeout(()=>{
-    showUserIdentityCard[id] = false;
-    timeId[id] = undefined;
-  },100)
-}
   
 </script>
   
@@ -335,6 +372,12 @@ function userInfoCardDelayLeave(id: number) {
   background-color: #f6f9f9;
   /* display: flex;
   flex-direction: column; */
+}
+
+.management {
+  display: flex;
+  flex-direction: row;
+  align-content: baseline;
 }
 
 .section-info-setting-title {
@@ -389,11 +432,26 @@ function userInfoCardDelayLeave(id: number) {
 }
 
 .admin-identity-list-content {
-  margin-top: 10px;
+  margin: 20px 10px;
   gap: 20px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
+
+.exit-section-box {
+  margin-top: 1px;
+  margin-left: 88px;
+  position: absolute;
+  display: flex;
+  z-index: 1;
+}
+
+.exit-section {
+  padding: 0;
+  width: 25px;
+  height: 25px;
+  font-size: 12px;
 }
 
 .item-box {
@@ -449,6 +507,18 @@ function userInfoCardDelayLeave(id: number) {
 .user-identity-card-content-enter-from,
 .user-identity-card-content-leave-to {
   transform: translateX(10px);
+  opacity: 0;
+}
+
+/* 删除按钮动画 */
+.exit-section-show-enter-active  {
+  transition: opacity 0.1s ease-out, transform 0.1s ease-out;
+}
+.exit-section-show-leave-active {
+  transition: opacity 0.1s ease-out, transform 0.1s ease-out;
+}
+.exit-section-show-enter-from,
+.exit-section-show-leave-to {
   opacity: 0;
 }
 

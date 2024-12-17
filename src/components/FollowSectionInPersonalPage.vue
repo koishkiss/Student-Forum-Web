@@ -1,9 +1,9 @@
 <script lang="ts">
-import { Delete } from '@element-plus/icons-vue';
+import { Delete, Edit } from '@element-plus/icons-vue';
 export default {
   name:"FollowSectionInPersonalPage",
   components:{
-    Delete
+    Delete, Edit
   }
 }
 </script>
@@ -55,7 +55,6 @@ import { ref, onBeforeMount, reactive } from 'vue';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { useHttpStore } from '@/store/Http';
-import { Edit } from "@element-plus/icons-vue";
 import SectionIdentity from './SectionIdentity.vue';
 import { SectionIdentityList } from '@/types';
 import { ElMessage } from 'element-plus';
