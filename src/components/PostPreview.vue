@@ -182,6 +182,7 @@ function toPersonalPageForVisitor(){
   // })
   if(props.uid != Cookies.get("uid") )
   router.push(`/visit/other/person/${props.uid}/post`);
+  else if(props.uid == Cookies.get("uid")) router.push('personal/activity');
 }
 
 //喜欢帖子

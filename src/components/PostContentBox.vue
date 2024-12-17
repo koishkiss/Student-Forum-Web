@@ -20,6 +20,7 @@ export default {
     <div class="avatar-container" 
       @mouseenter="userInfoCardEnter" 
       @mouseleave="userInfoCardDelayLeave"
+      @click="toPersonalPageForVisitor"
     >
       <transition name="user-identity-card-content">
         <div class="identity-card-container" v-if="showUserIdentityCard">
@@ -107,6 +108,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { useHttpStore } from "@/store/Http";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { useRouter } from "vue-router";
 
 const props = defineProps([
   "postId",
@@ -129,7 +131,7 @@ const props = defineProps([
 ]);
 
 const { ip_port } = useHttpStore();
-
+const router = useRouter();
 const loved = ref(props.isLiked);
 const like_num = ref(props.likeNum);
 const marked = ref(props.isMarked);
@@ -150,7 +152,10 @@ function userInfoCardDelayLeave() {
     timeId = undefined;
   },100)
 }
-
+function toPersonalPageForVisitor(){
+  if(props.uid == Cookies.get("uid")) router.push('personal/activity');
+  else router.push(`/visit/other/person/${props.uid}/post`);
+}
 //喜欢帖子
 function like() {
   axios({

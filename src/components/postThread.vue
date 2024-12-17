@@ -18,6 +18,7 @@ export default {
     <div class="avatar-container" 
       @mouseenter="userInfoCardEnter" 
       @mouseleave="userInfoCardDelayLeave"
+      @click="toPersonalPageForVisitor"
     >
       <transition name="user-identity-card-content">
         <div class="identity-card-container" v-if="showUserIdentityCard">
@@ -86,9 +87,10 @@ import { useHttpStore } from "@/store/Http";
 import { ElMessage, ElMessageBox } from "element-plus";
 import Cookies from "js-cookie";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 const { ip_port } = useHttpStore();
-
+const router = useRouter();
 const extend = ref(false);
 
 const props = defineProps([
@@ -111,6 +113,10 @@ const isLoved = ref(props.likeTime !== undefined)
 
 const showUserIdentityCard = ref(false);
 var timeId;
+function toPersonalPageForVisitor(){
+  if(props.uid == Cookies.get("uid")) router.push('personal/activity');
+  else router.push(`/visit/other/person/${props.uid}/post`);
+}
 function userInfoCardEnter() {
   if (timeId !== undefined) {
     clearTimeout(timeId);
