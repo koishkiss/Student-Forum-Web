@@ -103,7 +103,7 @@ export default {
           <el-dropdown-menu>
             <el-dropdown-item @click="unselectPost" v-if="isSelected">取消精华</el-dropdown-item>
             <el-dropdown-item @click="selectePost" v-else>设为精华</el-dropdown-item>
-            <el-dropdown-item @click="deletePost">删除</el-dropdown-item>
+            <!-- <el-dropdown-item @click="deletePost">删除</el-dropdown-item> -->
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -182,7 +182,7 @@ function toPersonalPageForVisitor(){
   // })
   if(props.uid != Cookies.get("uid") )
   router.push(`/visit/other/person/${props.uid}/post`);
-  else if(props.uid == Cookies.get("uid")) router.push('personal/activity');
+  else if(props.uid == Cookies.get("uid")) router.push('/personal/activity');
 }
 
 //喜欢帖子

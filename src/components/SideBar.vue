@@ -15,7 +15,14 @@
             
             <ul>
                 <li v-for="post in postList" :key="post.id">
-                    <p @click="watchPosting(post.id)">{{post.title}}</p>
+                    <el-tooltip
+                        class="box-item"
+                        effect="dark"
+                        content="点击查看该帖子"
+                        placement="right"
+                    >
+                        <p @click="watchPosting(post.id)">{{post.title}}</p>
+                    </el-tooltip>
                 </li>
             </ul>
         </div>

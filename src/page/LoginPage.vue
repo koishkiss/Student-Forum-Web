@@ -50,17 +50,45 @@
       />
     </span>
     <div class="submit-box">
-      <el-button type="primary" :loading="loading" @click="doNormalLogin">登入</el-button>
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="使用用户名密码进行普通登入"
+        placement="top"
+      >
+        <el-button type="primary" :loading="loading" @click="doNormalLogin">登入</el-button>
+      </el-tooltip>
     </div>
     <el-text class="quick-login-text">快捷登入</el-text>
     <div class="quick-login-box">
-      <el-button disabled title="没有登入就是游客状态">游客</el-button>
-      <el-button type="primary" plain title="可以看帖、发帖、修改个人信息等" @click="loginWithPrimary">
-        普通成员
-      </el-button>
-      <el-button type="warning" plain title="最高权限" @click="loginWithModerator">
-        版主
-      </el-button>
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="没有登入就是游客状态"
+        placement="bottom"
+      >
+        <el-button disabled>游客</el-button>
+      </el-tooltip>
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="可以看帖、发帖、修改个人信息等"
+        placement="bottom"
+      >
+        <el-button type="primary" plain @click="loginWithPrimary">
+          普通成员
+        </el-button>
+      </el-tooltip>
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="最高权限"
+        placement="bottom"
+      >
+        <el-button type="warning" plain @click="loginWithModerator">
+          版主
+        </el-button>
+      </el-tooltip>
     </div>
   </div>
 </div>

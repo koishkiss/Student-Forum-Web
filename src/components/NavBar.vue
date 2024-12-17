@@ -10,14 +10,41 @@
     <div class="mainpage-return">
       <SduIcon/>
 
-      <el-button :icon="House" type="success" plain text class="mainpage-button" @click="toMainPage">
-        首页
-      </el-button>
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="返回首页"
+        placement="right"
+      >
+        <el-button 
+          :icon="House" 
+          type="success" 
+          plain 
+          text 
+          class="mainpage-button" 
+          @click="toMainPage"
+        >
+          首页
+        </el-button>
+      </el-tooltip>
     </div>
 
     <div class="search-container">
-      <el-input v-model="searchQuery" class="search-input" placeholder="搜索..." :prefix-icon="Search"/>
-      <el-button :icon="Search" class="search-button" @click="toSearchPage"/>
+      <el-input 
+        v-model="searchQuery" 
+        class="search-input" 
+        placeholder="搜索..." 
+        :prefix-icon="Search"
+        @keypress.enter="toSearchPage"
+      />
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="搜索帖子"
+        placement="right"
+      >
+        <el-button :icon="Search" class="search-button" @click="toSearchPage"/>
+      </el-tooltip>
     </div>
 
     <div class="item-container">
@@ -65,7 +92,7 @@ import { useUserInfoStore } from '@/store/UserInfo';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useHttpStore } from '@/store/Http';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 const router = useRouter();
 const { ip_port } = useHttpStore();
@@ -127,6 +154,7 @@ function personalInfoCardDelayLeave() {
 //去首页
 function toMainPage() {
   router.push("/main")
+  searchQuery.value = '';
 }
 
 //去个人主页动态页面
@@ -136,10 +164,12 @@ function toPersonalPage() {
   } else {
     router.push("/login")
   }
+  searchQuery.value = '';
 }
 function toPersonalActivePage() {
   if (user.uid !== -1) {
     router.push("/personal/activity");
+    searchQuery.value = '';
   } else {
     ElMessage.error("请登入!");
   }
@@ -148,6 +178,7 @@ function toPersonalActivePage() {
 function toViewHistoryPage(){
   if (user.uid !== -1) {
     router.push("/personal/post/viewed")
+    searchQuery.value = '';
   } else {
     ElMessage.error("请登入!");
   }
@@ -156,6 +187,7 @@ function toViewHistoryPage(){
 function toPersonalMarkPage() {
   if (user.uid !== -1) {
     router.push("/personal/mark")
+    searchQuery.value = '';
   } else {
     ElMessage.error("请登入!");
   }
@@ -165,6 +197,7 @@ function toPersonalMarkPage() {
 function toPersonalPostPage() {
   if (user.uid !== -1) {
     router.push("/personal/post/mine")
+    searchQuery.value = '';
   } else {
     ElMessage.error("请登入!");
   }
@@ -174,6 +207,7 @@ function toPersonalPostPage() {
 function toMessageLikePage() {
   if (user.uid !== -1) {
     router.push("/message/like")
+    searchQuery.value = '';
   } else {
     ElMessage.error("请登入!");
   }
@@ -183,6 +217,7 @@ function toMessageLikePage() {
 function toMessageReplyPage() {
   if (user.uid !== -1) {
     router.push("/message/reply")
+    searchQuery.value = '';
   } else {
     ElMessage.error("请登入!");
   }
@@ -192,6 +227,7 @@ function toMessageReplyPage() {
 function toMessageNoticePage() {
   if (user.uid !== -1) {
     router.push("/message/notice")
+    searchQuery.value = '';
   } else {
     ElMessage.error("请登入!");
   }
@@ -199,6 +235,27 @@ function toMessageNoticePage() {
 
 function toSearchPage() {
   router.push("/search?searchQuery=" + searchQuery.value)
+}
+
+function alertPop() {
+  ElMessageBox.confirm(
+    '您可以在未登录状态下浏览该系统，也可以登入后使用论坛功能！',
+    '欢迎来到sdu学生论坛系统！',
+    {
+      confirmButtonText: '跳转到登入页面',
+      cancelButtonText: '先在游客状态下浏览',
+      type: 'info',
+    }
+  )
+  .then(() => {
+    router.push("/login")
+  })
+  .catch(() => {
+    ElMessage({
+      type:'info',
+      message:'后续可以点击上边栏头像部分进行登入哦'
+    })
+  })
 }
 
 //初始化
@@ -223,6 +280,8 @@ onBeforeMount(()=>{
     .catch(function (error) {
       console.log(error);
     });
+  } else if (user.uid === -1 && Cookies.get('Authorization') === undefined) {
+    alertPop();
   }
 })
 

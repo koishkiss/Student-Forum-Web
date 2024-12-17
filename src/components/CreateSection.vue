@@ -19,26 +19,32 @@ export default {
   <div class="input-box">
     <div style="display: flex; flex-direction: row;">
       <div class="cover-and-input-box">
-        <el-upload 
-          ref="upload"
-          class="cover-uploader" 
-          :action="ip_port+'/upload/photo'" 
-          :headers="{
-            Authorization: Cookies.get('Authorization'),
-            uid: Cookies.get('uid')
-          }" 
-          title="上传版块头像"
-          name="photo" 
-          :show-file-list="false"
-          :limit="1"
-          :multiple="false"
-          :on-exceed="handleExceed"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeCoverUpload"
+        <el-tooltip
+          class="box-item"
+          effect="dark"
+          content="上传版块头像"
+          placement="left"
         >
-          <img v-if="imageUrl" :src="imageUrl" class="cover" fit="cover" />
-          <el-icon v-else class="cover-uploader-icon"><Plus /></el-icon>
-        </el-upload>
+          <el-upload 
+            ref="upload"
+            class="cover-uploader" 
+            :action="ip_port+'/upload/photo'" 
+            :headers="{
+              Authorization: Cookies.get('Authorization'),
+              uid: Cookies.get('uid')
+            }" 
+            name="photo" 
+            :show-file-list="false"
+            :limit="1"
+            :multiple="false"
+            :on-exceed="handleExceed"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeCoverUpload"
+          >
+            <img v-if="imageUrl" :src="imageUrl" class="cover" fit="cover" />
+            <el-icon v-else class="cover-uploader-icon"><Plus /></el-icon>
+          </el-upload>
+        </el-tooltip>
       </div>
 
       <div style="flex: 1; display: flex; align-items: center; justify-content: center;">

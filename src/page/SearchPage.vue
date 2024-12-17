@@ -59,7 +59,7 @@ import { useHttpStore } from '@/store/Http';
 import { reactive, ref } from 'vue';
 import { PostPreviewItemList } from '@/types';
 import { onBeforeMount } from 'vue';
-import { ElMessageBox } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import { useRoute } from 'vue-router';
 
 let searchList = reactive<PostPreviewItemList>([])
@@ -86,7 +86,8 @@ const fetchSearchResults = () => {
     } else if (data.code === 40010) {
       hasData.value = false;
     } else {   
-      ElMessageBox.alert(data.message, "", { confirmButtonText: 'OK' });  
+      hasData.value = false;
+      ElMessage.error(data.message);  
     }  
     isLoading.value = false; 
   })  
@@ -152,6 +153,7 @@ onBeforeMount(() => {
   border-top: none;
   border: solid 1px rgb(201, 201, 201);
   border-radius: 5px;
+  background-color: #fff;
 }
 
 .search-page-content-box {

@@ -19,9 +19,16 @@ export default {
 
     <el-popover placement="right" trigger="click" width="200" v-if="user.authority >= 3">
       <template #reference>
-        <el-button type="info" link class="add-new-classify-button" title="添加新分区">
-          <el-icon :size="25"><CirclePlus/></el-icon>
-        </el-button>
+        <el-tooltip
+          class="box-item"
+          effect="dark"
+          content="添加新分区"
+          placement="right"
+        >
+          <el-button type="info" link class="add-new-classify-button">
+            <el-icon :size="25"><CirclePlus/></el-icon>
+          </el-button>
+        </el-tooltip>
       </template>
       <div style="display: flex;flex-direction: column; align-items: center;">
         <el-input v-model="newClassifyName" placeholder="请输入分区标题"></el-input>
@@ -62,12 +69,19 @@ export default {
                 <SectionIdentity :sectionId="section.sectionId" :iconURL="section.iconURL" :name="section.name"/>
               </div>
 
-              <div class="add-section" v-if="user.authority >= 2" title="添加新版块">
-                <el-button class="add-section-button" @click="addNewSectionInClassify(index)">
-                  <el-icon :size="30" style="color: #b2b2b2;" v-if="!addNewSection[index]"><Plus/></el-icon>
-                  <el-icon :size="30" style="color: #b2b2b2;" v-if="addNewSection[index]"><Minus/></el-icon>
-                </el-button>
-              </div>
+              <el-tooltip
+                class="box-item"
+                effect="dark"
+                content="在该分区下添加新版块"
+                placement="bottom"
+              >
+                <div class="add-section" v-if="user.authority >= 2">
+                  <el-button class="add-section-button" @click="addNewSectionInClassify(index)">
+                    <el-icon :size="30" style="color: #b2b2b2;" v-if="!addNewSection[index]"><Plus/></el-icon>
+                    <el-icon :size="30" style="color: #b2b2b2;" v-if="addNewSection[index]"><Minus/></el-icon>
+                  </el-button>
+                </div>
+              </el-tooltip>
             </template>
           </div>
 

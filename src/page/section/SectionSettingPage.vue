@@ -85,15 +85,22 @@ export default {
         管理员信息设置
       </el-text>
 
-      <el-button 
-        :type="showCancelButton ? 'danger' : 'primary'" 
-        v-if="hasPerson" 
-        :icon="Edit" 
-        plain 
-        style="margin-left: 8px; height: 30px; width: 30px;"
-        @click="showCancelButton = !showCancelButton"
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="管理"
+        placement="right"
       >
-      </el-button>
+        <el-button 
+          :type="showCancelButton ? 'danger' : 'primary'" 
+          v-if="hasPerson" 
+          :icon="Edit" 
+          plain 
+          style="margin-left: 8px; height: 30px; width: 30px;"
+          @click="showCancelButton = !showCancelButton"
+        >
+        </el-button>
+      </el-tooltip>
     </div>
 
     <div class="admin-identity-list-content" v-if="hasPerson">
