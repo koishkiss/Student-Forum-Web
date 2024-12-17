@@ -2,7 +2,7 @@
   <div style="height: 95%; width: 99%; position: absolute;">
     <!-- 背景图 -->
     <!-- <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;">
-      <img :src="ip_port + '/image/static/background002.jpg'" style="width: 100%; height: 100%; object-fit: cover;" alt="背景图">
+      <img :src="static_ip_port + '/image/static/background3.jpg'" style="width: 100%; height: 100%; object-fit: cover;" alt="背景图">
     </div> -->
     
     <!-- 导航栏 -->
@@ -17,12 +17,15 @@
 
 <script setup lang="ts">
 import NavBar from './components/NavBar.vue';
-// import { useHttpStore } from './store/Http';
-// import use3DBackground from './hooks/Background3D';
+import { useHttpStore } from './store/Http';
+import use3DBackground from './hooks/Background3D';
+import { onBeforeMount } from 'vue';
 
-// const { ip_port } = useHttpStore();
-// use3DBackground(ip_port);
+const { static_ip_port } = useHttpStore();
 
+onBeforeMount(()=>{
+  use3DBackground(static_ip_port);
+});
 </script>
 
 <style>
