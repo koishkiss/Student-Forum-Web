@@ -23,8 +23,8 @@ const textureLoader = new THREE.TextureLoader();
 // const texture = textureLoader.load("/assets/cat.jpg");
 // const depthTexture = textureLoader.load("/assets/cat_depth.jpg");
 
-const texture = textureLoader.load(ip_port + '/image/static/background002.jpg');
-const depthTexture = textureLoader.load(ip_port + '/image/static/background002.jpg');
+const texture = textureLoader.load(ip_port + '/image/static/background3.jpg');
+const depthTexture = textureLoader.load(ip_port + '/image/static/background3.jpg');
 
 // 创建平面
 const geometry = new THREE.PlaneGeometry(19.2, 12);

@@ -6,7 +6,7 @@
 
 <template>
 <div class="login-page-box">
-  <el-image fit="fill" class="image" :src="imagrURL"/>
+  <!-- <el-image fit="fill" class="image" :src="imagrURL"/> -->
 
   <div class="shell">
     <div class="box wave"></div>
