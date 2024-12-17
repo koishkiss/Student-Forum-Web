@@ -1,16 +1,16 @@
 <script lang="ts">
+import { Loading } from "@element-plus/icons-vue";
 import PostPreview from '@/components/PostPreview.vue';
 import ClassificationList from '@/components/ClassificationList.vue';
 import SideBar from '@/components/SideBar.vue';
-import { useRoute } from 'vue-router';
 export default {
   name: "SearchPage",
-  components: PostPreview
+  components: PostPreview,ClassificationList,SideBar,Loading
 }
 </script>
 
 <template>
-  <div class="search-page-box" v-if="!isLoading">
+  <div class="search-page-box">
     <div class="search-page-flex-box">
       <div class="left-sidebar-box">
         <div class="section-classification-box">
@@ -18,27 +18,34 @@ export default {
         </div>
       </div>
       <div class="right-sidebar-box">
-          <div class="public-trend-box">
-            <div class="search-page-content-box">
-              <div class="search-page-title">
-                <span class="search-page-title-text">
-                  搜索结果
-                </span>
-                <!-- <div class="search-page-result" v-if="hasData">
-                  {{ searchList.length }} 条结果
-                </div> -->
-                <!-- <div class="search-page-result" v-else>
-                  没有找到相关内容
-                </div> -->
-              </div>
+        <div class="public-trend-box">
+          <div class="search-page-content-box" v-if="!isLoading">
+            <div class="search-page-title">
+              <el-text class="search-page-result" tag="p" v-if="hasData">
+                共 {{ searchList.length }} 条搜索结果
+              </el-text>
+              <el-text class="search-page-result" tag="p" v-else>
+                共 0 条搜索结果
+              </el-text>
+            </div>
+            <template v-if="hasData">
               <div class="search-page-content" v-for="post in searchList" :key="post.id">
                 <PostPreview v-bind="post" />
               </div>
-            </div>
+            </template>
           </div>
-          <div class="hot-issue-box">
-            <SideBar />
+
+          <div v-else class="load-classification-box">
+            <Loading/>
           </div>
+
+          <div class="search-no-data" v-if="!hasData && !isLoading">
+            <el-empty description="没有找到相关的帖子哦"/>
+          </div>
+        </div>
+        <div class="hot-issue-box">
+          <SideBar />
+        </div>
       </div>
     </div>
   </div>
@@ -53,8 +60,7 @@ import { reactive, ref } from 'vue';
 import { PostPreviewItemList } from '@/types';
 import { onBeforeMount } from 'vue';
 import { ElMessageBox } from 'element-plus';
-
-
+import { useRoute } from 'vue-router';
 
 let searchList = reactive<PostPreviewItemList>([])
 const { ip_port } = useHttpStore();
@@ -62,31 +68,32 @@ const isLoading = ref(true);
 const route = useRoute();
 const hasData = ref(true);
 
-const fetchSearchResults = () => {  
+const fetchSearchResults = () => {
+  hasData.value = true;
   isLoading.value = true;
   axios({  
     method: "get",  
-    url: ip_port + "/post/get" + "?search=" + route.query.searchQuery,  
+    url: ip_port + "/post/get?search=" + route.query.searchQuery,  
     headers: {  
       "Authorization": Cookies.get("Authorization"),  
       "uid": Cookies.get("uid")  
     },  
   })  
-    .then((response) => {  
-      const data = response.data;  
-      if (data.code === 200) {  
-        searchList = data.data;  
-        hasData.value = searchList.length > 0;
-      } else {  
-        hasData.value = false;  
-        ElMessageBox.alert(data.message, "", { confirmButtonText: 'OK' });  
-      }  
-      isLoading.value = false; 
-    })  
-    .catch(function (error) {  
-      console.log(error);  
-      isLoading.value = false; 
-    });  
+  .then((response) => {  
+    const data = response.data;  
+    if (data.code === 200) {  
+      searchList = data.data;
+    } else if (data.code === 40010) {
+      hasData.value = false;
+    } else {   
+      ElMessageBox.alert(data.message, "", { confirmButtonText: 'OK' });  
+    }  
+    isLoading.value = false; 
+  })  
+  .catch(function (error) {  
+    console.log(error);  
+    isLoading.value = false; 
+  });  
 };  
 
 watch(() => route.query.searchQuery, () => {  
@@ -119,7 +126,6 @@ onBeforeMount(() => {
 
 .section-classification-box {
   position: sticky;
-  margin-top: 10px;
   top: 60px;
 }
 
@@ -142,12 +148,10 @@ onBeforeMount(() => {
   display: flex;
   flex-direction: column;
   min-width: 70%;
-  min-height: 800px;
+  min-height: 600px;
   border-top: none;
   border: solid 1px rgb(201, 201, 201);
   border-radius: 5px;
-  border-start-start-radius: 0;
-  border-start-end-radius: 0;
 }
 
 .search-page-content-box {
@@ -162,7 +166,19 @@ onBeforeMount(() => {
   background-color: #efefef;
 }
 
+.search-page-result {
+  margin: 5px 3px;
+  font-size: 15px;
+}
+
+.load-classification-box {
+  height: 30px;
+  width: 30px;
+  margin: auto;
+}
+
 .hot-issue-box {
+  margin-left: 10px;
   min-width: 28%;
   min-height: 500px;
 }
