@@ -244,6 +244,7 @@ function dislike() {
 }
 
 .comment-text {
+  white-space: pre-line;
   font-size: 16px;
   color: #000;
 }

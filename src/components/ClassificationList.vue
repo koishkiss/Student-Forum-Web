@@ -19,16 +19,9 @@ export default {
 
     <el-popover placement="right" trigger="click" width="200" v-if="user.authority >= 3">
       <template #reference>
-        <el-tooltip
-          class="box-item"
-          effect="dark"
-          content="添加新分区"
-          placement="right"
-        >
-          <el-button type="info" link class="add-new-classify-button">
-            <el-icon :size="25"><CirclePlus/></el-icon>
-          </el-button>
-        </el-tooltip>
+        <el-button type="info" link class="add-new-classify-button" title="添加新分区">
+          <el-icon :size="25"><CirclePlus/></el-icon>
+        </el-button>
       </template>
       <div style="display: flex;flex-direction: column; align-items: center;">
         <el-input v-model="newClassifyName" placeholder="请输入分区标题"></el-input>

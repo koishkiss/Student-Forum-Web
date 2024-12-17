@@ -59,8 +59,8 @@
         <el-button type="primary" :loading="loading" @click="doNormalLogin">登入</el-button>
       </el-tooltip>
     </div>
-    <el-text class="quick-login-text">快捷登入</el-text>
-    <div class="quick-login-box">
+    <el-text class="quick-login-text" v-if="false">快捷登入</el-text>
+    <div class="quick-login-box" v-if="false">
       <el-tooltip
         class="box-item"
         effect="dark"
