@@ -58,7 +58,6 @@ export default {
       <el-input 
         v-model="name" 
         placeholder="请填写版块名称" 
-        clearable 
         maxlength="20" 
         show-word-limit 
         type="text" 

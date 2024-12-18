@@ -118,7 +118,7 @@ function watchPosting(id:number){
 
 .side-bar li {
   font-size: 16px;
-  height: 40px;
+  min-height: 40px;
   border-left: 5px solid yellowgreen;
   margin-top: 1px;
   margin-bottom: 1px;
@@ -137,7 +137,7 @@ function watchPosting(id:number){
 
 .side-bar li:hover {
   background-color: #f3f4f6;
-  padding-left: 20px;
+  padding-left: 10px;
 }
 
 .side-bar li::before {

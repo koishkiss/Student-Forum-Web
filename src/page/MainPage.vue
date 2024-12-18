@@ -18,7 +18,9 @@
   <div class="main-page-flex-box">
     <div class="left-sidebar-box">
       <div class="announcement-bar-box">
-        <AnnouncementBar/>
+        <el-scrollbar max-height="400">
+          <AnnouncementBar/>
+        </el-scrollbar>
       </div>
 
       <div class="section-classification-box">
@@ -28,7 +30,9 @@
 
     <div class="right-sidebar-box">
       <div class="follow-section-box">
-        <FollowSection/>
+        <el-scrollbar max-height="400">
+          <FollowSection/>
+        </el-scrollbar>
       </div>
 
       <div class="right-bottom-item-box">
@@ -84,12 +88,12 @@ function reloadPostList() {
 }
 
 .announcement-bar-box {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-height: 400px;
 }
 
 .section-classification-box {
   position: sticky;
-  margin-top: 10px;
   top: 60px;
 }
 
@@ -99,7 +103,7 @@ function reloadPostList() {
 }
 
 .follow-section-box {
-  min-height: 180px;
+  min-height: 200px;
   max-height: 400px;
   scroll-behavior: smooth;
   border-radius: 6px;
@@ -107,6 +111,7 @@ function reloadPostList() {
 }
 
 .right-bottom-item-box {
+  margin-top: 0px;
   gap: 10px;
   display: flex;
   flex-direction: row;
