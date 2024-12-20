@@ -27,14 +27,16 @@ export default {
           <el-text tag="p" class="like-title">
             <span class="like-nickname" 
               @mouseenter="userInfoCardEnter(index)" 
-              @mouseleave="userInfoCardDelayLeave(index)"
+              @mouseleave="userInfoCardDelayLeave(index)" 
             >
               <transition name="user-identity-card-content">
                 <div class="identity-card-container" v-if="showUserIdentityCard[index]">
                   <UserPreviewIdentityCard :theUid="like.uid"/>
                 </div>
               </transition>
-              {{ like.nickname }}
+              <span @click="toPersonalPageForVisitor(like.uid)">
+                {{ like.nickname }}
+              </span>
             </span> 
             赞了你的{{ types[like.type] }}
           </el-text>
@@ -131,6 +133,12 @@ function userInfoCardDelayLeave(id: number) {
 
 function toThePost(id: number) {
   router.push("/post?id=" + id)
+}
+
+function toPersonalPageForVisitor(uid){
+  if(uid != Cookies.get("uid") )
+  router.push(`/visit/other/person/${uid}/post`);
+  else if(uid == Cookies.get("uid")) router.push('/personal/activity');
 }
 
 //加载更多

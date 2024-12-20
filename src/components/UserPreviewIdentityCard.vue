@@ -21,12 +21,12 @@ export default {
   </div>
 
   <div v-if="!isLoading&&hasUser" class="user-preview-info-box">
-    <div class="avatar-box">
+    <div class="avatar-box" @click="toPersonalPageForVisitor(theUid)">
       <el-avatar :src="theUser.avatarURL" fit="cover" shape="square" class="avatar"/>
     </div>
 
     <div class="info-box">
-      <el-text class="nickname-box" tag="p">
+      <el-text class="nickname-box" tag="p" @click="toPersonalPageForVisitor(theUid)">
         {{ theUser.nickname }}
         <el-tag :type="auth.type" effect="dark" class="tag">
           {{ auth.label }}
@@ -64,10 +64,12 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { ElMessage } from 'element-plus';
 import { computed, onBeforeMount, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const props = defineProps(["theUid","adminLevel","sectionId"]);
 const emits = defineEmits(["update:adminLevel"]);
 
+const router = useRouter();
 const { ip_port,static_ip_port } = useHttpStore();
 const user = useUserInfoStore();
 
@@ -99,6 +101,12 @@ let auth = computed(()=>{
 
 const isLoading = ref(true);
 const hasUser = ref(true);
+
+function toPersonalPageForVisitor(uid){
+  if(uid != Cookies.get("uid") )
+  router.push(`/visit/other/person/${uid}/post`);
+  else if(uid == Cookies.get("uid")) router.push('/personal/activity');
+}
 
 function beAdmin() {
   axios({

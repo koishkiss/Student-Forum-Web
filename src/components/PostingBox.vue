@@ -137,6 +137,8 @@ axios({
     addCover.value = false;
     ElMessage({message:"发布成功",type:"success"});
     emits("uploadPost");
+  } else if (data.code === 40016) {
+    ElMessageBox.alert("请先关注本板块！(ps:点击“未关注”来关注板块哦)", "", {confirmButtonText: 'OK'});
   } else {
     ElMessageBox.alert(data.message, "", {confirmButtonText: 'OK'});
   }

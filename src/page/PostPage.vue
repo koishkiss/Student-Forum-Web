@@ -15,7 +15,7 @@ export default {
 <template>
 <div class="post-page-box">
     <div class="page-head-box" v-if="!isLoadingSection">
-        <PostHead v-bind="section"/>
+        <PostHead v-bind="section" :postTitle="content.title"/>
     </div>
 
     <div class="post-page-bottom-box">

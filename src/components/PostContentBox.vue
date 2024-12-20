@@ -20,18 +20,17 @@ export default {
     <div class="avatar-container" 
       @mouseenter="userInfoCardEnter" 
       @mouseleave="userInfoCardDelayLeave"
-      @click="toPersonalPageForVisitor"
     >
       <transition name="user-identity-card-content">
         <div class="identity-card-container" v-if="showUserIdentityCard">
           <UserPreviewIdentityCard :theUid="uid"/>
         </div>
       </transition>
-      <el-avatar :src="avatarURL" shape="square" fit="cover" class="author-avatar"/>
+      <el-avatar @click="toPersonalPageForVisitor" :src="avatarURL" shape="square" fit="cover" class="author-avatar"/>
     </div>
 
     <div class="user-name-box">
-      <el-text class="user-name">{{ nickname }}</el-text>
+      <el-text class="user-name" @click="toPersonalPageForVisitor">{{ nickname }}</el-text>
     </div>
 
     <div class="user-tag-box">
@@ -47,6 +46,12 @@ export default {
   
   <!-- 评论内容 -->
   <div class="comment-content-box">
+    <div class="post-title">
+      <el-text style="font-size: 23px; font-weight: bold;">
+        {{ title }}
+      </el-text>
+    </div>
+
     <div class="comment-text-box">
       <el-text tag="p" class="comment-text">
         {{ content }}
@@ -264,6 +269,10 @@ function dismark() {
 
 
 <style scoped>
+.post-title {
+  margin: 0 0 10px 0;
+}
+
 .post-content {
   border: solid 1px rgb(211, 211, 211);
   display: flex;
@@ -324,9 +333,10 @@ function dismark() {
 }
 
 .comment-text {
+  line-height: 24px;
   white-space: pre-line;
-  font-size: 16px;
-  color: #000;
+  font-size: 14px;
+  color: #252525;
 }
 
 .comment-bottom-box {

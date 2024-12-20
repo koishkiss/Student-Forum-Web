@@ -18,18 +18,17 @@ export default {
     <div class="avatar-container" 
       @mouseenter="userInfoCardEnter" 
       @mouseleave="userInfoCardDelayLeave"
-      @click="toPersonalPageForVisitor"
     >
       <transition name="user-identity-card-content">
         <div class="identity-card-container" v-if="showUserIdentityCard">
           <UserPreviewIdentityCard :theUid="uid"/>
         </div>
       </transition>
-      <el-avatar :src="avatarURL" shape="square" fit="cover" class="author-avatar"/>
+      <el-avatar @click="toPersonalPageForVisitor" :src="avatarURL" shape="square" fit="cover" class="author-avatar"/>
     </div>
 
     <div class="user-name-box">
-      <el-text class="user-name">{{ nickname }}</el-text>
+      <el-text @click="toPersonalPageForVisitor" class="user-name">{{ nickname }}</el-text>
     </div>
 
     <div class="user-tag-box">
@@ -244,9 +243,10 @@ function dislike() {
 }
 
 .comment-text {
+  line-height: 24px;
   white-space: pre-line;
-  font-size: 16px;
-  color: #000;
+  font-size: 14px;
+  color: #252525;
 }
 
 .comment-bottom-box {

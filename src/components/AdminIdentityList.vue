@@ -25,7 +25,7 @@ export default {
       <div class="item-box">
         <div class="avatar-container" 
           @mouseenter="userInfoCardEnter(index)" 
-          @mouseleave="userInfoCardDelayLeave(index)"
+          @mouseleave="userInfoCardDelayLeave(index)" 
         >
           <transition name="user-identity-card-content">
             <div class="identity-card-container" v-if="showUserIdentityCard[index]">
@@ -38,6 +38,7 @@ export default {
             :size="90"
             fit="cover" 
             class="admin-avatar"
+            @click="toPersonalPageForVisitor(admin.uid)"
           />
         </div>
 
@@ -57,6 +58,10 @@ export default {
 <script lang="ts" setup>
 import { computed, reactive } from 'vue';
 import { AdminList } from '@/types';
+import Cookies from 'js-cookie';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const props = defineProps({
   adminList:{
@@ -83,6 +88,12 @@ function userInfoCardDelayLeave(id: number) {
     showUserIdentityCard[id] = false;
     timeId[id] = undefined;
   },100)
+}
+
+function toPersonalPageForVisitor(uid){
+  if(uid != Cookies.get("uid") )
+  router.push(`/visit/other/person/${uid}/post`);
+  else if(uid == Cookies.get("uid")) router.push('/personal/activity');
 }
 
 </script>

@@ -27,14 +27,16 @@ export default {
           <el-text tag="p" class="reply-title">
             <span class="reply-nickname" 
               @mouseenter="userInfoCardEnter(index)" 
-              @mouseleave="userInfoCardDelayLeave(index)"
+              @mouseleave="userInfoCardDelayLeave(index)" 
             >
               <transition name="user-identity-card-content">
                 <div class="identity-card-container" v-if="showUserIdentityCard[index]">
                   <UserPreviewIdentityCard :theUid="reply.uid"/>
                 </div>
               </transition>
-              {{ reply.nickname }}
+              <span @click="toPersonalPageForVisitor(reply.uid)">
+                {{ reply.nickname }}
+              </span>
             </span> 
             {{ types[reply.type] }}
           </el-text>
@@ -118,6 +120,12 @@ function userInfoCardDelayLeave(id: number) {
 
 function toThePost(id: number) {
   router.push("/post?id=" + id)
+}
+
+function toPersonalPageForVisitor(uid){
+  if(uid != Cookies.get("uid") )
+  router.push(`/visit/other/person/${uid}/post`);
+  else if(uid == Cookies.get("uid")) router.push('/personal/activity');
 }
 
 //加载更多

@@ -132,6 +132,7 @@ export default {
               :size="90"
               fit="cover" 
               class="admin-avatar"
+              @click="toPersonalPageForVisitor(admin.uid)"
             />
           </div>
 
@@ -159,10 +160,11 @@ import axios from 'axios';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import Cookies from 'js-cookie';
 import { computed, onBeforeMount, reactive, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const emits = defineEmits(["update:sectionInfo"])
 
+const router = useRouter();
 const { ip_port } = useHttpStore();
 const route = useRoute();
 
@@ -198,6 +200,12 @@ const hasPerson = computed(()=>{
   return section.adminList.length === 0 ? false : true;
 })
 const showCancelButton = ref(false);
+
+function toPersonalPageForVisitor(uid){
+  if(uid != Cookies.get("uid") )
+  router.push(`/visit/other/person/${uid}/post`);
+  else if(uid == Cookies.get("uid")) router.push('/personal/activity');
+}
 
 function deleteAdmin(uid: number) {
   axios({
