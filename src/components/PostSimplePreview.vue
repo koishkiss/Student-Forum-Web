@@ -84,15 +84,17 @@ function toThePost() {
 }
 
 .post-description {
+  line-height: 23px;
   cursor: pointer;
   font-size: 14px;
   color: #666;
-  margin-bottom: 10px;
+  margin-bottom: 13px;
+  max-width: 400px;
 }
 
 .post-info {
   display: flex;
-  gap: 10px;
+  gap: 50px;
   font-size: 13px;
   color: #999;
 }

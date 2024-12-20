@@ -59,8 +59,8 @@
         <el-button type="primary" :loading="loading" @click="doNormalLogin">登入</el-button>
       </el-tooltip>
     </div>
-    <el-text class="quick-login-text" v-if="false">快捷登入</el-text>
-    <div class="quick-login-box" v-if="false">
+    <el-text class="quick-login-text">快捷登入</el-text>
+    <div class="quick-login-box">
       <el-tooltip
         class="box-item"
         effect="dark"
@@ -113,11 +113,11 @@ const loading = ref(false);
 const imagrURL = `${static_ip_port}/image/static/background3.jpg`
 
 function loginWithPrimary() {
-  doLogin("202000300514","123456");
+  doLogin("202051400514","654321");
 }
 
 function loginWithModerator() {
-  doLogin("202051400514","654321");
+  doLogin("202000300514","123456");
 }
 
 function doNormalLogin() {

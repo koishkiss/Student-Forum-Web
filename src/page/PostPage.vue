@@ -129,7 +129,7 @@ const pageSize = ref(10);
 const recordsCount = ref(0);
 
 function reloadComment() {
-    if (!hasData || recordsCount.value + 1 <= pageSize.value) {
+    if (!hasData || recordsCount.value <= pageSize.value) {
         handleCurrentChange(1);
         hasData.value = true;
     }

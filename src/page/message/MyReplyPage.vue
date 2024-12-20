@@ -253,6 +253,8 @@ onBeforeMount(()=>{
   cursor: pointer;
   margin-top: 4px;
   color: #141414;
+  max-width: 600px;
+  line-height: 26px;
   font-size: 17px;
 }
 
